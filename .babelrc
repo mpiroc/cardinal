@@ -7,9 +7,14 @@
   "plugins": [
   ],
   "env": {
+    "start": {
+      "presets": [
+        "react-hmre"
+      ],
+    },
     "production": {
       "plugins": [
       ]
-    }
+    },
   },
 }
