@@ -22,7 +22,7 @@ const webpackConfig = {
     loaders: [
       {
         test: /\.js$/,
-        include: [ paths.app ],
+        exclude: /node_modules/,
         loader: 'babel'
       },
       {
