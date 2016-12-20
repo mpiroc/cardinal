@@ -1,0 +1,19 @@
+{
+  "name": "cardinal",
+  "version": "1.0.0",
+  "description": "Spaced-repetition single-page application",
+  "main": "app/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mpiroc/cardinal.git"
+  },
+  "author": "Matthew Pirocchi <matthew.pirocchi@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mpiroc/cardinal/issues"
+  },
+  "homepage": "https://github.com/mpiroc/cardinal#readme"
+}
