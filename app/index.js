@@ -1,5 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { hashHistory } from 'react-router'
+import getRoutes from 'config/routes'
 
 function HelloWorld (props) {
   return (
@@ -8,6 +10,6 @@ function HelloWorld (props) {
 }
 
 ReactDOM.render(
-  <HelloWorld />,
+  getRoutes(hashHistory),
   document.getElementById('app')
 )
