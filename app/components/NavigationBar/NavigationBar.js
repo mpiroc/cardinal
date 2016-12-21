@@ -1,15 +1,15 @@
 import React, { PropTypes } from 'react'
 import { SignInLinkContainer } from 'containers'
-import './styles.css'
+import { navBar, navBarLink } from './styles.css'
 
 export default function NavigationBar (props) {
   return (
     <div>
-      <nav>
+      <nav className={navBar}>
         <ul>
-          <li>Profile</li>
-          <li><SignInLinkContainer /></li>
-          <li>Home</li>
+          <li className={navBarLink}>Profile</li>
+          <li className={navBarLink}><SignInLinkContainer /></li>
+          <li className={navBarLink}>Home</li>
         </ul>
       </nav>
     </div>

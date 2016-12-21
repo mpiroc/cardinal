@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 
 export default function SignInLink (props) {
   return (
-    <a onClick={props.onClick}>Sign In</a>
+    <span onClick={props.onClick}>Sign In</span>
   )
 }
 

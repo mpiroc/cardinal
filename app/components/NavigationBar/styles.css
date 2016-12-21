@@ -1,10 +1,24 @@
-nav ul {
+.navBar ul {
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
 }
 
-nav li {
+.navBar li {
   list-style-type: none;
+  padding: 8px 5px;
+}
+
+.navBar {
+  background-color: #4484CE;
+  color: #FFFFFF;
   padding: 0px 5px;
+}
+
+.navBarLink {
+  cursor: pointer;
+}
+
+.navBarLink:hover {
+  opacity: 0.8;
 }
