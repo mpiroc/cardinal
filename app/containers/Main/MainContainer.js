@@ -1,11 +1,14 @@
 import React, { PropTypes } from 'react'
+import { NavigationBarContainer } from 'containers'
 
 export default class MainContainer extends React.Component {
   render () {
     return (
       <div>
-        <p>{'Main'}</p>
-        {this.props.children}
+        <NavigationBarContainer />
+        <div>
+          {this.props.children}
+        </div>
       </div>
     )
   }
