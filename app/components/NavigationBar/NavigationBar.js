@@ -7,6 +7,7 @@ export default function NavigationBar (props) {
       <nav>
         <ul>
           <li>Profile</li>
+          <li>Sign in</li>
           <li>Home</li>
         </ul>
       </nav>

@@ -1,3 +1,5 @@
+import firebase from 'firebase'
+
 var config = {
   apiKey: "AIzaSyChIATMLsKHzUbbPhBWAKT4W1yi6uq67-U",
   authDomain: "cardinal-d1df7.firebaseapp.com",
