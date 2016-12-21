@@ -10,8 +10,8 @@
 }
 
 .navBar {
-  background-color: #4484CE;
-  color: #FFFFFF;
+  background-color: var(--color-accent);
+  color: var(--color-light-text);
   padding: 0px 5px;
 }
 
