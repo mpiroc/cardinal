@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react'
+import { SignInLinkContainer } from 'containers'
 import './styles.css'
 
 export default function NavigationBar (props) {
@@ -7,7 +8,7 @@ export default function NavigationBar (props) {
       <nav>
         <ul>
           <li>Profile</li>
-          <li>Sign in</li>
+          <li><SignInLinkContainer /></li>
           <li>Home</li>
         </ul>
       </nav>
