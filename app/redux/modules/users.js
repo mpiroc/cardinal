@@ -1,15 +1,18 @@
 import { Map } from 'immutable'
+import { signInWithPopup, saveUser } from 'helpers/firebase'
 
 const AUTHING_USER = 'AUTHING_USER'
 const AUTHING_USER_SUCCESS = 'AUTHING_USER_SUCCESS'
 const AUTHING_USER_FAILURE = 'AUTHING_USER_FAILURE'
 
 export function authAndSaveUser() {
-  return (dispatch) => {
+  return async function(dispatch) {
     dispatch(authingUser())
 
     try {
-      // const user = await firebase.signInWithFacebookOrGmail
+      const user = await signInWithPopup()
+      await saveUser(user)
+
       dispatch(authingUserSuccess(user))
     }
     catch (error) {
