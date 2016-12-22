@@ -1,5 +1,5 @@
 import { Map } from 'immutable'
-import { saveDeck } from 'helpers/firebase'
+import { saveNewDeck } from 'helpers/firebase'
 
 const OPEN_NEW_DECK_MODAL = 'OPEN_NEW_DECK_MODAL'
 const CLOSE_NEW_DECK_MODAL = 'CLOSE_NEW_DECK_MODAL'
@@ -9,16 +9,19 @@ const SAVING_NEW_DECK_SUCCESS = 'SAVING_NEW_DECK_SUCCESS'
 const SAVING_NEW_DECK_FAILURE = 'SAVING_NEW_DECK_FAILURE'
 
 export function saveAndHandleNewDeck() {
-  return (dispatch, getState) => {
+  return async (dispatch, getState) => {
     dispatch(savingNewDeck())
 
     try {
-
+      const { newDeckModal } = getState()
+      await saveNewDeck({
+        name: newDeckModal.get('name')
+      })
+      dispatch(savingNewDeckSuccess())
     }
     catch (error) {
       dispatch(savingNewDeckFailure(error.message))
     }
-
   }
 }
 
@@ -34,7 +37,7 @@ export function closeNewDeckModal() {
   }
 }
 
-function updateNewDeckName(name) {
+export function updateNewDeckName(name) {
   return {
     type: UPDATE_NEW_DECK_NAME,
     name,
@@ -63,7 +66,7 @@ function savingNewDeckFailure(error) {
 const newDeckModalInitialState = Map({
   isSaving: false,
   isOpen: false,
-  name: 'test name',
+  name: '',
   error: '',
 })
 

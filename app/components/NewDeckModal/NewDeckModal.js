@@ -1,16 +1,27 @@
 import React, { PropTypes } from 'react'
 import { default as ReactModal } from 'react-modal'
+import { DelegateLink } from 'components'
+import { modal, mainContainer, topBar, closeButton, content, textField, actionContainer, submitButton } from './styles.css'
 
 export default function NewDeckModal (props) {
-  const { isOpen, isSaving, name, error } = props
+  const { isOpen, isSaving, name, error, onNameChange, updateNewDeckName, closeNewDeckModal, saveAndHandleNewDeck } = props
 
   return (
     <span>
-      <ReactModal isOpen={isOpen} contentLabel={'Create New Deck'}>
-        <div>{`isSaving: ${isSaving}`}</div>
-        <div>{`Name: ${name}`}</div>
-        <div>{`Error: ${error}`}</div>
-        <div>{`Close: ${String.fromCharCode('10006')}`}</div>
+      <ReactModal className={modal} isOpen={isOpen} contentLabel={'Create New Deck'}>
+        <div className={mainContainer}>
+          <div className={topBar}>
+            <DelegateLink onClick={() => closeNewDeckModal()}>{String.fromCharCode('10006')}</DelegateLink>
+          </div>
+          <div className={content}>
+            <input className={textField}
+                   type='text' value={name} maxLength={80} placeholder={'Name'}
+                   onChange={(e) => updateNewDeckName(e.target.value)} />
+            <div className={actionContainer}>
+              <DelegateLink onClick={() => saveAndHandleNewDeck()}>{'Create'}</DelegateLink>
+            </div>
+          </div>
+        </div>
       </ReactModal>
     </span>
   )
@@ -21,4 +32,6 @@ NewDeckModal.propTypes = {
   isSaving: PropTypes.bool.isRequired,
   name: PropTypes.string.isRequired,
   error: PropTypes.string.isRequired,
+  updateNewDeckName: PropTypes.func.isRequired,
+  closeNewDeckModal: PropTypes.func.isRequired,
 }

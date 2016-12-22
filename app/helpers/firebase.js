@@ -18,8 +18,15 @@ export function saveUser(user) {
     .set(user)
 }
 
-export function saveDeck(deck) {
-  return ref
-    .child(`decks/decks/${deck.deckId}`)
-    .set(deck)
+export function saveNewDeck(deck) {
+  const deckRef = ref
+    .child(`decks/decks`)
+    .push()
+
+  deck = {
+    deckId: deckRef.key,
+    ...deck,
+  }
+
+  return deckRef.set(deck)
 }

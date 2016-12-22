@@ -6,13 +6,16 @@ import * as newDeckModalActionCreators from 'redux/modules/newDeckModal'
 
 class NewDeckModalContainer extends React.Component {
   render () {
-    const { isOpen, isSaving, name, error } = this.props
+    const { isOpen, isSaving, name, error, updateNewDeckName, closeNewDeckModal, saveAndHandleNewDeck } = this.props
     return (
       <NewDeckModal
         isOpen={isOpen}
         isSaving={isSaving}
         name={name}
-        error={error} />
+        error={error}
+        updateNewDeckName={updateNewDeckName}
+        closeNewDeckModal={closeNewDeckModal}
+        saveAndHandleNewDeck={saveAndHandleNewDeck} />
     )
   }
 }
@@ -22,6 +25,9 @@ NewDeckModalContainer.propTypes = {
   isSaving: PropTypes.bool.isRequired,
   name: PropTypes.string.isRequired,
   error: PropTypes.string.isRequired,
+  updateNewDeckName: PropTypes.func.isRequired,
+  closeNewDeckModal: PropTypes.func.isRequired,
+  saveAndHandleNewDeck: PropTypes.func.isRequired,
 }
 
 function mapStateToProps (state, props) {
