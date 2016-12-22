@@ -1,0 +1,26 @@
+TODO: Once the basic skeleton is ready, choose project management service and start tracking user stories
+
+Next steps:
+  - Redux route protection
+  - Decks redux module
+  - New Deck modal dialog
+  - Decks component (just name of each deck for now)
+
+Then:
+  - Cards redux module
+  - New Card modal dialog
+  - Deck component
+
+Then:
+  - Review component
+
+Future (MVP):
+  - Edit card modal dialog
+  - Add 'rename deck' to Decks component
+  - Add 'delete deck' to Decks component
+  - Add 'edit card' to Deck component
+  - Add 'delete card' to Deck component
+  - Firebase route protection
+  - Unit tests
+  - Continuous integration
+  - Continuous deployment

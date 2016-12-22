@@ -7,9 +7,9 @@ export default function NavigationBar (props) {
     <div className={navBarContainer}>
       <nav className={navBar}>
         <ul>
-          <li className={navBarLink}>Profile</li>
-          <li className={navBarLink}><SignInLinkContainer /></li>
           <li className={navBarLink}>Home</li>
+          <li className={navBarLink}>New Deck</li>
+          <li className={navBarLink}><SignInLinkContainer /></li>
         </ul>
       </nav>
     </div>
