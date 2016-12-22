@@ -18,11 +18,3 @@
   background-color: var(--color-accent);
   color: var(--color-light-text);
 }
-
-.navBarLink {
-  cursor: pointer;
-}
-
-.navBarLink:hover {
-  opacity: 0.8;
-}

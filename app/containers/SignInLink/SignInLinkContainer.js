@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { SignInLink } from 'components'
+import { DelegateLink } from 'components'
 import * as userActionCreators from 'redux/modules/users'
 
 class SignInLinkContainer extends React.Component {
@@ -12,7 +12,7 @@ class SignInLinkContainer extends React.Component {
   }
   render () {
     return (
-      <SignInLink onClick={this.handleClick.bind(this)} isAuthed={this.props.isAuthed} />
+      <DelegateLink onClick={this.handleClick.bind(this)} />
     )
   }
 }
@@ -23,13 +23,11 @@ SignInLinkContainer.contextTypes = {
 
 SignInLinkContainer.propTypes = {
   authAndSaveUser: PropTypes.func.isRequired,
-  isAuthed: PropTypes.bool.isRequired,
 }
 
 
 function mapStateToProps ({users}, props) {
   return {
-    isAuthed: users.get('authedUserId').length > 0,
   }
 }
 

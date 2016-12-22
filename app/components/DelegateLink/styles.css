@@ -1,0 +1,7 @@
+.delegateLink {
+  cursor: pointer;
+}
+
+.delegateLink:hover {
+  opacity: 0.8;
+}
