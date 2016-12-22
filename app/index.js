@@ -12,7 +12,7 @@ import './styles.css'
 
 const store = createStore(combineReducers({...reducers, routing: routerReducer}), compose(
   applyMiddleware(thunk),
-  window.devToolExtension ? window.devToolExtension() : (f) => f
+  window.devToolsExtension ? window.devToolsExtension() : (f) => f
 ))
 
 const history = syncHistoryWithStore(hashHistory, store)

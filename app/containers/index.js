@@ -1,5 +1,6 @@
 export DecksContainer from './Decks/DecksContainer'
 export HomeContainer from './Home/HomeContainer'
 export MainContainer from './Main/MainContainer'
+export NewDeckLinkContainer from './NewDeckLink/NewDeckLinkContainer'
 export NavigationBarContainer from './NavigationBar/NavigationBarContainer'
 export SignInLinkContainer from './SignInLink/SignInLinkContainer'
