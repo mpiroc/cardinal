@@ -24,3 +24,5 @@ Future (MVP):
   - Unit tests
   - Continuous integration
   - Continuous deployment
+  - Replace firebase with GraphQL/Relay/Reindex
+

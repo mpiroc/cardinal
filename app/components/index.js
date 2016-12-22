@@ -1,4 +1,5 @@
 export Decks from './Decks/Decks'
 export Home from './Home/Home'
 export NavigationBar from './NavigationBar/NavigationBar'
+export NewDeckModal from './NewDeckModal/NewDeckModal'
 export SignInLink from './SignInLink/SignInLink'

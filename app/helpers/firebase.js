@@ -14,6 +14,12 @@ export async function signInWithPopup() {
 
 export function saveUser(user) {
   return ref
-    .child(`users/${user.uid}`)
+    .child(`users/users/${user.uid}`)
     .set(user)
+}
+
+export function saveDeck(deck) {
+  return ref
+    .child(`decks/decks/${deck.deckId}`)
+    .set(deck)
 }
