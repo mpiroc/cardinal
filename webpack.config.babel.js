@@ -11,7 +11,6 @@ const paths = {
 }
 
 const htmlWebpackPluginConfig = {
-  title: 'Cardinal',
   filename: 'index.html',
   template: path.join(paths.app, 'index.html'),
   inject: 'body',

@@ -10,6 +10,7 @@ export default function NewDeckModal (props) {
         <div>{`isSaving: ${isSaving}`}</div>
         <div>{`Name: ${name}`}</div>
         <div>{`Error: ${error}`}</div>
+        <div>{`Close: ${String.fromCharCode('10006')}`}</div>
       </ReactModal>
     </span>
   )
