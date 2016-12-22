@@ -2,13 +2,12 @@ import React, { PropTypes } from 'react'
 import { delegateLink } from './styles.css'
 
 export default function DelegateLink (props) {
-  const { onClick, label } = props
+  const { onClick, children } = props
   return (
-    <span className={delegateLink} onClick={onClick}>{label}</span>
+    <span className={delegateLink} onClick={onClick}>{children}</span>
   )
 }
 
 DelegateLink.propTypes = {
   onClick: PropTypes.func.isRequired,
-  label: PropTypes.string.isRequired,
 }

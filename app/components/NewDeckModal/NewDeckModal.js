@@ -1,15 +1,17 @@
 import React, { PropTypes } from 'react'
-import Modal from 'react-modal'
+import { default as ReactModal } from 'react-modal'
 
 export default function NewDeckModal (props) {
   const { isOpen, isSaving, name, error } = props
 
   return (
-    <Modal isOpen={isOpen} contentLabel={'Create New Deck'}>
-      <div>{`isSaving: ${isSaving}`}</div>
-      <div>{`Name: ${name}`}</div>
-      <div>{`Error: ${error}`}</div>
-    </Modal>
+    <span>
+      <ReactModal isOpen={isOpen} contentLabel={'Create New Deck'}>
+        <div>{`isSaving: ${isSaving}`}</div>
+        <div>{`Name: ${name}`}</div>
+        <div>{`Error: ${error}`}</div>
+      </ReactModal>
+    </span>
   )
 }
 

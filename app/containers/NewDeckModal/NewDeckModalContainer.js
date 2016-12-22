@@ -26,10 +26,10 @@ NewDeckModalContainer.propTypes = {
 
 function mapStateToProps (state, props) {
   return {
-    isOpen: state.getIn(['newDeckModal', 'isOpen']),
-    isSaving: state.getIn(['newDeckModal', 'isSaving']),
-    name: state.getIn(['newDeckModal', 'name']),
-    error: state.getIn(['newDeckModal', 'error']),
+    isOpen: state.newDeckModal.get('isOpen'),
+    isSaving: state.newDeckModal.get('isSaving'),
+    name: state.newDeckModal.get('name'),
+    error: state.newDeckModal.get('error'),
   }
 }
 

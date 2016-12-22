@@ -12,7 +12,7 @@ class SignInLinkContainer extends React.Component {
   }
   render () {
     return (
-      <DelegateLink onClick={this.handleClick.bind(this)} label={'Sign In'} />
+      <DelegateLink onClick={this.handleClick.bind(this)}>{'Sign In'}</DelegateLink>
     )
   }
 }

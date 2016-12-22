@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { DelegateLink } from 'components'
+import { NewDeckModalContainer } from 'containers'
 import * as newDeckModalActionCreators from 'redux/modules/newDeckModal'
 
 class NewDeckLinkContainer extends React.Component {
@@ -15,7 +16,12 @@ class NewDeckLinkContainer extends React.Component {
   }
   render () {
     return (
-      <DelegateLink onClick={this.handleClick} label={'New Deck'} />
+      <DelegateLink onClick={this.handleClick}>
+        {'New Deck'}
+        <span>
+          <NewDeckModalContainer />
+        </span>
+      </DelegateLink>
     )
   }
 }
