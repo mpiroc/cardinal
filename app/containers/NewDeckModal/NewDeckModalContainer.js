@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 import { NewDeckModal } from 'components'
 import * as newDeckModalActionCreators from 'redux/modules/newDeckModal'
 
+// TODO: The container component is unnecessary--connect directly to the presentational component instead
+
 class NewDeckModalContainer extends React.Component {
   render () {
     const { isOpen, isSaving, name, error, updateNewDeckName, closeNewDeckModal, saveAndHandleNewDeck } = this.props

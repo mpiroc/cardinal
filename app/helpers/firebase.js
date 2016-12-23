@@ -38,7 +38,7 @@ export function saveNewCard(card) {
 
   card = {
     cardId: cardRef.key,
-    ...card1,
+    ...card,
   }
 
   return cardRef.set(card)

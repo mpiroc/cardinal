@@ -62,7 +62,7 @@ export default function cards(state = initialState, action) {
       return state
         .set('isFetching', false)
         .set(error, '')
-        .set(cards, Map({action.cards}))
+        .set(cards, Map(action.cards))
     case SETTING_CARDS_LISTENER_FAILURE:
       return state
         .set('isFetching', false)
