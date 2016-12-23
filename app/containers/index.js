@@ -1,6 +1,5 @@
 export DeckContainer from './Deck/DeckContainer'
 export DecksContainer from './Decks/DecksContainer'
-export HomeContainer from './Home/HomeContainer'
 export MainContainer from './Main/MainContainer'
 export NewCardModalContainer from './NewCardModal/NewCardModalContainer'
 export NewCardLinkContainer from './NewCardLink/NewCardLinkContainer'
