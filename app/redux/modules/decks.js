@@ -50,7 +50,7 @@ function settingDecksListenerFailure(error) {
 const initialState = Map({
   isFetching: false,
   error: '',
-  decks: {},
+  decks: Map({}),
 })
 
 export default function decks(state = initialState, action) {
@@ -63,7 +63,7 @@ export default function decks(state = initialState, action) {
       return state
         .set('isFetching', false)
         .set('error', '')
-        .set('decks', action.decks)
+        .set('decks', Map(action.decks))
     case SETTING_DECKS_LISTENER_FAILURE:
       return state
         .set('isFetching', false)
