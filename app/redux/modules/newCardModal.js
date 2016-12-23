@@ -9,13 +9,14 @@ const SAVING_NEW_CARD = 'SAVING_NEW_CARD'
 const SAVING_NEW_CARD_SUCCESS = 'SAVING_NEW_CARD_SUCCESS'
 const SAVING_NEW_CARD_FAILURE = 'SAVING_NEW_CARD_FAILURE'
 
-export function saveAndHandleNewCard() {
+export function saveAndHandleNewCard(deckId) {
   return async (dispatch, getState) => {
     dispatch(savingNewCard())
 
     try {
       const { newCardModal } = getState()
       await saveNewCard({
+        deckId,
         side1: newCardModal.get('side1'),
         side2: newCardModal.get('side2'),
       })

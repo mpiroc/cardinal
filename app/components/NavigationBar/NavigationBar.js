@@ -11,9 +11,13 @@ export default function NavigationBar (props) {
     <div className={navBarContainer}>
       <nav className={navBar}>
         <ul>
-          <li>
-            <NewCardLinkContainer />
-          </li>
+          {
+            props.deckId ? (
+            <li>
+              <NewCardLinkContainer deckId={props.deckId} />
+            </li>
+            ) : null
+          }
           <li>
             <NewDeckLinkContainer />
           </li>
@@ -31,4 +35,5 @@ export default function NavigationBar (props) {
 
 NavigationBar.propTypes = {
   isAuthed: PropTypes.bool.isRequired,
+  deckId: PropTypes.string,
 }

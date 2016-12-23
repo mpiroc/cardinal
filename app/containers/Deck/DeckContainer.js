@@ -10,13 +10,16 @@ class DeckContainer extends React.Component {
   }
   render () {
     return (
-      <Deck />
+      <Deck deckId={this.props.params.deckId} />
     )
   }
 }
 
 DeckContainer.propTypes = {
   setAndHandleCardsListener: PropTypes.func.isRequired,
+  params: PropTypes.shape({
+    deckId: PropTypes.string.isRequired
+  })
 }
 
 function mapStateToProps (state, props) {

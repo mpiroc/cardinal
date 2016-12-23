@@ -24,7 +24,7 @@ export default function NewCardModal (props) {
             <textarea type='text' value={side2} maxLength={10000} placeholder={'Side Two'}
                    onChange={(e) => updateNewCardSide2(e.target.value)} />
             <div>
-              <DelegateLink onClick={() => saveAndHandleNewCard()}>{'Create'}</DelegateLink>
+              <DelegateLink onClick={() => saveAndHandleNewCard(props.deckId)}>{'Create'}</DelegateLink>
             </div>
           </div>
         </div>
@@ -35,6 +35,7 @@ export default function NewCardModal (props) {
 
 
 NewCardModal.propTypes = {
+  deckId: PropTypes.string,
   isOpen: PropTypes.bool.isRequired,
   isSaving: PropTypes.bool.isRequired,
   side1: PropTypes.string.isRequired,

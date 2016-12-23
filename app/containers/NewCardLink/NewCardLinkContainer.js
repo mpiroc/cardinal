@@ -19,7 +19,7 @@ class NewCardLinkContainer extends React.Component {
       <DelegateLink onClick={this.handleClick}>
         {'New Card'}
         <span>
-          <NewCardModalContainer />
+          <NewCardModalContainer deckId={this.props.deckId} />
         </span>
       </DelegateLink>
     )
@@ -27,6 +27,7 @@ class NewCardLinkContainer extends React.Component {
 }
 
 NewCardLinkContainer.propTypes = {
+  deckId: PropTypes.string,
   openNewCardModal: PropTypes.func.isRequired
 }
 

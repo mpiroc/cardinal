@@ -35,7 +35,8 @@ function settingCardsListener() {
 
 function settingCardsListenerSuccess(cards) {
   return {
-    type: SETTING_CARDS_LISTENER_SUCCESS
+    type: SETTING_CARDS_LISTENER_SUCCESS,
+    cards
   }
 }
 
