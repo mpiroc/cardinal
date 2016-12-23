@@ -17,9 +17,12 @@ export default function NavigationBar (props) {
           <li>
             <NewDeckLinkContainer />
           </li>
-          <li>
-            <SignInLinkContainer />
-          </li>
+          {
+            props.isAuthed ? null :
+            <li>
+              <SignInLinkContainer />
+            </li>
+          }
         </ul>
       </nav>
     </div>
@@ -27,5 +30,5 @@ export default function NavigationBar (props) {
 }
 
 NavigationBar.propTypes = {
-  
+  isAuthed: PropTypes.bool.isRequired,
 }

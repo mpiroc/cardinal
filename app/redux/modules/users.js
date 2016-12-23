@@ -55,6 +55,7 @@ export default function users(state = initalState, action) {
     case AUTHING_USER_SUCCESS:
       return state
         .set('isAuthing', false)
+        .set('authedUserId', action.user.uid)
         .setIn(['users', action.user.uid], action.user)
     case AUTHING_USER_FAILURE:
       return state

@@ -2,9 +2,12 @@ import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Deck } from 'components'
-import * as deckActionCreators from 'redux/modules/decks'
+import * as cardActionCreators from 'redux/modules/cards'
 
 class DeckContainer extends React.Component {
+  componentDidMount() {
+    this.props.setAndHandleCardsListener()
+  }
   render () {
     return (
       <Deck />
@@ -13,7 +16,7 @@ class DeckContainer extends React.Component {
 }
 
 DeckContainer.propTypes = {
-  
+  setAndHandleCardsListener: PropTypes.func.isRequired,
 }
 
 function mapStateToProps (state, props) {
@@ -22,7 +25,7 @@ function mapStateToProps (state, props) {
 }
 
 function mapDispatchToProps (dispatch, props) {
-  return bindActionCreators(deckActionCreators, dispatch)
+  return bindActionCreators(cardActionCreators, dispatch)
 }
 
 export default connect(
