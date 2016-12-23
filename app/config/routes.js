@@ -1,6 +1,6 @@
 import React from 'react'
 import { Router, Route, IndexRoute } from 'react-router'
-import { DecksContainer, HomeContainer, MainContainer } from 'containers'
+import { DeckContainer, DecksContainer, HomeContainer, MainContainer } from 'containers'
 
 export default function getRoutes (history) {
   return (
@@ -8,6 +8,7 @@ export default function getRoutes (history) {
       <Router path='/' component={MainContainer}>
         <IndexRoute component={HomeContainer} />
         <Route path='/decks' component={DecksContainer} />
+        <Route path='/deck/:deckId' component={DeckContainer} />
       </Router>
     </Router>
   )

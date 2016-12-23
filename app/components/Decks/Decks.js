@@ -1,10 +1,14 @@
 import React, { PropTypes } from 'react'
+import { Link } from 'react-router'
 import { deckContainer, deckName } from './styles.css'
 
 function Deck (props) {
+  // TODO: Do we need to url-escape props.deckId?
   return (
     <div className={deckContainer} key={props.deckId}>
-      <div className={deckName}>{props.name}</div>
+      <div className={deckName}>
+        <Link to={`/deck/${props.deckId}`}>{props.name}</Link>
+      </div>
     </div>
   )
 }

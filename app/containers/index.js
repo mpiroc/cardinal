@@ -1,3 +1,4 @@
+export DeckContainer from './Deck/DeckContainer'
 export DecksContainer from './Decks/DecksContainer'
 export HomeContainer from './Home/HomeContainer'
 export MainContainer from './Main/MainContainer'
