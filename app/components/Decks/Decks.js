@@ -1,9 +1,11 @@
 import React, { PropTypes } from 'react'
-import { deckContainer } from './styles.css'
+import { deckContainer, deckName } from './styles.css'
 
 function Deck (props) {
   return (
-    <div className={deckContainer} key={props.deckId}>{props.name}</div>
+    <div className={deckContainer} key={props.deckId}>
+      <div className={deckName}>{props.name}</div>
+    </div>
   )
 }
 
