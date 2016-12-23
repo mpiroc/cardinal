@@ -5,14 +5,11 @@ Next steps:
   - Decks redux module
   - New Deck modal dialog
   - Decks component (just name of each deck for now)
-
-Then:
   - Cards redux module
   - New Card modal dialog
   - Deck component
-
-Then:
   - Review component
+  - Markdown support
 
 Future (MVP):
   - Edit card modal dialog
@@ -22,7 +19,8 @@ Future (MVP):
   - Add 'delete card' to Deck component
   - Firebase route protection
   - Unit tests
+  - Alternate version using GraphQL/Relay/Reindex
   - Continuous integration
   - Continuous deployment
-  - Replace firebase with GraphQL/Relay/Reindex
+  
 
