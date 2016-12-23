@@ -14,13 +14,13 @@ export async function signInWithPopup() {
 
 export function saveUser(user) {
   return ref
-    .child(`users/users/${user.uid}`)
+    .child(`users/${user.uid}`)
     .set(user)
 }
 
 export function saveNewDeck(deck) {
   const deckRef = ref
-    .child(`decks/decks`)
+    .child(`decks`)
     .push()
 
   deck = {
@@ -29,4 +29,12 @@ export function saveNewDeck(deck) {
   }
 
   return deckRef.set(deck)
+}
+
+export function setDecksListener(onSuccess, onFailure) {
+  return ref
+    .child(`decks`)
+    .on('value',
+      (snapshot) => onSuccess(snapshot.val()),
+      onFailure)
 }
