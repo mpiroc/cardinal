@@ -1,4 +1,5 @@
 import { Map } from 'immutable'
+import { saveNewCard } from 'helpers/firebase'
 
 const OPEN_NEW_CARD_MODAL = 'OPEN_NEW_CARD_MODAL'
 const CLOSE_NEW_CARD_MODAL = 'CLOSE_NEW_CARD_MODAL'
@@ -7,6 +8,24 @@ const UPDATE_NEW_CARD_SIDE2 = 'UPDATE_NEW_CARD_SIDE2'
 const SAVING_NEW_CARD = 'SAVING_NEW_CARD'
 const SAVING_NEW_CARD_SUCCESS = 'SAVING_NEW_CARD_SUCCESS'
 const SAVING_NEW_CARD_FAILURE = 'SAVING_NEW_CARD_FAILURE'
+
+export function saveAndHandleNewCard() {
+  return async (dispatch, getState) => {
+    dispatch(savingNewCard())
+
+    try {
+      const { newCardModal } = getState()
+      await saveNewCard({
+        side1: newCardModal.get('side1'),
+        side2: newCardModal.get('side2'),
+      })
+      dispatch(savingNewCardSuccess())
+    }
+    catch (error) {
+      dispatch(savingNewCardFailure(error.message))
+    }
+  }
+}
 
 export function openNewCardModal() {
   return {

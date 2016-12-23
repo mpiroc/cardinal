@@ -20,7 +20,7 @@ export function saveUser(user) {
 
 export function saveNewDeck(deck) {
   const deckRef = ref
-    .child(`decks`)
+    .child('decks')
     .push()
 
   deck = {
@@ -31,9 +31,30 @@ export function saveNewDeck(deck) {
   return deckRef.set(deck)
 }
 
+export function saveNewCard(card) {
+  const cardRef = ref
+    .child('cards')
+    .push()
+
+  card = {
+    cardId: cardRef.key,
+    ...card1,
+  }
+
+  return cardRef.set(card)
+}
+
 export function setDecksListener(onSuccess, onFailure) {
   return ref
-    .child(`decks`)
+    .child('decks')
+    .on('value',
+      (snapshot) => onSuccess(snapshot.val()),
+      onFailure)
+}
+
+export function setCardsListener(onSuccess, onFailure) {
+  return ref
+    .child('cards')
     .on('value',
       (snapshot) => onSuccess(snapshot.val()),
       onFailure)
