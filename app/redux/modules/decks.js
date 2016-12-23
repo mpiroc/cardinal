@@ -2,6 +2,7 @@ import { Map } from 'immutable'
 import { setDecksListener } from 'helpers/firebase'
 import { addListener } from 'redux/modules/listeners'
 
+const ADD_CARD_TO_DECK = 'ADD_CARD_TO_DECK'
 const SETTING_DECKS_LISTENER = 'SETTING_DECKS_LISTENER'
 const SETTING_DECKS_LISTENER_SUCCESS = 'SETTING_DECKS_LISTENER_SUCCESS'
 const SETTING_DECKS_LISTENER_FAILURE = 'SETTING_DECKS_LISTENER_FAILURE'

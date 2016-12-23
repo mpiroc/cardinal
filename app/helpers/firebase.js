@@ -31,6 +31,12 @@ export function saveNewDeck(deck) {
   return deckRef.set(deck)
 }
 
+function addCardToDeck(deckId, cardId) {
+  return ref
+    .child(`decks/${deckId}/cards/${cardId}`)
+    .set(true)
+}
+
 export function saveNewCard(card) {
   const cardRef = ref
     .child('cards')
@@ -41,7 +47,11 @@ export function saveNewCard(card) {
     ...card,
   }
 
-  return cardRef.set(card)
+  // TODO: Convert to transaction
+  return firebase.Promise.all([
+    cardRef.set(card),
+    addCardToDeck(card.deckId, card.cardId)
+  ])
 }
 
 export function setDecksListener(onSuccess, onFailure) {
