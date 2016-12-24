@@ -1,6 +1,6 @@
 import { Map } from 'immutable'
 import { addDeckCardValueListener } from './listeners'
-import { setDeckCardValueListener } from 'helpers/firebase'
+import { setDeckCardValueListener } from './helpers/firebase'
 
 // actions
 const SETTING_CARD_VALUE_LISTENER = 'SETTING_CARD_VALUE_LISTENER'
@@ -8,7 +8,7 @@ const SETTING_CARD_VALUE_LISTENER_SUCCESS = 'SETTING_CARD_VALUE_LISTENER_SUCCESS
 const SETTING_CARD_VALUE_LISTENER_FAILURE = 'SETTING_CARD_VALUE_LISTENER_FAILURE'
 
 // thunks
-export function setCardListeners(deckId, cardId) {
+export function setCardValueListener(deckId, cardId) {
   return (dispatch, getState) => {
     const state = getState().listeners
 

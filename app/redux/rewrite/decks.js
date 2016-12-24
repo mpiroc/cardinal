@@ -8,7 +8,7 @@ import {
   setUserDeckValueListener,
   setDeckCardAddedListener,
   setDeckCardRemovedListener,
-} from 'helpers/firebase'
+} from './helpers/firebase'
 
 // actions
 const ADD_DECK_CARD = 'ADD_DECK_CARD'
@@ -19,7 +19,7 @@ const SETTING_DECK_VALUE_LISTENER_SUCCESS = 'SETTING_DECK_VALUE_LISTENER_SUCCESS
 const SETTING_DECK_VALUE_LISTENER_FAILURE = 'SETTING_DECK_VALUE_LISTENER_FAILURE'
 
 // thunks
-export function setDeckListeners(uid, deckId) {
+export function setDeckValueListener(uid, deckId) {
   return (dispatch, getState) => {
     const state = getState().listeners
 
@@ -32,6 +32,12 @@ export function setDeckListeners(uid, deckId) {
         error => dispatch(settingDeckValueListenerFailure(deckId, error)),
       )
     }
+  }
+}
+
+export function setDeckCardAddedRemovedListeners(deckId) {
+  return (dispatch, getState) => {
+    const state = getState().listeners
 
     if (state.getIn(['deckCards', deckId, 'added']) !== true) {
       dispatch(addDeckCardAddedListener(deckId))

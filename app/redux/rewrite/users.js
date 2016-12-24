@@ -8,7 +8,7 @@ import {
   setUserValueListener,
   setUserDeckAddedListener,
   setUserDeckRemovedListener,
-} from 'helpers/firebase'
+} from './helpers/firebase'
 
 // actions
 const ADD_USER_DECK = 'ADD_USER_DECK'
@@ -19,7 +19,7 @@ const SETTING_USER_VALUE_LISTENER_SUCCESS = 'SETTING_USER_VALUE_LISTENER_SUCCESS
 const SETTING_USER_VALUE_LISTENER_FAILURE = 'SETTING_USER_VALUE_LISTENER_FAILURE'
 
 // thunks
-export function setUserListeners(uid) {
+export function setUserValueListener(uid) {
   return (dispatch, getState) => {
     const state = getState().listeners
 
@@ -32,6 +32,12 @@ export function setUserListeners(uid) {
         error => dispatch(settingUserValueListenerFailure(uid, error)),
       )
     }
+  }
+}
+
+export function setUserDeckAddedRemovedListeners(uid) {
+  return (dispatch, getState) => {
+    const state = getState().listeners
 
     if (state.getIn(['userDecks', uid, 'added']) !== true) {
       dispatch(addUserDeckAddedListener(uid))
