@@ -3,6 +3,7 @@ import { Map } from 'immutable'
 // actions
 const ADD_DECK_CARD = 'ADD_DECK_CARD'
 const REMOVE_DECK_CARD = 'REMOVE_DECK_CARD'
+const SETTING_ADD_OR_REMOVE_DECK_CARD_LISTENER_FAILURE = 'SETTING_ADD_OR_REMOVE_DECK_CARD_LISTENER_FAILURE'
 const SETTING_DECK_VALUE_LISTENER = 'SETTING_DECK_VALUE_LISTENER'
 const SETTING_DECK_VALUE_LISTENER_SUCCESS = 'SETTING_DECK_VALUE_LISTENER_SUCCESS'
 const SETTING_DECK_VALUE_LISTENER_FAILURE = 'SETTING_DECK_VALUE_LISTENER_FAILURE'
@@ -21,6 +22,14 @@ function removeDeckCard(deckId, cardId) {
     type: REMOVE_DECK_CARD,
     deckId,
     cardId,
+  }
+}
+
+function settingAddOrRemoveDeckCardListenerFailure(deckId, error) {
+  return {
+    type: SETTING_ADD_OR_REMOVE_DECK_CARD_LISTENER_FAILURE,
+    deckId,
+    error,
   }
 }
 
@@ -51,6 +60,7 @@ function settingDeckValueListenerFailure(deckId, error) {
 const initialDeckState = Map({
   isLoading: true,
   loadingError: '',
+  addOrRemoveError: '',
 
   deckId: '',
   name: '',
@@ -63,6 +73,8 @@ function deck(state = initialDeckState, action) {
       return state.setIn(['cards', action.cardId], true)
     case REMOVE_DECK_CARD:
       return state.deleteIn(['cards', action.cardId])
+    case SETTING_ADD_OR_REMOVE_DECK_CARD_LISTENER_FAILURE:
+      return state.set('addOrRemoveError', action.error)
     case SETTING_DECK_VALUE_LISTENER:
       return state
         .set('isLoading', true)
@@ -91,6 +103,7 @@ export default function decks(state = initialState, action) {
   switch (action.type) {
     case ADD_DECK_CARD:
     case REMOVE_DECK_CARD:
+    case SETTING_ADD_OR_REMOVE_DECK_CARD_LISTENER_FAILURE:
     case SETTING_DECK_VALUE_LISTENER:
     case SETTING_DECK_VALUE_LISTENER_SUCCESS:
     case SETTING_DECK_VALUE_LISTENER_FAILURE:

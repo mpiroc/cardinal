@@ -3,6 +3,7 @@ import { Map } from 'immutable'
 // actions
 const ADD_USER_DECK = 'ADD_USER_DECK'
 const REMOVE_USER_DECK = 'REMOVE_USER_DECK'
+const SETTING_ADD_OR_REMOVE_USER_DECK_LISTENER_FAILURE = 'SETTING_ADD_OR_REMOVE_USER_DECK_LISTENER_FAILURE'
 const SETTING_USER_VALUE_LISTENER = 'SETTING_USER_VALUE_LISTENER'
 const SETTING_USER_VALUE_LISTENER_SUCCESS = 'SETTING_USER_VALUE_LISTENER_SUCCESS'
 const SETTING_USER_VALUE_LISTENER_FAILURE = 'SETTING_USER_VALUE_LISTENER_FAILURE'
@@ -21,6 +22,14 @@ function removeUserDeck(uid, deckId) {
     type: REMOVE_USER_DECK,
     uid,
     deckId,
+  }
+}
+
+function settingAddOrRemoveUserDeckListenerFailure(uid, error) {
+  return {
+    type: SETTING_ADD_OR_REMOVE_USER_DECK_LISTENER_FAILURE,
+    uid,
+    error,
   }
 }
 
@@ -51,6 +60,7 @@ function settingUserValueListenerFailure(uid, error) {
 const initialUserState = Map({
   isLoading: true,
   loadingError: '',
+  addOrRemoveError: '',
 
   uid: '',
   name: '',
@@ -65,6 +75,8 @@ function user(state = initialUserState, action) {
       return state.setIn(['decks', action.deckId], true)
     case REMOVE_USER_DECK:
       return state.deleteIn(['decks', action.deckId])
+    case SETTING_ADD_OR_REMOVE_USER_DECK_LISTENER_FAILURE:
+      return state.set('addOrRemoveError', action.error)
     case SETTING_USER_VALUE_LISTENER:
       return state
         .set('isLoading', true)
@@ -93,6 +105,7 @@ export default function users(state = initialState, action) {
   switch(action.type) {
     case ADD_USER_DECK:
     case REMOVE_USER_DECK:
+    case SETTING_ADD_OR_REMOVE_USER_DECK_LISTENER_FAILURE:
     case SETTING_USER_VALUE_LISTENER:
     case SETTING_USER_VALUE_LISTENER_SUCCESS:
     case SETTING_USER_VALUE_LISTENER_FAILURE:
