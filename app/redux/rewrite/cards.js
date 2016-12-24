@@ -11,7 +11,6 @@ function updateCardValue(card) {
 
 const initialCardState = Map({
   cardId: '',
-  deckId: '',
   side1: '',
   side2: '',
 })
