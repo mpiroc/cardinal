@@ -1,11 +1,13 @@
 import { Map } from 'immutable'
 
+// actions
 const ADD_DECK_CARD = 'ADD_DECK_CARD'
 const REMOVE_DECK_CARD = 'REMOVE_DECK_CARD'
 const SETTING_DECK_VALUE_LISTENER = 'SETTING_DECK_VALUE_LISTENER'
 const SETTING_DECK_VALUE_LISTENER_SUCCESS = 'SETTING_DECK_VALUE_LISTENER_SUCCESS'
 const SETTING_DECK_VALUE_LISTENER_FAILURE = 'SETTING_DECK_VALUE_LISTENER_FAILURE'
 
+// action creators
 function addDeckCard(deckId, cardId) {
   return {
     type: ADD_DECK_CARD,
@@ -45,6 +47,7 @@ function settingDeckValueListenerFailure(deckId, error) {
   }
 }
 
+// deck reducer
 const initialDeckState = Map({
   isLoading: true,
   loadingError: '',
@@ -79,6 +82,7 @@ function deck(state = initialDeckState, action) {
   }
 }
 
+// decks reducer
 const initialState = Map({
   decks: Map(),
 })

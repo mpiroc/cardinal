@@ -1,9 +1,11 @@
 import { Map } from 'immutable'
 
+// actions
 const SETTING_CARD_VALUE_LISTENER = 'SETTING_CARD_VALUE_LISTENER'
 const SETTING_CARD_VALUE_LISTENER_SUCCESS = 'SETTING_CARD_VALUE_LISTENER_SUCCESS'
 const SETTING_CARD_VALUE_LISTENER_FAILURE = 'SETTING_CARD_VALUE_LISTENER_FAILURE'
 
+// action creators
 function settingCardValueListener(cardId) {
   return {
     type: SETTING_CARD_VALUE_LISTENER,
@@ -27,6 +29,7 @@ function settingCardValueListenerFailure(cardId, error) {
   }
 }
 
+// card reducer
 const initialCardState = Map({
   isLoading: true,
   loadingError: '',
@@ -57,6 +60,7 @@ function card(state = initialCardState, action) {
   }
 }
 
+// cards reducer
 const initialState = Map({
   cards: Map(),
 })
