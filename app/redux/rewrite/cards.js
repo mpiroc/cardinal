@@ -32,7 +32,7 @@ export default function cards(state = initialState, action) {
   switch(action.type) {
     case UPDATE_CARD_VALUE:
       const path = ['cards', action.card.cardId]
-      return state.setIn(path, card(state.getIn(path), action.card))
+      return state.setIn(path, card(state.getIn(path), action))
     default:
       return state
   }
