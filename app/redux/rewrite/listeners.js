@@ -101,24 +101,20 @@ const initialState = Map({
   deckCards: Map(),
 })
 
-function listeners (state = initialState, action) {
+export default function listeners (state = initialState, action) {
   switch(action.type) {
     case ADD_USER_VALUE_LISTENER:
       return state.setIn(['users', action.uid], true)
     case ADD_USER_DECK_ADDED_LISTENER:
     case ADD_USER_DECK_REMOVED_LISTENER:
     case ADD_USER_DECK_VALUE_LISTENER:
-      return state.setIn(
-        ['userDecks', action.uid],
-        userDecks(state.getIn(['userDecks', action.uid]), action)
-      )
+      const path = ['userDecks', action.uid]
+      return state.setIn(path, userDecks(state.getIn(path), action))
     case ADD_DECK_CARD_ADDED_LISTENER:
     case ADD_DECK_CARD_REMOVED_LISTENER:
     case ADD_DECK_CARD_VALUE_LISTENER:
-      return state.setIn(
-        ['deckCards', action.deckId]
-        deckCards(state.getIn(['deckCards', action.deckId]), action)
-      )
+      const path = ['deckCards', action.deckId]
+      return state.setIn(path, deckCards(state.getIn(path), action))
     default:
       return state
   }
