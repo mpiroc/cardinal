@@ -1,5 +1,6 @@
 import { Map } from 'immutable'
 
+// actions
 const ADD_USER_VALUE_LISTENER = 'ADD_USER_LISTENER'
 const ADD_USER_DECK_ADDED_LISTENER = 'ADD_USER_DECK_ADDED_LISTENER'
 const ADD_USER_DECK_REMOVED_LISTENER = 'ADD_USER_DECK_REMOVED_LISTENER'
@@ -8,6 +9,7 @@ const ADD_DECK_CARD_ADDED_LISTENER = 'ADD_DECK_CARD_ADDED_LISTENER'
 const ADD_DECK_CARD_REMOVED_LISTENER = 'ADD_DECK_CARD_REMOVED_LISTENER'
 const ADD_DECK_CARD_VALUE_LISTENER = 'ADD_DECK_CARD_VALUE_LISTENER'
 
+// action creators
 export function addUserValueListener(uid) {
   return {
     type: ADD_USER_VALUE_LISTENER,
@@ -59,6 +61,7 @@ export function addDeckCardValueListener(deckId, cardId) {
   }
 }
 
+// userDecks reducer
 const initialUserDecksState = Map({
   added: false,
   removed: false,
@@ -78,6 +81,7 @@ function userDecks(state = initialUserDecksState, action) {
   }
 }
 
+// deckCards reducer
 const initialDeckCardsState = Map({
   added: false,
   removed: false,
@@ -95,6 +99,7 @@ function deckCards(state = initialDeckCardsState, action) {
   }
 }
 
+// listeners reducer
 const initialState = Map({
   users: Map(),
   userDecks: Map(),

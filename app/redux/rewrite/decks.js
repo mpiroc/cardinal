@@ -1,4 +1,14 @@
 import { Map } from 'immutable'
+import {
+  addUserDeckValueListener,
+  addDeckCardAddedListener,
+  addDeckCardRemovedListener,
+} from './listeners'
+import {
+  setUserDeckValueListener,
+  setDeckCardAddedListener,
+  setDeckCardRemovedListener,
+} from 'helpers/firebase'
 
 // actions
 const ADD_DECK_CARD = 'ADD_DECK_CARD'
@@ -7,6 +17,40 @@ const SETTING_ADD_OR_REMOVE_DECK_CARD_LISTENER_FAILURE = 'SETTING_ADD_OR_REMOVE_
 const SETTING_DECK_VALUE_LISTENER = 'SETTING_DECK_VALUE_LISTENER'
 const SETTING_DECK_VALUE_LISTENER_SUCCESS = 'SETTING_DECK_VALUE_LISTENER_SUCCESS'
 const SETTING_DECK_VALUE_LISTENER_FAILURE = 'SETTING_DECK_VALUE_LISTENER_FAILURE'
+
+// thunks
+export function setDeckListeners(uid, deckId) {
+  return (dispatch, getState) => {
+    const state = getState().listeners
+
+    if (state.getIn(['userDecks', uid, 'decks', deckId]) !== true) {
+      dispatch(addUserDeckValueListener(uid, deckId))
+      dispatch(settingDeckValueListener(deckId))
+      setUserDeckValueListener(
+        uid, deckId,
+        deck => dispatch(settingDeckValueListenerSuccess(deckId, deck)),
+        error => dispatch(settingDeckValueListenerFailure(deckId, error)),
+      )
+    }
+
+    if (state.getIn(['deckCards', deckId, 'added']) !== true) {
+      dispatch(addDeckCardAddedListener(deckId))
+      setDeckCardAddedListener(
+        deckId,
+        cardId => dispatch(addDeckCard(deckId, cardId)),
+        error => dispatch(settingAddOrRemoveDeckCardListenerFailure(deckId, error)),
+      )
+    }
+
+    if (state.getIn(['deckCards', deckId, 'removed']) !== true) {
+      dispatch(addDeckCardRemovedListener(deckId))
+      setDeckCardRemovedListener(
+        deckId,
+        cardId => dispatch(removeDeckCard(deckId, cardId)),
+        error => dispatch(settingAddOrRemoveDeckCardListenerFailure(deckId, error)))
+    }
+  }
+}
 
 // action creators
 function addDeckCard(deckId, cardId) {

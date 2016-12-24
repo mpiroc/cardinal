@@ -47,11 +47,11 @@ firebase
 
 listeners:
   users/[uid].on('value')
-
   userDecks/[uid].on('child_removed')
   userDecks/[uid].on('child_added')
-  userDecks/[uid]/[deckId].on('value')
 
+  userDecks/[uid]/[deckId].on('value')
   deckCards/[deckId].on('child_removed')
   deckCards/[deckId].on('child_added')
+  
   deckCards/[deckId]/[cardId].on('value')
