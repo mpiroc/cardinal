@@ -1,45 +1,60 @@
 users
-  isFetching
-  isAuthing
-  authedId
-  error
+  isFetching: bool
+  error: string
   users
     [uid]
-      name
+      name: string
+      decks
+        [deckId]: true
 
 decks
-  isFetching
-  error
+  isFetching: bool
+  error: string
   decks
     [deckId]
-      name
-      cards (order by nextReviewDate?)
+      name: string
+      cards
         [cardId]: true
 
 cards
-  isFetching
-  error
+  isFetching: bool
+  error: string
   cards
     [cardId]
-      side1
-      side2
-      lastAnswer
-      nextReviewDate
-      difficulty
+      cardId: string
+      side1: string
+      side2: string
 
-review
-  deckId
-  cardId
-  isAnswerVisible
+listeners
+  users
+    [uid]: true
+  userDecks
+    [uid]
+      added: bool
+      removed: bool
+      decks
+        [deckId]: true
+  deckCards
+    [deckId]
+      added: bool
+      removed: bool
+      cards
+        [cardId]: true
 
-addDeckModal
-  isSaving
-  error
-  name
+auth
+  isAuthing: bool
+  authedUid: string
+  authError: string
 
-addCardModal
-  isSaving
-  error
-  deckId
-  side1
-  side2
+newDeckModal
+  isOpen: bool
+  isSaving: bool
+  name: string
+  error: string
+
+newCardModal
+  isOpen: bool
+  isSaving: bool
+  error: string
+  side1: string
+  side2: string

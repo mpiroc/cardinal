@@ -1,24 +1,17 @@
 users
   [uid]
-    name
-    decks
-      [deckId]
-        name
+    uid: string
+    name: string
 
-decks
+userDecks
+  [uid]
+    [deckId]
+      deckId: string
+      name: string
+
+deckCards
   [deckId]
-    uid
-    name
-    cards
-      [cardId]
-        lastAnswer
-        nextReviewDate
-
-cards
-  [cardId]
-    uid
-    deckId
-    side1
-    side2
-    difficulty
-
+    [cardId]
+      cardId: string
+      side1: string
+      side2: string

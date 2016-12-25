@@ -9,6 +9,10 @@ import {
   setDeckCardAddedListener,
   setDeckCardRemovedListener,
 } from './helpers/firebase'
+import {
+  updateCard,
+  removeCard,
+} from './decks'
 
 // actions
 const DECK_CARD_ADDED_RECEIVED = 'DECK_CARD_ADDED_RECEIVED'
@@ -17,6 +21,8 @@ const SETTING_ADD_OR_REMOVE_DECK_CARD_LISTENER_FAILURE = 'SETTING_ADD_OR_REMOVE_
 const SETTING_DECK_VALUE_LISTENER = 'SETTING_DECK_VALUE_LISTENER'
 const SETTING_DECK_VALUE_LISTENER_SUCCESS = 'SETTING_DECK_VALUE_LISTENER_SUCCESS'
 const SETTING_DECK_VALUE_LISTENER_FAILURE = 'SETTING_DECK_VALUE_LISTENER_FAILURE'
+const UPDATE_DECK = 'UPDATE_DECK'
+const REMOVE_DECK = 'REMOVE_DECK'
 
 // thunks
 export function setDeckValueListener(uid, deckId) {
@@ -43,7 +49,10 @@ export function setDeckCardCollectionListeners(deckId) {
       dispatch(addDeckCardAddedListener(deckId))
       setDeckCardAddedListener(
         deckId,
-        cardId => dispatch(deckCardAddedReceived(deckId, cardId)),
+        card => {
+          dispatch(deckCardAddedReceived(deckId, card))
+          dispatch(updateCard(card.cardId, card))
+        },
         error => dispatch(settingAddOrRemoveDeckCardListenerFailure(deckId, error)),
       )
     }
@@ -52,25 +61,28 @@ export function setDeckCardCollectionListeners(deckId) {
       dispatch(addDeckCardRemovedListener(deckId))
       setDeckCardRemovedListener(
         deckId,
-        cardId => dispatch(deckCardRemovedReceived(deckId, cardId)),
+        card => {
+          dispatch(deckCardRemovedReceived(deckId, card))
+          dispatch(removeCard(card.cardId))
+        },
         error => dispatch(settingAddOrRemoveDeckCardListenerFailure(deckId, error)))
     }
   }
 }
 
 // action creators
-function deckCardAddedReceived(deckId, cardId) {
+function deckCardAddedReceived(deckId, card) {
   return {
     type: DECK_CARD_ADDED_RECEIVED,
-    deckId,
+    deck,
     cardId,
   }
 }
 
-function deckCardRemovedReceived(deckId, cardId) {
+function deckCardRemovedReceived(deckId, card) {
   return {
     type: DECK_CARD_REMOVED_RECEIVED,
-    deckId,
+    deck,
     cardId,
   }
 }
@@ -106,6 +118,21 @@ function settingDeckValueListenerFailure(deckId, error) {
   }
 }
 
+export function updateDeck(deckId, deck) {
+  return {
+    type: UPDATE_DECK,
+    deckId,
+    deck,
+  }
+}
+
+export function removeDeck(deckId) {
+  return {
+    type: REMOVE_DECK,
+    deckId,
+  }
+}
+
 // deck reducer
 const initialDeckState = Map({
   isLoading: true,
@@ -120,9 +147,9 @@ const initialDeckState = Map({
 function deck(state = initialDeckState, action) {
   switch (action.type) {
     case DECK_CARD_ADDED_RECEIVED:
-      return state.setIn(['cards', action.cardId], true)
+      return state.setIn(['cards', action.card.cardId], true)
     case DECK_CARD_REMOVED_RECEIVED:
-      return state.deleteIn(['cards', action.cardId])
+      return state.deleteIn(['cards', action.card.cardId])
     case SETTING_ADD_OR_REMOVE_DECK_CARD_LISTENER_FAILURE:
       return state.set('addOrRemoveError', action.error)
     case SETTING_DECK_VALUE_LISTENER:
@@ -139,6 +166,8 @@ function deck(state = initialDeckState, action) {
       return state
         .set('isLoading', false)
         .set('loadingError', action.error)
+    case UPDATE_DECK:
+      return state.merge(action.deck)
     default:
       return state
   }
@@ -157,8 +186,11 @@ export default function decks(state = initialState, action) {
     case SETTING_DECK_VALUE_LISTENER:
     case SETTING_DECK_VALUE_LISTENER_SUCCESS:
     case SETTING_DECK_VALUE_LISTENER_FAILURE:
+    case UPDATE_DECK:
       const path = ['decks', action.deckId]
       return state.setIn(path, deck(state.getIn(path), action))
+    case REMOVE_DECK:
+      return state.deleteIn(['decks', action.deckId])
     default:
       return state
   }

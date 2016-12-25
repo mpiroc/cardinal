@@ -6,6 +6,8 @@ import { setDeckCardValueListener } from './helpers/firebase'
 const SETTING_CARD_VALUE_LISTENER = 'SETTING_CARD_VALUE_LISTENER'
 const SETTING_CARD_VALUE_LISTENER_SUCCESS = 'SETTING_CARD_VALUE_LISTENER_SUCCESS'
 const SETTING_CARD_VALUE_LISTENER_FAILURE = 'SETTING_CARD_VALUE_LISTENER_FAILURE'
+const UPDATE_CARD = 'UPDATE_CARD'
+const REMOVE_CARD = 'REMOVE_CARD'
 
 // thunks
 export function setCardValueListener(deckId, cardId) {
@@ -48,6 +50,21 @@ function settingCardValueListenerFailure(cardId, error) {
   }
 }
 
+export function updateCard(cardId, card) {
+  return {
+    type: UPDATE_CARD,
+    cardId,
+    card
+  }
+}
+
+export function removeCard(cardId) {
+  return {
+    type: REMOVE_CARD,
+    cardId
+  }
+}
+
 // card reducer
 const initialCardState = Map({
   isLoading: true,
@@ -74,6 +91,8 @@ function card(state = initialCardState, action) {
       return state
         .set('isLoading', false)
         .set('loadingError', action.error)
+    case UPDATE_CARD:
+      return state.merge(action.card)
     default:
       return state
   }
@@ -89,8 +108,11 @@ export default function cards(state = initialState, action) {
     case SETTING_CARD_VALUE_LISTENER:
     case SETTING_CARD_VALUE_LISTENER_SUCCESS:
     case SETTING_CARD_VALUE_LISTENER_FAILURE:
+    case UPDATE_CARD:
       const path = ['cards', action.cardId]
       return state.setIn(path, card(state.getIn(path), action))
+    case REMOVE_CARD:
+      return state.deleteIn(['cards', action.cardId])
     default:
       return state
   }

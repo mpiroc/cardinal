@@ -9,6 +9,10 @@ import {
   setUserDeckAddedListener,
   setUserDeckRemovedListener,
 } from './helpers/firebase'
+import {
+  updateDeck,
+  removeDeck,
+} from './decks'
 
 // actions
 const USER_DECK_ADDED_RECEIVED = 'USER_DECK_ADDED_RECEIVED'
@@ -43,7 +47,10 @@ export function setUserDeckCollectionListeners(uid) {
       dispatch(addUserDeckAddedListener(uid))
       setUserDeckAddedListener(
         uid,
-        deckId => dispatch(userDeckAddedReceived(uid, deckId)),
+        deck => {
+          dispatch(userDeckAddedReceived(uid, deck))
+          dispatch(updateDeck(deck.deckId, deck))
+        },
         error => dispatch(settingAddOrRemoveUserDeckListenerFailure(uid, error)),
       )
     }
@@ -52,7 +59,11 @@ export function setUserDeckCollectionListeners(uid) {
       dispatch(addUserDeckRemovedListener(uid))
       setUserDeckRemovedListener(
         uid,
-        deckId => dispatch(userDeckRemovedReceived(uid, deckId)),
+        deck => {
+          dispatch(userDeckRemovedReceived(uid, deck))
+          // TODO: Also remove cards?
+          dispatch(removeDeck(deck.deckId))
+        },
         error => dispatch(settingAddOrRemoveUserDeckListenerFailure(uid, error)),
       )
     }
@@ -60,19 +71,19 @@ export function setUserDeckCollectionListeners(uid) {
 }
 
 // action creators
-function userDeckAddedReceived(uid, deckId) {
+function userDeckAddedReceived(uid, deck) {
   return {
     type: USER_DECK_ADDED_RECEIVED,
     uid,
-    deckId,
+    deck,
   }
 }
 
-function userDeckRemovedReceived(uid, deckId) {
+function userDeckRemovedReceived(uid, deck) {
   return {
     type: USER_DECK_REMOVED_RECEIVED,
     uid,
-    deckId,
+    deck,
   }
 }
 
@@ -123,9 +134,9 @@ function user(state = initialUserState, action) {
     case UPDATE_USER_VALUE:
       return state.merge(action.user)
     case USER_DECK_ADDED_RECEIVED:
-      return state.setIn(['decks', action.deckId], true)
+      return state.setIn(['decks', action.deck.deckId], true)
     case USER_DECK_REMOVED_RECEIVED:
-      return state.deleteIn(['decks', action.deckId])
+      return state.deleteIn(['decks', action.deck.deckId])
     case SETTING_ADD_OR_REMOVE_USER_DECK_LISTENER_FAILURE:
       return state.set('addOrRemoveError', action.error)
     case SETTING_USER_VALUE_LISTENER:
