@@ -1,3 +1,4 @@
+export Card from './Card/Card'
 export Deck from './Deck/Deck'
 export Decks from './Decks/Decks'
 export Home from './Home/Home'

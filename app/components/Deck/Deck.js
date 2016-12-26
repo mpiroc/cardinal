@@ -1,11 +1,20 @@
 import React, { PropTypes } from 'react'
+import { CardContainer } from 'containers'
 
-export default function Deck (props) {
+export default function Deck ({name, cards}) {
   return (
-    <div>{props.deckId}</div>
+    <div>
+      <div>{name}</div>
+      <div>{
+        cards.keySeq().map(
+          cardId => <CardContainer key={cardId} cardId={cardId} />
+        )
+      }</div>
+    </div>
   )
 }
 
 Deck.propTypes = {
-  deckId: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  cards: PropTypes.object.isRequired
 }

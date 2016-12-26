@@ -99,7 +99,9 @@ function card(state = initialCardState, action) {
         .set('isLoading', false)
         .set('loadingError', action.error)
     case UPDATE_CARD:
-      return state.merge(action.card)
+      return state
+        .set('isLoading', false)
+        .merge(action.card)
     default:
       return state
   }

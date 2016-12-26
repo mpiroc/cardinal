@@ -12,7 +12,7 @@ import {
 import {
   updateCard,
   removeCard,
-} from './decks'
+} from './cards'
 
 // actions
 const DECK_CARD_ADDED_RECEIVED = 'DECK_CARD_ADDED_RECEIVED'
@@ -75,15 +75,15 @@ export function setDeckCardCollectionListeners(deckId) {
 function deckCardAddedReceived(deckId, card) {
   return {
     type: DECK_CARD_ADDED_RECEIVED,
-    deck,
-    cardId,
+    deckId,
+    card,
   }
 }
 
 function deckCardRemovedReceived(deckId, card) {
   return {
     type: DECK_CARD_REMOVED_RECEIVED,
-    deck,
+    deckId,
     cardId,
   }
 }

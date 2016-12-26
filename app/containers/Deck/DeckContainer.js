@@ -11,9 +11,8 @@ class DeckContainer extends React.Component {
     setDeckCardCollectionListeners(params.deckId)
   }
   render () {
-    return (
-      <Deck deckId={this.props.params.deckId} />
-    )
+    const { name, cards } = this.props
+    return <Deck name={name} cards={cards} />
   }
 }
 
@@ -26,9 +25,12 @@ DeckContainer.propTypes = {
   })
 }
 
-function mapStateToProps ({ auth }, props) {
+function mapStateToProps ({ auth, decks, cards }, props) {
+  const deck = decks.getIn(['decks', props.params.deckId])
   return {
-    authedUid: auth.get('authedUid')
+    authedUid: auth.get('authedUid'),
+    name: deck.get('name'),
+    cards: deck.get('cards').map(cardId => cards.getIn(['cards', cardId]))
   }
 }
 
