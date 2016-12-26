@@ -1,71 +1,91 @@
 import firebase from 'firebase'
 import { ref } from 'config/firebase'
 
+// Sign in helpers
 export async function signInWithPopup() {
   const provider = new firebase.auth.GoogleAuthProvider()
   const result = await firebase.auth().signInWithPopup(provider)
   const { displayName, uid } = result.user
 
   return {
-    displayName,
+    name: displayName,
     uid,
   }
 }
 
-export function saveUser(user) {
-  return ref
-    .child(`users/${user.uid}`)
-    .set(user)
+// Save item helpers
+export function saveUser({ uid, name }) {
+  return ref.child(`users/${uid}`).set({
+    uid,
+    name,
+  })
 }
 
-export function saveNewDeck(deck) {
-  const deckRef = ref
-    .child('decks')
-    .push()
-
-  deck = {
-    deckId: deckRef.key,
-    ...deck,
-  }
-
-  return deckRef.set(deck)
+export function saveNewDeck(uid, { name }) {
+  const userDeckRef = ref.child(`userDecks/${uid}`).push()
+  return userDeckRef.set({
+    deckId: userDeckRef.key,
+    name,
+  })
 }
 
-function addCardToDeck(deckId, cardId) {
-  return ref
-    .child(`decks/${deckId}/cards/${cardId}`)
-    .set(true)
+export function saveExistingDeck(uid, { deckId, name }) {
+  return ref.child(`userDecks/${uid}/${deckId}`).set({
+    deckId,
+    name,
+  })
 }
 
-export function saveNewCard(card) {
-  const cardRef = ref
-    .child('cards')
-    .push()
-
-  card = {
-    cardId: cardRef.key,
-    ...card,
-  }
-
-  // TODO: Convert to transaction
-  return firebase.Promise.all([
-    cardRef.set(card),
-    addCardToDeck(card.deckId, card.cardId)
-  ])
+export function saveNewCard(deckId, { side1, side2 }) {
+  const deckCardRef = ref.child(`deckCards/${deckId}`).push()
+  return deckCardRef.set({
+    cardId: deckCardRef.key,
+    side1,
+    side2,
+  })
 }
 
-export function setDecksListener(onSuccess, onFailure) {
-  return ref
-    .child('decks')
-    .on('value',
-      (snapshot) => onSuccess(snapshot.val()),
-      onFailure)
+export function saveExistingCard(deckId, { cardId, side1, side2 }) {
+  return ref.child(`deckCards/${deckId}`).set({
+    cardId,
+    side1,
+    side2,
+  })
 }
 
-export function setCardsListener(onSuccess, onFailure) {
-  return ref
-    .child('cards')
-    .on('value',
-      (snapshot) => onSuccess(snapshot.val()),
-      onFailure)
+// Listener helpers
+export function setUserValueListener(uid, onSuccess, onFailure) {
+  return ref.child(`users/${uid}`)
+    .on('value', snapshop => onSuccess(snapshop.val()), onFailure)
 }
+
+export function setUserDeckAddedListener(uid, onSuccess, onFailure) {
+  return ref.child(`userDecks/${uid}`)
+    .on('child_added', snapshop => onSuccess(snapshop.val()), onFailure)
+}
+
+export function setUserDeckRemovedListener(uid, onSuccess, onFailure) {
+  return ref.child(`userDecks/${uid}`)
+    .on('child_removed', snapshop => onSuccess(snapshop.val()), onFailure)
+}
+
+export function setUserDeckValueListener(uid, deckId, onSuccess, onFailure) {
+  return ref.child(`userDecks/${uid}/${deckId}`)
+    .on('value', snapshop => onSuccess(snapshop.val()), onFailure)
+}
+
+export function setDeckCardAddedListener(deckId, onSuccess, onFailure) {
+  return ref.child(`deckCards/${deckId}`)
+    .on('child_added', snapshop => onSuccess(snapshop.val()), onFailure)
+}
+
+export function setDeckCardRemovedListener(deckId, onSuccess, onFailure) {
+  return ref.child(`deckCards/${deckId}`)
+    .on('child_removed', snapshop => onSuccess(snapshop.val()), onFailure)
+}
+
+export function setDeckCardValueListener(deckId, cardId, onSuccess, onFailure) {
+  return ref.child(`deckCards/${deckId}/${cardId}`)
+    .on('value', snapshop => onSuccess(snapshop.val()), onFailure)
+}
+

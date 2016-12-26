@@ -15,11 +15,13 @@ export function saveAndHandleNewCard(deckId) {
 
     try {
       const { newCardModal } = getState()
-      await saveNewCard({
-        deckId,
-        side1: newCardModal.get('side1'),
-        side2: newCardModal.get('side2'),
+      const side1 = newCardModal.get('side1')
+      const side2 = newCardModal.get('side2')
+      await saveNewCard(deckId, {
+        side1,
+        side2,
       })
+      
       dispatch(savingNewCardSuccess())
     }
     catch (error) {

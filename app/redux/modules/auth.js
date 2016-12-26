@@ -3,7 +3,7 @@ import { setAndHandleUserValueListener } from './users'
 import {
   signInWithPopup,
   saveUser,
-} from './helpers/firebase'
+} from 'helpers/firebase'
 
 // actions
 const AUTHING_USER = 'AUTHING_USER'

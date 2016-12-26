@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { NewCardModal } from 'components'
-import * as newCardModalActionCreators from 'redux/rewrite/newCardModal'
+import * as newCardModalActionCreators from 'redux/modules/newCardModal'
 
 function mapStateToProps (state, props) {
   return {

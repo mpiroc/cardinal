@@ -1,3 +1,4 @@
+export auth from './auth'
 export cards from './cards'
 export decks from './decks'
 export listeners from './listeners'

@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { NewDeckModal } from 'components'
-import * as newDeckModalActionCreators from 'redux/rewrite/newDeckModal'
+import * as newDeckModalActionCreators from 'redux/modules/newDeckModal'
 
 function mapStateToProps (state, props) {
   return {

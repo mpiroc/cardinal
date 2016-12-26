@@ -13,10 +13,13 @@ export function saveAndHandleNewDeck() {
     dispatch(savingNewDeck())
 
     try {
-      const { newDeckModal } = getState()
-      await saveNewDeck({
-        name: newDeckModal.get('name')
+      const { auth, newDeckModal } = getState()
+      const uid = auth.get('authedUid')
+      const name = newDeckModal.get('name')
+      await saveNewDeck(uid, {
+        name
       })
+
       dispatch(savingNewDeckSuccess())
     }
     catch (error) {
@@ -79,7 +82,9 @@ export default function newDeckModal(state = newDeckModalInitialState, action) {
     case UPDATE_NEW_DECK_NAME:
       return state.set('name', action.name)
     case SAVING_NEW_DECK:
-      return state.set('isSaving', true)
+      return state
+        .set('isSaving', true)
+        .set('error', '')
     case SAVING_NEW_DECK_SUCCESS:
       return state
         .set('isSaving', false)

@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Deck } from 'components'
-import * as deckActionCreators from 'redux/rewrite/decks'
+import * as deckActionCreators from 'redux/modules/decks'
 
 class DeckContainer extends React.Component {
   componentDidMount() {

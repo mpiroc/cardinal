@@ -2,8 +2,8 @@ import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { DelegateLink } from 'components'
-import * as authActionCreators from 'redux/rewrite/auth'
-import * as userActionCreators from 'redux/rewrite/users'
+import * as authActionCreators from 'redux/modules/auth'
+import * as userActionCreators from 'redux/modules/users'
 
 class SignInLinkContainer extends React.Component {
   constructor() {

@@ -6,7 +6,7 @@ import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
 import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'
 import { routerReducer, syncHistoryWithStore } from 'react-router-redux'
-import * as reducers from 'redux/rewrite'
+import * as reducers from 'redux/modules'
 import getRoutes from 'config/routes'
 import './styles.css'
 

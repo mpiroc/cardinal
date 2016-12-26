@@ -1,73 +1,118 @@
 import { Map } from 'immutable'
-import { setCardsListener } from 'helpers/firebase'
-import { addListener } from 'redux/modules/listeners'
+import { addDeckCardValueListener } from './listeners'
+import { setDeckCardValueListener } from 'helpers/firebase'
 
-const SETTING_CARDS_LISTENER = 'SETTING_CARDS_LISTENER'
-const SETTING_CARDS_LISTENER_SUCCESS = 'SETTING_CARDS_LISTENER_SUCCESS'
-const SETTING_CARDS_LISTENER_FAILURE = 'SETTING_CARDS_LISTENER_FAILURE'
+// actions
+const SETTING_CARD_VALUE_LISTENER = 'SETTING_CARD_VALUE_LISTENER'
+const SETTING_CARD_VALUE_LISTENER_SUCCESS = 'SETTING_CARD_VALUE_LISTENER_SUCCESS'
+const SETTING_CARD_VALUE_LISTENER_FAILURE = 'SETTING_CARD_VALUE_LISTENER_FAILURE'
+const UPDATE_CARD = 'UPDATE_CARD'
+const REMOVE_CARD = 'REMOVE_CARD'
 
-export function setAndHandleCardsListener() {
-  // TODO: Right now we get the whole cards snapshop every time it changes.
-  //       We should just subscribe to the data that actually changed, instead.
+// thunks
+export function setCardValueListener(deckId, cardId) {
   return (dispatch, getState) => {
-    if (getState().listeners.get('cards') === true) {
-      return
+    const state = getState().listeners
+
+    if (state.getIn(['deckCards', deckId, 'cards', cardId]) !== true) {
+      dispatch(addDeckCardValueListener(deckId, cardId))
+      dispatch(settingCardValueListener(cardId))
+      setDeckCardValueListener(
+        deckId, cardId,
+        card => dispatch(settingCardValueListenerSuccess(cardId, card)),
+        error => dispatch(settingCardValueListenerFailure(cardId, error)),
+      )
     }
-
-    dispatch(addListener('cards'))
-    dispatch(settingCardsListener())
-
-    setCardsListener(
-      (cards) => {
-        dispatch(settingCardsListenerSuccess(cards))
-        // TODO: Add author information to cards, then add the author for each card to redux users here
-      },
-      (error) => dispatch(settingCardsListenerFailure(error))
-    )
   }
 }
 
-function settingCardsListener() {
+// action creators
+function settingCardValueListener(cardId) {
   return {
-    type: SETTING_CARDS_LISTENER
+    type: SETTING_CARD_VALUE_LISTENER,
+    cardId,
   }
 }
 
-function settingCardsListenerSuccess(cards) {
+function settingCardValueListenerSuccess(cardId, card) {
   return {
-    type: SETTING_CARDS_LISTENER_SUCCESS,
-    cards
+    type: SETTING_CARD_VALUE_LISTENER_SUCCESS,
+    cardId,
+    card,
   }
 }
 
-function settingCardsListenerFailure(error) {
+function settingCardValueListenerFailure(cardId, error) {
   return {
-    type: SETTING_CARDS_LISTENER_FAILURE,
-    error
+    type: SETTING_CARD_VALUE_LISTENER_FAILURE,
+    cardId,
+    error,
   }
 }
 
+export function updateCard(cardId, card) {
+  return {
+    type: UPDATE_CARD,
+    cardId,
+    card
+  }
+}
+
+export function removeCard(cardId) {
+  return {
+    type: REMOVE_CARD,
+    cardId
+  }
+}
+
+// card reducer
+const initialCardState = Map({
+  isLoading: true,
+  loadingError: '',
+
+  cardId: '',
+  side1: '',
+  side2: '',
+})
+
+function card(state = initialCardState, action) {
+  switch(action.type) {
+    case SETTING_CARD_VALUE_LISTENER:
+      return state
+        .set('isLoading', true)
+        .set('loadingError', '')
+    case SETTING_CARD_VALUE_LISTENER_SUCCESS:
+      // TODO: Can action.card be null?
+      return state
+        .set('isLoading', false)
+        .set('loadingError', '')
+        .merge(action.card)
+    case SETTING_CARD_VALUE_LISTENER_FAILURE:
+      return state
+        .set('isLoading', false)
+        .set('loadingError', action.error)
+    case UPDATE_CARD:
+      return state.merge(action.card)
+    default:
+      return state
+  }
+}
+
+// cards reducer
 const initialState = Map({
-  isFetching: false,
-  error: '',
-  cards: Map({})
+  cards: Map(),
 })
 
 export default function cards(state = initialState, action) {
   switch(action.type) {
-    case SETTING_CARDS_LISTENER:
-      return state
-        .set('isFetching', true)
-        .set('error', '')
-    case SETTING_CARDS_LISTENER_SUCCESS:
-      return state
-        .set('isFetching', false)
-        .set('error', '')
-        .set('cards', Map(action.cards))
-    case SETTING_CARDS_LISTENER_FAILURE:
-      return state
-        .set('isFetching', false)
-        .set('error', action.error)
+    case SETTING_CARD_VALUE_LISTENER:
+    case SETTING_CARD_VALUE_LISTENER_SUCCESS:
+    case SETTING_CARD_VALUE_LISTENER_FAILURE:
+    case UPDATE_CARD:
+      const path = ['cards', action.cardId]
+      return state.setIn(path, card(state.getIn(path), action))
+    case REMOVE_CARD:
+      return state.deleteIn(['cards', action.cardId])
     default:
       return state
   }

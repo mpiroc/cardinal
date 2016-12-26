@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { DelegateLink } from 'components'
 import { NewCardModalContainer } from 'containers'
-import * as newCardModalActionCreators from 'redux/rewrite/newCardModal'
+import * as newCardModalActionCreators from 'redux/modules/newCardModal'
 
 class NewCardLinkContainer extends React.Component {
   constructor() {
