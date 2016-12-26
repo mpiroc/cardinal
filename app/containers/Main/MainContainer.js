@@ -44,6 +44,7 @@ MainContainer.propTypes = {
   deckId: PropTypes.string,
   authUser: PropTypes.func.isRequired,
   setAndHandleUserValueListener: PropTypes.func.isRequired,
+  location: PropTypes.object.isRequired,
 }
 
 MainContainer.contextTypes = {

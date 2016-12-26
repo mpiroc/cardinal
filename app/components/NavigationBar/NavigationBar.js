@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react'
 import {
   NewCardLinkContainer,
   NewDeckLinkContainer,
+  SignOutLinkContainer,
   SignInLinkContainer
 } from 'containers'
 import { navBar, navBarContainer } from './styles.css'
@@ -22,10 +23,15 @@ export default function NavigationBar (props) {
             <NewDeckLinkContainer />
           </li>
           {
-            props.isAuthed ? null :
-            <li>
-              <SignInLinkContainer />
-            </li>
+            props.isAuthed ? (
+              <li>
+                <SignOutLinkContainer />
+              </li> 
+            ) : (
+              <li>
+                <SignInLinkContainer />
+              </li>
+            )
           }
         </ul>
       </nav>

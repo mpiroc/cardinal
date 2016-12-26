@@ -13,6 +13,10 @@ export async function signInWithPopup() {
   }
 }
 
+export function signOut () {
+  return firebase.auth().signOut()
+}
+
 // Save item helpers
 export function saveUser({ uid, name }) {
   return ref.child(`users/${uid}`).set({

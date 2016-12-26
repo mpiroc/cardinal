@@ -1,5 +1,5 @@
 import React from 'react'
-import { Router, Route, IndexRoute } from 'react-router'
+import { Router, Route, IndexRoute, Redirect } from 'react-router'
 import { DeckContainer, DecksContainer, HomeContainer, MainContainer } from 'containers'
 import { Home } from 'components'
 

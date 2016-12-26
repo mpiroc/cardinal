@@ -2,6 +2,7 @@ import { Map } from 'immutable'
 import { setAndHandleUserValueListener } from './users'
 import {
   signInWithPopup,
+  signOut,
   saveUser,
 } from 'helpers/firebase'
 
@@ -10,6 +11,7 @@ const AUTHING_USER = 'AUTHING_USER'
 const AUTHING_USER_SUCCESS = 'AUTHING_USER_SUCCESS'
 const AUTHING_USER_FAILURE = 'AUTHING_USER_FAILURE'
 const AUTH_USER = 'AUTH_USER'
+const UNAUTH_USER = 'UNAUTH_USER'
 
 // thunks
 export function authAndSaveUser() {
@@ -26,6 +28,15 @@ export function authAndSaveUser() {
     catch (error) {
       dispatch(authingUserFailure(error))
     }
+  }
+}
+
+export function signOutAndUnauth() {
+  return async (dispatch, getState) => {
+    signOut()
+    dispatch(unauthUser())
+    // TODO: Also clear decks and cards?
+    // TODO: Also stop listening?
   }
 }
 
@@ -54,6 +65,12 @@ export function authUser(uid) {
   return {
     type: AUTH_USER,
     uid,
+  }
+}
+
+export function unauthUser() {
+  return {
+    type: UNAUTH_USER
   }
 }
 
@@ -87,6 +104,12 @@ export default function auth(state = initialState, action) {
         .set('isAuthed', false)
         .set('authedUid', '')
         .set('authError', action.error)
+    case UNAUTH_USER:
+      return state
+        .set('isAuthing', false)
+        .set('isAuthed', false)
+        .set('authedUid', '')
+        .set('authError', '')
     default:
       return state
   }
