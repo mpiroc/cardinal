@@ -2,11 +2,12 @@ import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Decks } from 'components'
-import * as decksActionCreators from 'redux/modules/decks'
+import * as userActionCreators from 'redux/rewrite/users'
 
 class DecksContainer extends React.Component {
   componentDidMount() {
-    this.props.setAndHandleDecksListener()
+    const { setUserDeckCollectionListeners, authedUid } = this.props
+    setUserDeckCollectionListeners(authedUid)
   }
   render () {
     return (
@@ -17,17 +18,19 @@ class DecksContainer extends React.Component {
 
 DecksContainer.propTypes = {
   decks: PropTypes.object.isRequired,
-  setAndHandleDecksListener: PropTypes.func.isRequired,
+  authedUid: PropTypes.string.isRequired,
+  setUserDeckCollectionListeners: PropTypes.func.isRequired,
 }
 
-function mapStateToProps (state, props) {
+function mapStateToProps ({decks, auth}, props) {
   return {
-    decks: state.decks.get('decks'),
+    decks: decks.get('decks'),
+    authedUid: auth.get('authedUid')
   }
 }
 
 function mapDispatchToProps (dispatch, props) {
-  return bindActionCreators(decksActionCreators, dispatch)
+  return bindActionCreators(userActionCreators, dispatch)
 }
 
 export default connect(

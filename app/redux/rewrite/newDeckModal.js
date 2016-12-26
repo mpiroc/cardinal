@@ -1,5 +1,5 @@
 import { Map } from 'immutable'
-import { saveNewDeck } from 'helpers/firebase'
+import { saveNewDeck } from './helpers/firebase'
 
 const OPEN_NEW_DECK_MODAL = 'OPEN_NEW_DECK_MODAL'
 const CLOSE_NEW_DECK_MODAL = 'CLOSE_NEW_DECK_MODAL'
@@ -10,7 +10,7 @@ const SAVING_NEW_DECK_FAILURE = 'SAVING_NEW_DECK_FAILURE'
 
 export function saveAndHandleNewDeck() {
   return async (dispatch, getState) => {
-    dispatch(saveNewDeck())
+    dispatch(savingNewDeck())
 
     try {
       const { auth, newDeckModal } = getState()

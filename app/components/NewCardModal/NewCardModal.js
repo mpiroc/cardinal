@@ -44,4 +44,5 @@ NewCardModal.propTypes = {
   updateNewCardSide1: PropTypes.func.isRequired,
   updateNewCardSide2: PropTypes.func.isRequired,
   closeNewCardModal: PropTypes.func.isRequired,
+  saveAndHandleNewCard: PropTypes.func.isRequired,
 }

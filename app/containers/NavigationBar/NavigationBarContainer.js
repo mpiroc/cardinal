@@ -4,7 +4,7 @@ import { NavigationBar } from 'components'
 
 function mapStateToProps (state, props) {
   return {
-    isAuthed: state.users.get('authedUserId').length > 0,
+    isAuthed: state.auth.get('authedUid').length > 0,
   }
 }
 

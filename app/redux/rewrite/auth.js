@@ -1,5 +1,5 @@
 import { Map } from 'immutable'
-import { setUserValueListener } from './users'
+import { setAndHandleUserValueListener } from './users'
 import {
   signInWithPopup,
   saveUser,
@@ -19,11 +19,11 @@ export function authAndSaveUser() {
       const user = await signInWithPopup()
       await saveUser(user)
 
-      dispatch(setUserValueListener(user.uid))
-      dispatch(authingUserSuccess(user))
+      dispatch(setAndHandleUserValueListener(user.uid))
+      dispatch(authingUserSuccess(user.uid))
     }
     catch (error) {
-      dispatch(authingUserFailure(user))
+      dispatch(authingUserFailure(error))
     }
   }
 }

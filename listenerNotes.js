@@ -5,7 +5,7 @@ on view decks
   listen to userDecks collection
   optional: listen to each userDeck value
 
-on view decks
+on view deck
   listen to userDeck value
   listen to deckCards collection
   optional: listen to each deckCard value

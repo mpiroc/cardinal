@@ -5,7 +5,7 @@ import { deckContainer, deckName } from './styles.css'
 function Deck (props) {
   // TODO: Do we need to url-escape props.deckId?
   return (
-    <div className={deckContainer} key={props.deckId}>
+    <div className={deckContainer}>
       <div className={deckName}>
         <Link to={`/deck/${props.deckId}`}>{props.name}</Link>
       </div>
@@ -13,9 +13,16 @@ function Deck (props) {
   )
 }
 
+Deck.propTypes = {
+  deckId: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+}
+
 export default function Decks (props) {
-  return (
-    <div>{props.decks.valueSeq().map((deck) => Deck(deck))}</div>
+  return props.decks.count() < 1 ? null : (
+    <div>{props.decks.keySeq().map(
+      deckId => <Deck key={deckId} deckId={deckId} name={props.decks.getIn([deckId, 'name'])} />
+    )}</div>
   )
 }
 

@@ -23,7 +23,7 @@ const SETTING_USER_VALUE_LISTENER_SUCCESS = 'SETTING_USER_VALUE_LISTENER_SUCCESS
 const SETTING_USER_VALUE_LISTENER_FAILURE = 'SETTING_USER_VALUE_LISTENER_FAILURE'
 
 // thunks
-export function setUserValueListener(uid) {
+export function setAndHandleUserValueListener(uid) {
   return (dispatch, getState) => {
     const state = getState().listeners
 
@@ -131,8 +131,6 @@ const initialUserState = Map({
 
 function user(state = initialUserState, action) {
   switch(action.type) {
-    case UPDATE_USER_VALUE:
-      return state.merge(action.user)
     case USER_DECK_ADDED_RECEIVED:
       return state.setIn(['decks', action.deck.deckId], true)
     case USER_DECK_REMOVED_RECEIVED:

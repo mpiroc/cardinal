@@ -1,5 +1,5 @@
 import { Map } from 'immutable'
-import { saveNewCard } from 'helpers/firebase'
+import { saveNewCard } from './helpers/firebase'
 
 const OPEN_NEW_CARD_MODAL = 'OPEN_NEW_CARD_MODAL'
 const CLOSE_NEW_CARD_MODAL = 'CLOSE_NEW_CARD_MODAL'

@@ -113,13 +113,13 @@ export default function listeners (state = initialState, action) {
     case ADD_USER_DECK_ADDED_LISTENER:
     case ADD_USER_DECK_REMOVED_LISTENER:
     case ADD_USER_DECK_VALUE_LISTENER:
-      const path = ['userDecks', action.uid]
-      return state.setIn(path, userDecks(state.getIn(path), action))
+      const userDeckPath = ['userDecks', action.uid]
+      return state.setIn(userDeckPath, userDecks(state.getIn(userDeckPath), action))
     case ADD_DECK_CARD_ADDED_LISTENER:
     case ADD_DECK_CARD_REMOVED_LISTENER:
     case ADD_DECK_CARD_VALUE_LISTENER:
-      const path = ['deckCards', action.deckId]
-      return state.setIn(path, deckCards(state.getIn(path), action))
+      const deckCardPath = ['deckCards', action.deckId]
+      return state.setIn(deckCardPath, deckCards(state.getIn(deckCardPath), action))
     default:
       return state
   }
