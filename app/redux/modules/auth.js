@@ -5,6 +5,10 @@ import {
   signOut,
   saveUser,
 } from 'helpers/firebase'
+import { disableAndRemoveAllListeners } from 'redux/modules/listeners'
+import { usersLogout } from 'redux/modules/users'
+import { decksLogout } from 'redux/modules/decks'
+import { cardsLogout } from 'redux/modules/cards'
 
 // actions
 const AUTHING_USER = 'AUTHING_USER'
@@ -33,10 +37,13 @@ export function authAndSaveUser() {
 
 export function signOutAndUnauth() {
   return async (dispatch, getState) => {
-    signOut()
+    disableAndRemoveAllListeners()
+    await signOut()
+
     dispatch(unauthUser())
-    // TODO: Also clear decks and cards?
-    // TODO: Also stop listening?
+    dispatch(usersLogout())
+    dispatch(decksLogout())
+    dispatch(cardsLogout())
   }
 }
 

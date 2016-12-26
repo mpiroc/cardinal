@@ -21,6 +21,7 @@ const SETTING_ADD_OR_REMOVE_USER_DECK_LISTENER_FAILURE = 'SETTING_ADD_OR_REMOVE_
 const SETTING_USER_VALUE_LISTENER = 'SETTING_USER_VALUE_LISTENER'
 const SETTING_USER_VALUE_LISTENER_SUCCESS = 'SETTING_USER_VALUE_LISTENER_SUCCESS'
 const SETTING_USER_VALUE_LISTENER_FAILURE = 'SETTING_USER_VALUE_LISTENER_FAILURE'
+const USERS_LOGOUT = 'USERS_LOGOUT'
 
 // thunks
 export function setAndHandleUserValueListener(uid) {
@@ -118,6 +119,13 @@ function settingUserValueListenerFailure(uid, error) {
   }
 }
 
+export function usersLogout(uid) {
+  return {
+    type: USERS_LOGOUT,
+    uid,
+  }
+}
+
 // user reducer
 const initialUserState = Map({
   isLoading: true,
@@ -171,6 +179,8 @@ export default function users(state = initialState, action) {
     case SETTING_USER_VALUE_LISTENER_FAILURE:
       const path = ['users', action.uid]
       return state.setIn(path, user(state.getIn(path), action))
+    case USERS_LOGOUT:
+      return state.set('users', Map())
     default:
       return state
   }

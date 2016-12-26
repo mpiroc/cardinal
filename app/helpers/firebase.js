@@ -93,3 +93,30 @@ export function setDeckCardValueListener(deckId, cardId, onSuccess, onFailure) {
     .on('value', snapshop => onSuccess(snapshop.val()), onFailure)
 }
 
+export function removeUserValueListener(uid, onSuccess, onFailure) {
+  return ref.child(`users/${uid}`).off('value')
+}
+
+export function removeUserDeckAddedListener(uid, onSuccess, onFailure) {
+  return ref.child(`userDecks/${uid}`).off('child_added')
+}
+
+export function removeUserDeckRemovedListener(uid, onSuccess, onFailure) {
+  return ref.child(`userDecks/${uid}`).off('child_removed')
+}
+
+export function removeUserDeckValueListener(uid, deckId, onSuccess, onFailure) {
+  return ref.child(`userDecks/${uid}/${deckId}`).off('value')
+}
+
+export function removeDeckCardAddedListener(deckId, onSuccess, onFailure) {
+  return ref.child(`deckCards/${deckId}`).off('child_added')
+}
+
+export function removeDeckCardRemovedListener(deckId, onSuccess, onFailure) {
+  return ref.child(`deckCards/${deckId}`).off('child_removed')
+}
+
+export function removeDeckCardValueListener(deckId, cardId, onSuccess, onFailure) {
+  return ref.child(`deckCards/${deckId}/${cardId}`).off('value')
+}

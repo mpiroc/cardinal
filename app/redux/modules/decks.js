@@ -23,6 +23,7 @@ const SETTING_DECK_VALUE_LISTENER_SUCCESS = 'SETTING_DECK_VALUE_LISTENER_SUCCESS
 const SETTING_DECK_VALUE_LISTENER_FAILURE = 'SETTING_DECK_VALUE_LISTENER_FAILURE'
 const UPDATE_DECK = 'UPDATE_DECK'
 const REMOVE_DECK = 'REMOVE_DECK'
+const DECKS_LOGOUT = 'DECKS_LOGOUT'
 
 // thunks
 export function setDeckValueListener(uid, deckId) {
@@ -133,6 +134,12 @@ export function removeDeck(deckId) {
   }
 }
 
+export function decksLogout() {
+  return {
+    type: DECKS_LOGOUT
+  }
+}
+
 // deck reducer
 const initialDeckState = Map({
   isLoading: true,
@@ -191,6 +198,8 @@ export default function decks(state = initialState, action) {
       return state.setIn(path, deck(state.getIn(path), action))
     case REMOVE_DECK:
       return state.deleteIn(['decks', action.deckId])
+    case DECKS_LOGOUT:
+      return state.set('decks', Map())
     default:
       return state
   }

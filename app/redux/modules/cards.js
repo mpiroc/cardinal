@@ -8,6 +8,7 @@ const SETTING_CARD_VALUE_LISTENER_SUCCESS = 'SETTING_CARD_VALUE_LISTENER_SUCCESS
 const SETTING_CARD_VALUE_LISTENER_FAILURE = 'SETTING_CARD_VALUE_LISTENER_FAILURE'
 const UPDATE_CARD = 'UPDATE_CARD'
 const REMOVE_CARD = 'REMOVE_CARD'
+const CARDS_LOGOUT = 'CARDS_LOGOUT'
 
 // thunks
 export function setCardValueListener(deckId, cardId) {
@@ -65,6 +66,12 @@ export function removeCard(cardId) {
   }
 }
 
+export function cardsLogout() {
+  return {
+    type: CARDS_LOGOUT
+  }
+}
+
 // card reducer
 const initialCardState = Map({
   isLoading: true,
@@ -113,6 +120,8 @@ export default function cards(state = initialState, action) {
       return state.setIn(path, card(state.getIn(path), action))
     case REMOVE_CARD:
       return state.deleteIn(['cards', action.cardId])
+    case CARDS_LOGOUT:
+      return state.set('cards', Map())
     default:
       return state
   }
