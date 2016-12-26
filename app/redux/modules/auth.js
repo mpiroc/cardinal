@@ -9,6 +9,7 @@ import {
 const AUTHING_USER = 'AUTHING_USER'
 const AUTHING_USER_SUCCESS = 'AUTHING_USER_SUCCESS'
 const AUTHING_USER_FAILURE = 'AUTHING_USER_FAILURE'
+const AUTH_USER = 'AUTH_USER'
 
 // thunks
 export function authAndSaveUser() {
@@ -49,9 +50,18 @@ function authingUserFailure(error) {
   }
 }
 
+export function authUser(uid) {
+  return {
+    type: AUTH_USER,
+    uid,
+  }
+}
+
+
 // auth reducer
 const initialState = Map({
   isAuthing: true,
+  isAuthed: false,
   authedUid: '',
   authError: '',
 })
@@ -61,16 +71,20 @@ export default function auth(state = initialState, action) {
     case AUTHING_USER:
       return state
         .set('isAuthing', true)
+        .set('isAuthed', false)
         .set('authedUid', '')
         .set('authError', '')
     case AUTHING_USER_SUCCESS:
+    case AUTH_USER:
       return state
         .set('isAuthing', false)
+        .set('isAuthed', true)
         .set('authedUid', action.uid)
         .set('authError', '')
     case AUTHING_USER_FAILURE:
       return state
         .set('isAuthing', false)
+        .set('isAuthed', false)
         .set('authedUid', '')
         .set('authError', action.error)
     default:

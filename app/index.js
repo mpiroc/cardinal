@@ -8,6 +8,7 @@ import thunk from 'redux-thunk'
 import { routerReducer, syncHistoryWithStore } from 'react-router-redux'
 import * as reducers from 'redux/modules'
 import getRoutes from 'config/routes'
+import { redirectIfNecessary } from 'helpers/routes'
 import './styles.css'
 
 const store = createStore(combineReducers({...reducers, routing: routerReducer}), compose(
@@ -18,13 +19,10 @@ const store = createStore(combineReducers({...reducers, routing: routerReducer})
 const history = syncHistoryWithStore(hashHistory, store)
 
 function checkAuth(nextState, replace) {
-  const authedUid = store.getState().auth.get('authedUid')
-  const isAuthed = authedUid.length > 0
+  const isAuthed = store.getState().auth.get('isAuthed')
   const nextPathName = nextState.location.pathname
 
-  if (nextPathName === '/decks' && !isAuthed) {
-    replace('/')
-  }
+  redirectIfNecessary(isAuthed, nextPathName, replace)
 }
 
 const routes = getRoutes(history, checkAuth)
