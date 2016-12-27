@@ -7,9 +7,10 @@ import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'
 import { routerReducer, syncHistoryWithStore } from 'react-router-redux'
 import * as reducers from 'redux/modules'
-import getRoutes from 'config/routes'
+//import getRoutes from 'config/routes'
+import getRoutes from 'config/Material/routes'
 import { redirectIfNecessary } from 'helpers/routes'
-import './styles.css'
+import 'react-toolbox/lib/commons.scss'
 
 const store = createStore(combineReducers({...reducers, routing: routerReducer}), compose(
   applyMiddleware(thunk),

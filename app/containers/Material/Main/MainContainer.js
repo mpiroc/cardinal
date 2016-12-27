@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
-import { MainSidebar } from 'components'
-import { MainNavDrawerContainer, MainAppBarContainer } from 'containers'
+import { MainSidebar } from 'components/Material'
+import { MainNavDrawerContainer, MainAppBarContainer } from 'containers/Material'
 import {
   Layout,
   Panel,

@@ -9,7 +9,7 @@ function Deck({deck}) {
 
   return (
     <Card style={{ width: '350px', margin: '0 1.8rem 1.8rem 0' }}>
-      <CardTitle title={name} subtitle={'Placeholder count'}`} />
+      <CardTitle title={name} subtitle={'Placeholder count'} />
       <CardText>{'Placeholder description'}</CardText>
       <CardActions>
         <Button label={'Edit'} />
