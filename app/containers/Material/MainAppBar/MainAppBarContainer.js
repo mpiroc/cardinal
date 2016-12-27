@@ -14,18 +14,21 @@ class MainAppBarContainer extends React.Component {
     this.props.toggleNavDrawer()
   }
   render () {
+    const { isAuthed } = this.props
     return (
-      <MainAppBar onToggleNavDrawer={this.handleToggleNavDrawer} />
+      <MainAppBar isAuthed={isAuthed} onToggleNavDrawer={this.handleToggleNavDrawer} />
     )
   }
 }
 
 MainAppBarContainer.propTypes = {
+  isAuthed: PropTypes.bool.isRequired,
   toggleNavDrawer: PropTypes.func.isRequired,
 }
 
-function mapStateToProps (state, props) {
+function mapStateToProps ({auth}, props) {
   return {
+    isAuthed: auth.get('isAuthed')
   }
 }
 
