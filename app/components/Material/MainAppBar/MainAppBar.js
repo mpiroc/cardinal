@@ -4,7 +4,7 @@ import {
   Navigation,
   Button,
 } from 'react-toolbox'
-import { SignInButtonContainer } from 'containers/Material'
+import { SignInButtonContainer, SignOutButtonContainer } from 'containers/Material'
 
 export default function MainAppBar (props) {
   return (
@@ -13,7 +13,7 @@ export default function MainAppBar (props) {
         <Button label={'Profile'} />
         {
           props.isAuthed ?
-            <Button label={'Sign Out'} /> :
+            <SignOutButtonContainer /> :
             <SignInButtonContainer />
         }
       </Navigation>
