@@ -33,9 +33,9 @@ export default function EditCardDialog (props) {
       >
       <section>
         <Input
-          type='text'
+          type='text' multiline
           label={'Side one'}
-          maxLength={80}
+          maxLength={2000}
           value={side1}
           onChange={onSide1Change}
           disabled={isSaving}
@@ -43,7 +43,7 @@ export default function EditCardDialog (props) {
         <Input
           type='text' multiline
           label={'Side two'}
-          maxLength={1000}
+          maxLength={2000}
           value={side2}
           onChange={onSide2Change}
           disabled={isSaving}

@@ -10,14 +10,18 @@ function FlashCard({card}) {
   return (
     <div style={{display: 'flex', flexDirection: 'row', margin: '0 0 1.8rem 0'}}>
       <Card style={{ width: '50%' }}>
-        <CardText>{side1}</CardText>
+        <CardText>
+          <pre>{side1}</pre>
+        </CardText>
         <CardActions>
           <Button label={'Edit'} />
           <Button label={'Delete'} />
         </CardActions>
       </Card>
       <Card style={{ width: '50%' }}>
-        <CardText>{side2}</CardText>
+        <CardText>
+          <pre>{side2}</pre>
+        </CardText>
       </Card>
     </div>
   )
