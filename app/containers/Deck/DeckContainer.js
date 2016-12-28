@@ -6,13 +6,18 @@ import * as deckActionCreators from 'redux/modules/decks'
 
 class DeckContainer extends React.Component {
   componentDidMount() {
-    const { authedUid, setDeckValueListener, setDeckCardCollectionListeners, params } = this.props
-    setDeckValueListener(authedUid, params.deckId)
-    setDeckCardCollectionListeners(params.deckId)
+    const {
+      deckId,
+      authedUid,
+      setDeckValueListener,
+      setDeckCardCollectionListeners,
+    } = this.props
+    setDeckValueListener(authedUid, deckId)
+    setDeckCardCollectionListeners(deckId)
   }
   render () {
-    const { name, cards } = this.props
-    return <Deck name={name} cards={cards} />
+    const { deckId, name, cards } = this.props
+    return <Deck deckId={deckId} name={name} cards={cards} />
   }
 }
 
@@ -26,11 +31,26 @@ DeckContainer.propTypes = {
 }
 
 function mapStateToProps ({ auth, decks, cards }, props) {
-  const deck = decks.getIn(['decks', props.params.deckId])
+  const deckId = props.params.deckId
+  const deck = decks.getIn(['decks', deckId])
+
+  const temp1 = deck.get('cards').toObject()
+  const temp2 = deck.get('cards').keySeq().toObject()
+  const temp3 = deck.get('cards').keySeq().map(cardId => cards.getIn(['cards', cardId])).toObject()
+  const temp4 = deck.get('cards').keySeq().map(cardId => cards.getIn(['cards', cardId])).filter(card => card !== undefined).toObject()
+
   return {
+    deckId: deckId,
     authedUid: auth.get('authedUid'),
     name: deck.get('name'),
-    cards: deck.get('cards').map(cardId => cards.getIn(['cards', cardId]))
+    cards: deck
+      .get('cards')
+      .keySeq()
+      .map(cardId => { return {
+        cardId,
+        card: cards.getIn(['cards', cardId])
+      }})
+      .filter(card => card.card !== undefined)
   }
 }
 

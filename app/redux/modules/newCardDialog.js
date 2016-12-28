@@ -17,12 +17,12 @@ export function saveAndHandleNewCard() {
     dispatch(savingNewCard())
 
     try {
-      const { auth, newCardDialog } = getState()
-      const uid = auth.get('authedUid')
+      const { newCardDialog } = getState()
+      const deckId = newCardDialog.get('deckId')
       const side1 = newCardDialog.get('side1')
       const side2 = newCardDialog.get('side2')
 
-      await saveNewCard(uid, {
+      await saveNewCard(deckId, {
         side1,
         side2,
       })
@@ -50,9 +50,10 @@ export function updateNewCardSide2(side2) {
   }
 }
 
-export function openNewCardDialog() {
+export function openNewCardDialog(deckId) {
   return {
-    type: OPEN_NEW_CARD_DIALOG
+    type: OPEN_NEW_CARD_DIALOG,
+    deckId
   }
 }
 
@@ -117,6 +118,7 @@ function snackbar(state = initialSnackbarState, action) {
 
 const initialState = Map({
   isActive: false,
+  deckId: '',
   side1: '',
   side2: '',
   isSaving: false,
@@ -130,7 +132,9 @@ export default function newCardDialog(state = initialState, action) {
     case UPDATE_NEW_CARD_SIDE2:
       return state.set('side2', action.side2)
     case OPEN_NEW_CARD_DIALOG:
-      return state.set('isActive', true)
+      return state
+        .set('isActive', true)
+        .set('deckId', action.deckId)
     case CLOSE_NEW_CARD_DIALOG:
       return state.set('isActive', false)
     case SAVING_NEW_CARD:
@@ -140,6 +144,7 @@ export default function newCardDialog(state = initialState, action) {
     case SAVING_NEW_CARD_SUCCESS:
       return state
         .set('isActive', false)
+        .set('deckId', '')
         .set('side1', '')
         .set('side2', '')
         .set('isSaving', false)

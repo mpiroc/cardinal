@@ -29,20 +29,21 @@ FlashCard.propTypes = {
   }).isRequired
 }
 
-export default function Deck ({name, cards}) {
+export default function Deck ({deckId, name, cards}) {
   return (
     <div>
       <div>{
-        cards.keySeq().map(
-          cardId => <FlashCard key={cardId} card={cards.get(cardId)} />
+        cards.valueSeq().map(
+          card => <FlashCard key={card.cardId} card={card.card} />
         )
       }</div>
-      <NewCardRTCardContainer />
+      <NewCardRTCardContainer deckId={deckId} />
     </div>
   )
 }
 
 Deck.propTypes = {
+  deckId: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   cards: PropTypes.object.isRequired,
 }

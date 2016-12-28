@@ -1,6 +1,7 @@
 export Deck from './Deck/Deck'
 export DeckRTCard from './DeckRTCard/DeckRTCard'
 export Decks from './Decks/Decks'
+export EditCardDialog from './EditCardDialog/EditCardDialog'
 export EditDeckDialog from './EditDeckDialog/EditDeckDialog'
 export MainAppBar from './MainAppBar/MainAppBar'
 export MainNavDrawer from './MainNavDrawer/MainNavDrawer'

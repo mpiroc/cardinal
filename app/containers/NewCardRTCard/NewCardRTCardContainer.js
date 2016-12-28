@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { NewCardRTCard } from 'components'
-//import * as newCardDialogActionCreators from 'redux/modules/newCardDialog'
+import * as newCardDialogActionCreators from 'redux/modules/newCardDialog'
 
 class NewCardRTCardContainer extends React.Component {
   constructor() {
@@ -10,17 +10,20 @@ class NewCardRTCardContainer extends React.Component {
     this.handleOpenDialog = this.handleOpenDialog.bind(this)
   }
   handleOpenDialog() {
-    //this.props.openNewCardDialog()
+    const { deckId } = this.props
+    this.props.openNewCardDialog(deckId)
   }
   render () {
+    const { deckId } = this.props
     return (
-      <NewCardRTCard onOpenDialog={this.handleOpenDialog} />
+      <NewCardRTCard deckId={deckId} onOpenDialog={this.handleOpenDialog} />
     )
   }
 }
 
 NewCardRTCardContainer.propTypes = {
-  //openNewCardDialog: PropTypes.func.isRequired
+  deckId: PropTypes.string.isRequired,
+  openNewCardDialog: PropTypes.func.isRequired,
 }
 
 function mapStateToProps (state, props) {
@@ -28,11 +31,11 @@ function mapStateToProps (state, props) {
   }
 }
 
-/*function mapDispatchToProps (dispatch, props) {
+function mapDispatchToProps (dispatch, props) {
   return bindActionCreators(newCardDialogActionCreators, dispatch)
-}*/
+}
 
 export default connect(
   mapStateToProps,
-  //mapDispatchToProps
+  mapDispatchToProps
 )(NewCardRTCardContainer)
