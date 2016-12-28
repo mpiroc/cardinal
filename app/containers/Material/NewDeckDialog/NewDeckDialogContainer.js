@@ -19,7 +19,7 @@ class NewDeckDialogContainer extends React.Component {
     this.props.updateNewDeckDescription(description)
   }
   handleSave() {
-    this.props.closeNewDeckDialog()
+    this.props.saveAndHandleNewDeck()
   }
   handleCancel() {
     this.props.closeNewDeckDialog()
@@ -45,10 +45,13 @@ NewDeckDialogContainer.propTypes = {
   description: PropTypes.string.isRequired,
   updateNewDeckName: PropTypes.func.isRequired,
   updateNewDeckDescription: PropTypes.func.isRequired,
+  saveAndHandleNewDeck: PropTypes.func.isRequired,
   closeNewDeckDialog: PropTypes.func.isRequired,
 }
 
 function mapStateToProps ({newDeckDialog}, props) {
+  // TODO: Display error message, if present
+  // TODO: Display loading animation while saving
   return {
     isActive: newDeckDialog.get('isActive'),
     name: newDeckDialog.get('name'),

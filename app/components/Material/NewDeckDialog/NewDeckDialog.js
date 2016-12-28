@@ -14,7 +14,7 @@ export default function NewDeckDialog (props) {
   } = props
   const actions = [
     { label: 'Cancel', onClick: onCancel },
-    { label: 'Save', onClick: onCancel },
+    { label: 'Save', onClick: onSave },
   ]
 
   return (

@@ -25,11 +25,12 @@ export function saveUser({ uid, name }) {
   })
 }
 
-export function saveNewDeck(uid, { name }) {
+export function saveNewDeck(uid, { name, description }) {
   const userDeckRef = ref.child(`userDecks/${uid}`).push()
   return userDeckRef.set({
     deckId: userDeckRef.key,
     name,
+    description,
   })
 }
 
