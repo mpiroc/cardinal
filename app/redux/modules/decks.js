@@ -11,6 +11,7 @@ import {
   deleteDeck,
 } from 'helpers/firebase'
 import {
+  setCardValueListener,
   updateCard,
   removeCard,
 } from './cards'
@@ -72,6 +73,7 @@ export function setDeckCardCollectionListeners(deckId) {
         card => {
           dispatch(deckCardAddedReceived(deckId, card))
           dispatch(updateCard(card.cardId, card))
+          dispatch(setCardValueListener(deckId, card.cardId))
         },
         error => dispatch(settingAddOrRemoveDeckCardListenerFailure(deckId, error)),
       )
