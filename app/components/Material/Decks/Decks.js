@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react'
 import { Card, CardMedia, CardTitle, CardText, CardActions } from 'react-toolbox/lib/card';
 import { Button } from 'react-toolbox/lib/button';
+import { NewDeckRTCard } from 'components/Material'
 
 function Deck({deck}) {
   const name = deck.get('name')
@@ -27,11 +28,14 @@ Deck.propTypes = {
 
 export default function Decks ({decks}) {
   return (
-    <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap'}}>{
-      decks.keySeq().map(
-        deckId => <Deck key={deckId} deck={decks.get(deckId)} />
-      )
-    }</div>
+    <div>
+      <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap'}}>{
+        decks.keySeq().map(
+          deckId => <Deck key={deckId} deck={decks.get(deckId)} />
+        )
+      }</div>
+      <NewDeckRTCard />
+    </div>
   )
 }
 
