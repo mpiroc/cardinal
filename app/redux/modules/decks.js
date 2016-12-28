@@ -8,6 +8,7 @@ import {
   setUserDeckValueListener,
   setDeckCardAddedListener,
   setDeckCardRemovedListener,
+  deleteDeck,
 } from 'helpers/firebase'
 import {
   updateCard,
@@ -21,16 +22,33 @@ const SETTING_ADD_OR_REMOVE_DECK_CARD_LISTENER_FAILURE = 'SETTING_ADD_OR_REMOVE_
 const SETTING_DECK_VALUE_LISTENER = 'SETTING_DECK_VALUE_LISTENER'
 const SETTING_DECK_VALUE_LISTENER_SUCCESS = 'SETTING_DECK_VALUE_LISTENER_SUCCESS'
 const SETTING_DECK_VALUE_LISTENER_FAILURE = 'SETTING_DECK_VALUE_LISTENER_FAILURE'
+const DELETING_DECK = 'DELETING_DECK'
+const DELETING_DECK_SUCCESS = 'DELETING_DECK_SUCCESS'
+const DELETING_DECK_FAILURE = 'DELETING_DECK_FAILURE'
 const UPDATE_DECK = 'UPDATE_DECK'
 const REMOVE_DECK = 'REMOVE_DECK'
 const DECKS_LOGOUT = 'DECKS_LOGOUT'
 
 // thunks
+export function deleteAndHandleDeck(uid, deckId) {
+  return async (dispatch, getState) => {
+    dispatch(deletingDeck(deckId))
+
+    try {
+      await deleteDeck(uid, deckId)
+      dispatch(deletingDeckSuccess(deckId))
+    }
+    catch (error) {
+      dispatch(deletingDeckFailure(deckId, error))
+    }
+  }
+}
+
 export function setDeckValueListener(uid, deckId) {
   return (dispatch, getState) => {
-    const state = getState().listeners
+    const listeners = getState().listeners
 
-    if (state.getIn(['userDecks', uid, 'decks', deckId]) !== true) {
+    if (listeners.getIn(['userDecks', uid, 'decks', deckId]) !== true) {
       dispatch(addUserDeckValueListener(uid, deckId))
       dispatch(settingDeckValueListener(deckId))
       setUserDeckValueListener(
@@ -119,6 +137,28 @@ function settingDeckValueListenerFailure(deckId, error) {
   }
 }
 
+function deletingDeck(deckId) {
+  return {
+    type: DELETING_DECK,
+    deckId,
+  }
+}
+
+function deletingDeckSuccess(deckId) {
+  return { 
+    type: DELETING_DECK_SUCCESS,
+    deckId,
+  }
+}
+
+function deletingDeckFailure(deckId, error) {
+  return {
+    type: DELETING_DECK_FAILURE,
+    deckId,
+    error,
+  }
+}
+
 export function updateDeck(deckId, deck) {
   return {
     type: UPDATE_DECK,
@@ -142,6 +182,7 @@ export function decksLogout() {
 
 // deck reducer
 const initialDeckState = Map({
+  isDeleting: false,
   isLoading: true,
   loadingError: '',
   addOrRemoveError: '',
@@ -173,6 +214,10 @@ function deck(state = initialDeckState, action) {
       return state
         .set('isLoading', false)
         .set('loadingError', action.error)
+    case DELETING_DECK:
+      return state.set('isDeleting', true)
+    case DELETING_DECK_FAILURE:
+      return state.set('isDeleting', false)
     case UPDATE_DECK:
       return state.merge(action.deck)
     default:
@@ -183,9 +228,11 @@ function deck(state = initialDeckState, action) {
 // decks reducer
 const initialState = Map({
   decks: Map(),
+  error: '',
 })
 
 export default function decks(state = initialState, action) {
+  let path = []
   switch (action.type) {
     case DECK_CARD_ADDED_RECEIVED:
     case DECK_CARD_REMOVED_RECEIVED:
@@ -193,9 +240,19 @@ export default function decks(state = initialState, action) {
     case SETTING_DECK_VALUE_LISTENER:
     case SETTING_DECK_VALUE_LISTENER_SUCCESS:
     case SETTING_DECK_VALUE_LISTENER_FAILURE:
+    case DELETING_DECK:
     case UPDATE_DECK:
-      const path = ['decks', action.deckId]
+      path = ['decks', action.deckId]
       return state.setIn(path, deck(state.getIn(path), action))
+    case DELETING_DECK_SUCCESS:
+      // TODO: Also dismiss snackbar
+      return state.set('error', '')
+    case DELETING_DECK_FAILURE:
+      // TODO: Also show error snackbar
+      path = ['decks', action.deckId]
+      return state
+        .setIn(path, deck(state.getIn(path), action))
+        .set('error', action.error)
     case REMOVE_DECK:
       return state.deleteIn(['decks', action.deckId])
     case DECKS_LOGOUT:

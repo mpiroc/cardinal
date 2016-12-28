@@ -1,4 +1,5 @@
 export DeckContainer from './Deck/DeckContainer'
+export DeckRTCardContainer from './DeckRTCard/DeckRTCardContainer'
 export DecksContainer from './Decks/DecksContainer'
 export MainAppBarContainer from './MainAppBar/MainAppBarContainer'
 export MainContainer from './Main/MainContainer'

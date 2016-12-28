@@ -25,6 +25,22 @@ export function saveUser({ uid, name }) {
   })
 }
 
+export function deleteDeck(uid, deckId) {
+  /*
+  throw {
+    message: `Error deleting deck ${uid}:${deckId}`
+  }
+  */
+  const deckCardRef = ref.child(`deckCards/${deckId}`)
+  const userDeckRef = ref.child(`userDecks/${uid}/${deckId}`)
+
+  return firebase.Promise.all([
+    // TODO: Does this also trigger child_removed events on the deckCard's children?
+    deckCardRef.remove(),
+    userDeckRef.remove(),
+  ])
+}
+
 export function saveNewDeck(uid, { name, description }) {
   const userDeckRef = ref.child(`userDecks/${uid}`).push()
   return userDeckRef.set({

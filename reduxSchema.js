@@ -12,7 +12,9 @@ decks
   error: string
   decks
     [deckId]
+      isDeleting: bool
       name: string
+      description: string
       cards
         [cardId]: true
 
