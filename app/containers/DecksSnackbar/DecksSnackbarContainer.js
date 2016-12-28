@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { DecksSnackbar } from 'components'
+import { Snackbar } from 'react-toolbox'
 import * as deckActionCreators from 'redux/modules/decks'
 
 class DecksSnackbarContainer extends React.Component {
@@ -19,10 +19,14 @@ class DecksSnackbarContainer extends React.Component {
     } = this.props
 
     return (
-      <DecksSnackbar
-        isActive={isActive}
-        error={error}
-        onDismissSnackbar={this.handleDismissSnackbar}
+      <Snackbar
+        action={'Dismiss'}
+        active={isActive}
+        label={`Error deleting deck: ${error}`}
+        timeout={5000}
+        onClick={this.handleDismissSnackbar}
+        onTimeout={this.handleDismissSnackbar}
+        type='warning'
       />
     )
   }

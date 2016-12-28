@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { EditDeckDialogSnackbar } from 'components'
+import Snackbar from 'react-toolbox/lib/snackbar'
 import * as newDeckDialogActionCreators from 'redux/modules/newDeckDialog'
 
 class NewDeckSnackbarContainer extends React.Component {
@@ -19,10 +19,14 @@ class NewDeckSnackbarContainer extends React.Component {
     } = this.props
 
     return (
-      <EditDeckDialogSnackbar
-        isActive={isActive}
-        error={error}
-        onDismissSnackbar={this.handleDismissSnackbar}
+      <Snackbar
+        action={'Dismiss'}
+        active={isActive}
+        label={`Error saving deck: ${error}`}
+        timeout={5000}
+        onClick={this.handleDismissSnackbar}
+        onTimeout={this.handleDismissSnackbar}
+        type='warning'
       />
     )
   }
