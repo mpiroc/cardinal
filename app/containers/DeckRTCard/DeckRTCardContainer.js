@@ -8,16 +8,21 @@ import * as editDeckDialogActionCreators from 'redux/modules/editDeckDialog'
 class DeckRTCardContainer extends React.Component {
   constructor() {
     super()
+    this.handleViewDeck = this.handleViewDeck.bind(this)
+    this.handleEditDeck = this.handleEditDeck.bind(this)
     this.handleDeleteDeck = this.handleDeleteDeck.bind(this)
-    this.handleOpenEditDialog = this.handleOpenEditDialog.bind(this)
+  }
+  handleViewDeck() {
+    const { deckId } = this.props
+    this.context.router.replace(`deck/${deckId}`)
+  }
+  handleEditDeck() {
+    const { openEditDeckDialog, deckId, name, description } = this.props
+    this.props.openEditDeckDialog(deckId, name, description)
   }
   handleDeleteDeck() {
     const { uid, deckId, deleteAndHandleDeck } = this.props
     deleteAndHandleDeck(uid, deckId)
-  }
-  handleOpenEditDialog() {
-    const { openEditDeckDialog, deckId, name, description } = this.props
-    this.props.openEditDeckDialog(deckId, name, description)
   }
   render () {
     const { deckId, isDeleting, name, description } = this.props
@@ -28,8 +33,9 @@ class DeckRTCardContainer extends React.Component {
         isDeleting={isDeleting}
         name={name}
         description={description}
+        onView={this.handleViewDeck}
         onDelete={this.handleDeleteDeck}
-        onOpenEditDialog={this.handleOpenEditDialog} />
+        onEdit={this.handleEditDeck} />
     )
   }
 }
@@ -42,6 +48,10 @@ DeckRTCardContainer.propTypes = {
   description: PropTypes.string.isRequired,
   deleteAndHandleDeck: PropTypes.func.isRequired,
   openEditDeckDialog: PropTypes.func.isRequired,
+}
+
+DeckRTCardContainer.contextTypes = {
+  router: PropTypes.object.isRequired,
 }
 
 function mapStateToProps ({ auth, decks }, props) {

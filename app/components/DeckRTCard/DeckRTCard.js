@@ -10,8 +10,10 @@ export default function DeckRTCard({
     isDeleting,
     name,
     description,
+    onView,
+    onEdit,
     onDelete,
-    onOpenEditDialog }) {
+  }) {
   return (
     <Card style={{ width: '350px', margin: '0 1.8rem 1.8rem 0' }}>
       <CardTitle title={name} subtitle={'Placeholder count'} />
@@ -31,9 +33,9 @@ export default function DeckRTCard({
         }
       </CardText>
       <CardActions>
-        <Button label={'View'} />
+        <Button label={'View'} onClick={onView}/>
 
-        <Button label={'Edit'} onClick={onOpenEditDialog} />
+        <Button label={'Edit'} onClick={onEdit} />
         <EditDeckDialogContainer deckId={deckId} />
         
         <Button label={'Delete'} onClick={onDelete} />
@@ -47,6 +49,7 @@ DeckRTCard.propTypes = {
   isDeleting: PropTypes.bool.isRequired,
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
+  onView: PropTypes.func.isRequired,
+  onEdit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
-  onOpenEditDialog: PropTypes.func.isRequired,
 }
