@@ -5,10 +5,11 @@ import ProgressBar from 'react-toolbox/lib/progress_bar'
 import { NewDeckDialogSnackbarContainer } from 'containers'
 import Delay from 'react-delay'
 
-export default function NewDeckDialog (props) {
+export default function EditDeckDialog (props) {
   const {
     isActive,
     isSaving,
+    title,
     name,
     description,
     onNameChange,
@@ -28,7 +29,7 @@ export default function NewDeckDialog (props) {
       onEscKeyDown={onCancel}
       onOverlayClick={onCancel}
       actions={actions}
-      title={'Create New Deck'}
+      title={title}
       >
       <section>
         <Input
@@ -65,9 +66,10 @@ export default function NewDeckDialog (props) {
   )
 }
 
-NewDeckDialog.propTypes = {
+EditDeckDialog.propTypes = {
   isActive: PropTypes.bool.isRequired,
   isSaving: PropTypes.bool.isRequired,
+  title: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   onNameChange: PropTypes.func.isRequired,

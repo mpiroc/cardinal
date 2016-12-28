@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { NewDeckDialog } from 'components'
+import { EditDeckDialog } from 'components'
 import * as newDeckDialogActionCreators from 'redux/modules/newDeckDialog'
 
 class NewDeckDialogContainer extends React.Component {
@@ -27,9 +27,10 @@ class NewDeckDialogContainer extends React.Component {
   render () {
     const { isActive, isSaving, name, description } = this.props
     return (
-      <NewDeckDialog
+      <EditDeckDialog
         isActive={isActive}
         isSaving={isSaving}
+        title={'Create New Deck'}
         name={name}
         description={description}
         onNameChange={this.handleNameChange}
