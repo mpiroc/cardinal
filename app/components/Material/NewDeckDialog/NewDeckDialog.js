@@ -3,6 +3,7 @@ import Dialog from 'react-toolbox/lib/dialog'
 import Input from 'react-toolbox/lib/input'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 import { NewDeckDialogSnackbarContainer } from 'containers/Material'
+import Delay from 'react-delay'
 
 export default function NewDeckDialog (props) {
   const {
@@ -48,10 +49,14 @@ export default function NewDeckDialog (props) {
           />
       </section>
       {
+        // If save completes quickly, we don't want to briefly flash the progress bar. So we
+        // wait 250 milliseconds before showing it.
         isSaving === true ? (
-            <div style={{margin: '1.8rem 0 0 0'}}>
-              <ProgressBar type='linear' mode='indeterminate' />
-            </div>
+            <Delay wait={250}>
+              <div style={{margin: '1.8rem 0 0 0'}}>
+                <ProgressBar type='linear' mode='indeterminate' />
+              </div>
+            </Delay>
           ) :
           null
       }
