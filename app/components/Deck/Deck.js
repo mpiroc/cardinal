@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react'
 import { Card, CardMedia, CardTitle, CardText, CardActions } from 'react-toolbox/lib/card';
 import { Button } from 'react-toolbox/lib/button';
+import { NewCardRTCardContainer } from 'containers'
 
 function FlashCard({card}) {
   const side1 = card.get('side1')
@@ -30,11 +31,14 @@ FlashCard.propTypes = {
 
 export default function Deck ({name, cards}) {
   return (
-    <div>{
-      cards.keySeq().map(
-        cardId => <FlashCard key={cardId} card={cards.get(cardId)} />
-      )
-    }</div>
+    <div>
+      <div>{
+        cards.keySeq().map(
+          cardId => <FlashCard key={cardId} card={cards.get(cardId)} />
+        )
+      }</div>
+      <NewCardRTCardContainer />
+    </div>
   )
 }
 
