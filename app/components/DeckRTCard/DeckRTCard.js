@@ -1,6 +1,8 @@
 import React, { PropTypes } from 'react'
-import { Card, CardMedia, CardTitle, CardText, CardActions } from 'react-toolbox/lib/card';
-import { Button } from 'react-toolbox/lib/button';
+import { Card, CardMedia, CardTitle, CardText, CardActions } from 'react-toolbox/lib/card'
+import { Button } from 'react-toolbox/lib/button'
+import ProgressBar from 'react-toolbox/lib/progress_bar'
+import Delay from 'react-delay'
 
 export default function DeckRTCard ({ isDeleting, name, description, onDelete }) {
   return (
@@ -8,7 +10,18 @@ export default function DeckRTCard ({ isDeleting, name, description, onDelete })
       <CardTitle title={name} subtitle={'Placeholder count'} />
       <CardText>
         <span>{description}</span>
-        <span>{`(TODO: Replace with progress bar) isDeleting: ${isDeleting}`}</span>
+        {
+          // If save completes quickly, we don't want to briefly flash the progress bar. So we
+          // wait 250 milliseconds before showing it.
+          isDeleting === true ? (
+              <Delay wait={250}>
+                <div style={{margin: '1.8rem 0 0 0'}}>
+                  <ProgressBar type='linear' mode='indeterminate' />
+                </div>
+              </Delay>
+            ) :
+            null
+        }
       </CardText>
       <CardActions>
         <Button label={'View'} />
@@ -20,6 +33,7 @@ export default function DeckRTCard ({ isDeleting, name, description, onDelete })
 }
 
 DeckRTCard.propTypes = {
+  isDeleting: PropTypes.bool.isRequired,
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   onDelete: PropTypes.func.isRequired,
