@@ -50,7 +50,6 @@ NewDeckDialogContainer.propTypes = {
 }
 
 function mapStateToProps ({newDeckDialog}, props) {
-  // TODO: Display error message, if present
   // TODO: Display loading animation while saving
   return {
     isActive: newDeckDialog.get('isActive'),

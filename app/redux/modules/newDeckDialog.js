@@ -9,6 +9,7 @@ const CLOSE_NEW_DECK_DIALOG = 'CLOSE_NEW_DECK_DIALOG'
 const SAVING_NEW_DECK = 'SAVING_NEW_DECK'
 const SAVING_NEW_DECK_SUCCESS = 'SAVING_NEW_DECK_SUCCESS'
 const SAVING_NEW_DECK_FAILURE = 'SAVING_NEW_DECK_FAILURE'
+const DISMISS_NEW_DECK_SNACKBAR = 'DISMISS_NEW_DECK_SNACKBAR'
 
 // thunks
 export function saveAndHandleNewDeck() {
@@ -73,19 +74,53 @@ function savingNewDeckSuccess() {
   }
 }
 
-function savingNewDeckFailure() {
+function savingNewDeckFailure(error) {
   return {
-    type: SAVING_NEW_DECK_FAILURE
+    type: SAVING_NEW_DECK_FAILURE,
+    error
+  }
+}
+
+export function dismissNewDeckSnackbar() {
+  return {
+    type: DISMISS_NEW_DECK_SNACKBAR,
   }
 }
 
 // reducers
+const initialSnackbarState = Map({
+  isActive: false,
+  error: '',
+})
+
+function snackbar(state = initialSnackbarState, action) {
+  switch(action.type) {
+    case SAVING_NEW_DECK:
+      return state
+        .set('isActive', false)
+        .set('error', '')
+    case SAVING_NEW_DECK_SUCCESS:
+      return state
+        .set('isActive', false)
+        .set('error', '')
+    case SAVING_NEW_DECK_FAILURE:
+      return state
+        .set('isActive', true)
+        .set('error', action.error)
+    case DISMISS_NEW_DECK_SNACKBAR:
+      // Don't reset 'error', so devs can still view it in the redux store.
+      return state.set('isActive', false)
+    default:
+      return state
+  }
+}
+
 const initialState = Map({
   isActive: false,
   name: '',
   description: '',
   isSaving: false,
-  error: '',
+  snackbar: snackbar(undefined, { type: undefined }),
 })
 
 export default function newDeckDialog(state = initialState, action) {
@@ -101,18 +136,21 @@ export default function newDeckDialog(state = initialState, action) {
     case SAVING_NEW_DECK:
       return state
         .set('isSaving', true)
-        .set('error', '')
+        .set('snackbar', snackbar(state.get('snackbar'), action))
     case SAVING_NEW_DECK_SUCCESS:
       return state
         .set('isActive', false)
         .set('name', '')
         .set('description', '')
         .set('isSaving', false)
-        .set('error', '')
+        .set('snackbar', snackbar(state.get('snackbar'), action))
     case SAVING_NEW_DECK_FAILURE:
       return state
         .set('isSaving', false)
-        .set('error', action.error)
+        .set('snackbar', snackbar(state.get('snackbar'), action))
+    case DISMISS_NEW_DECK_SNACKBAR:
+      return state
+        .set('snackbar', snackbar(state.get('snackbar'), action))
     default:
       return state
   }

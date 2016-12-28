@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react'
 import Dialog from 'react-toolbox/lib/dialog'
 import Input from 'react-toolbox/lib/input'
+import { NewDeckDialogSnackbarContainer } from 'containers/Material'
 
 export default function NewDeckDialog (props) {
   const {
@@ -40,6 +41,7 @@ export default function NewDeckDialog (props) {
           onChange={onDescriptionChange}
           />
       </section>
+      <NewDeckDialogSnackbarContainer />
     </Dialog>
   )
 }
