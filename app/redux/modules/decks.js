@@ -25,6 +25,7 @@ const SETTING_DECK_VALUE_LISTENER_FAILURE = 'SETTING_DECK_VALUE_LISTENER_FAILURE
 const DELETING_DECK = 'DELETING_DECK'
 const DELETING_DECK_SUCCESS = 'DELETING_DECK_SUCCESS'
 const DELETING_DECK_FAILURE = 'DELETING_DECK_FAILURE'
+const DISMISS_DECKS_SNACKBAR = 'DISMISS_DECKS_SNACKBAR'
 const UPDATE_DECK = 'UPDATE_DECK'
 const REMOVE_DECK = 'REMOVE_DECK'
 const DECKS_LOGOUT = 'DECKS_LOGOUT'
@@ -39,7 +40,7 @@ export function deleteAndHandleDeck(uid, deckId) {
       dispatch(deletingDeckSuccess(deckId))
     }
     catch (error) {
-      dispatch(deletingDeckFailure(deckId, error))
+      dispatch(deletingDeckFailure(deckId, error.message))
     }
   }
 }
@@ -159,6 +160,12 @@ function deletingDeckFailure(deckId, error) {
   }
 }
 
+export function dismissDecksSnackbar() {
+  return {
+    type: DISMISS_DECKS_SNACKBAR,
+  }
+}
+
 export function updateDeck(deckId, deck) {
   return {
     type: UPDATE_DECK,
@@ -225,10 +232,37 @@ function deck(state = initialDeckState, action) {
   }
 }
 
+const initialSnackbarState = Map({
+  isActive: false,
+  error: '',
+})
+
+function snackbar(state = initialSnackbarState, action) {
+  switch(action.type) {
+    case DELETING_DECK:
+      return state
+        .set('isActive', false)
+        .set('error', '')
+    case DELETING_DECK_SUCCESS:
+      return state
+        .set('isActive', false)
+        .set('error', '')
+    case DELETING_DECK_FAILURE:
+      return state
+        .set('isActive', true)
+        .set('error', action.error)
+    case DISMISS_DECKS_SNACKBAR:
+      // Don't reset 'error', so devs can still view it in the redux store.
+      return state.set('isActive', false)
+    default:
+      return state
+  }
+}
+
 // decks reducer
 const initialState = Map({
   decks: Map(),
-  error: '',
+  snackbar: snackbar(undefined, { type: undefined }),
 })
 
 export default function decks(state = initialState, action) {
@@ -240,19 +274,23 @@ export default function decks(state = initialState, action) {
     case SETTING_DECK_VALUE_LISTENER:
     case SETTING_DECK_VALUE_LISTENER_SUCCESS:
     case SETTING_DECK_VALUE_LISTENER_FAILURE:
-    case DELETING_DECK:
     case UPDATE_DECK:
       path = ['decks', action.deckId]
       return state.setIn(path, deck(state.getIn(path), action))
-    case DELETING_DECK_SUCCESS:
-      // TODO: Also dismiss snackbar
-      return state.set('error', '')
-    case DELETING_DECK_FAILURE:
-      // TODO: Also show error snackbar
+    case DELETING_DECK:
       path = ['decks', action.deckId]
       return state
         .setIn(path, deck(state.getIn(path), action))
-        .set('error', action.error)
+        .set('snackbar', snackbar(state.get('snackbar'), action))
+    case DELETING_DECK_FAILURE:
+      path = ['decks', action.deckId]
+      return state
+        .setIn(path, deck(state.getIn(path), action))
+        .set('snackbar', snackbar(state.get('snackbar'), action))
+    case DELETING_DECK_SUCCESS:
+    case DISMISS_DECKS_SNACKBAR:
+      return state
+        .set('snackbar', snackbar(state.get('snackbar'), action))
     case REMOVE_DECK:
       return state.deleteIn(['decks', action.deckId])
     case DECKS_LOGOUT:

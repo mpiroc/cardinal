@@ -1,6 +1,7 @@
 export DeckContainer from './Deck/DeckContainer'
 export DeckRTCardContainer from './DeckRTCard/DeckRTCardContainer'
 export DecksContainer from './Decks/DecksContainer'
+export DecksSnackbarContainer from './DecksSnackbar/DecksSnackbarContainer'
 export MainAppBarContainer from './MainAppBar/MainAppBarContainer'
 export MainContainer from './Main/MainContainer'
 export MainNavDrawerContainer from './MainNavDrawer/MainNavDrawerContainer'

@@ -26,11 +26,6 @@ export function saveUser({ uid, name }) {
 }
 
 export function deleteDeck(uid, deckId) {
-  /*
-  throw {
-    message: `Error deleting deck ${uid}:${deckId}`
-  }
-  */
   const deckCardRef = ref.child(`deckCards/${deckId}`)
   const userDeckRef = ref.child(`userDecks/${uid}/${deckId}`)
 

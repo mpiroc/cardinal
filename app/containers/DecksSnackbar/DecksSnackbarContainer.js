@@ -1,16 +1,16 @@
 import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { NewDeckDialogSnackbar } from 'components'
-import * as newDeckDialogActionCreators from 'redux/modules/newDeckDialog'
+import { DecksSnackbar } from 'components'
+import * as deckActionCreators from 'redux/modules/decks'
 
-class NewDeckSnackbarContainer extends React.Component {
+class DecksSnackbarContainer extends React.Component {
   constructor() {
     super()
     this.handleDismissSnackbar = this.handleDismissSnackbar.bind(this)
   }
   handleDismissSnackbar() {
-    this.props.dismissNewDeckSnackbar()
+    this.props.dismissDecksSnackbar()
   }
   render () {
     const {
@@ -19,7 +19,7 @@ class NewDeckSnackbarContainer extends React.Component {
     } = this.props
 
     return (
-      <NewDeckDialogSnackbar
+      <DecksSnackbar
         isActive={isActive}
         error={error}
         onDismissSnackbar={this.handleDismissSnackbar}
@@ -28,14 +28,14 @@ class NewDeckSnackbarContainer extends React.Component {
   }
 }
 
-NewDeckSnackbarContainer.propTypes = {
+DecksSnackbarContainer.propTypes = {
   isActive: PropTypes.bool.isRequired,
   error: PropTypes.string.isRequired,
-  dismissNewDeckSnackbar: PropTypes.func.isRequired,
+  dismissDecksSnackbar: PropTypes.func.isRequired,
 }
 
-function mapStateToProps ({newDeckDialog}, props) {
-  const snackbar = newDeckDialog.get('snackbar')
+function mapStateToProps ({decks}, props) {
+  const snackbar = decks.get('snackbar')
   return {
     isActive: snackbar.get('isActive'),
     error: snackbar.get('error'),
@@ -43,10 +43,10 @@ function mapStateToProps ({newDeckDialog}, props) {
 }
 
 function mapDispatchToProps (dispatch, props) {
-  return bindActionCreators(newDeckDialogActionCreators, dispatch)
+  return bindActionCreators(deckActionCreators, dispatch)
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(NewDeckSnackbarContainer)
+)(DecksSnackbarContainer)
