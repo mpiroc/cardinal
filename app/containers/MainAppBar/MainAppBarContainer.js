@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { MainAppBar } from 'components/Material'
+import { MainAppBar } from 'components'
 import * as navDrawerActionCreators from 'redux/modules/navDrawer'
 
 class MainAppBarContainer extends React.Component {

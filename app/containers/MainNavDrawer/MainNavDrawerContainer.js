@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { MainNavDrawer } from 'components/Material'
+import { MainNavDrawer } from 'components'
 import * as navDrawerActionCreators from 'redux/modules/navDrawer'
 
 class MainNavDrawerContainer extends React.Component {

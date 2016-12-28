@@ -4,8 +4,11 @@ import { connect } from 'react-redux'
 import firebase from 'firebase'
 import { saveUser } from 'helpers/firebase'
 import { redirectIfNecessary } from 'helpers/routes'
-import { MainSidebar } from 'components/Material'
-import { MainNavDrawerContainer, MainAppBarContainer } from 'containers/Material'
+import { MainSidebar } from 'components'
+import {
+  MainNavDrawerContainer,
+  MainAppBarContainer
+} from 'containers'
 import {
   Layout,
   Panel,

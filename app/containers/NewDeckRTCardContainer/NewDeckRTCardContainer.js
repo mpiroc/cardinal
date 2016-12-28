@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { NewDeckRTCard } from 'components/Material'
+import { NewDeckRTCard } from 'components'
 import * as newDeckDialogActionCreators from 'redux/modules/newDeckDialog'
 
 class NewDeckRTCardContainer extends React.Component {

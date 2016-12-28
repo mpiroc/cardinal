@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 import Dialog from 'react-toolbox/lib/dialog'
 import Input from 'react-toolbox/lib/input'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
-import { NewDeckDialogSnackbarContainer } from 'containers/Material'
+import { NewDeckDialogSnackbarContainer } from 'containers'
 import Delay from 'react-delay'
 
 export default function NewDeckDialog (props) {

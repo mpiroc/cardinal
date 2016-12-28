@@ -46,13 +46,13 @@ auth
   authedUid: string
   authError: string
 
-newDeckModal
+newDeckDialog
   isOpen: bool
   isSaving: bool
   name: string
   error: string
 
-newCardModal
+newCardDialog
   isOpen: bool
   isSaving: bool
   error: string

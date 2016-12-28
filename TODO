@@ -2,17 +2,13 @@ TODO: Once the basic skeleton is ready, choose project management service and st
 
 Next steps:
   - Redux route protection
-  - Decks redux module
-  - New Deck modal dialog
-  - Decks component (just name of each deck for now)
-  - Cards redux module
-  - New Card modal dialog
+  - New Card dialog
   - Deck component
   - Review component
   - Markdown support
 
 Future (MVP):
-  - Edit card modal dialog
+  - Edit card dialog
   - Add 'rename deck' to Decks component
   - Add 'delete deck' to Decks component
   - Add 'edit card' to Deck component

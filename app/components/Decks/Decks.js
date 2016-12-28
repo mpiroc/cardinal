@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import { Card, CardMedia, CardTitle, CardText, CardActions } from 'react-toolbox/lib/card';
 import { Button } from 'react-toolbox/lib/button';
-import { NewDeckRTCardContainer } from 'containers/Material'
+import { NewDeckRTCardContainer } from 'containers'
 
 function Deck({deck}) {
   const name = deck.get('name')

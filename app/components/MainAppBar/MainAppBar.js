@@ -4,7 +4,10 @@ import {
   Navigation,
   Button,
 } from 'react-toolbox'
-import { SignInButtonContainer, SignOutButtonContainer } from 'containers/Material'
+import {
+  SignInButtonContainer,
+  SignOutButtonContainer,
+} from 'containers'
 
 export default function MainAppBar (props) {
   return (
