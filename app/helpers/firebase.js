@@ -45,10 +45,11 @@ export function saveNewDeck(uid, { name, description }) {
   })
 }
 
-export function saveExistingDeck(uid, { deckId, name }) {
+export function saveExistingDeck(uid, { deckId, name, description }) {
   return ref.child(`userDecks/${uid}/${deckId}`).set({
     deckId,
     name,
+    description,
   })
 }
 

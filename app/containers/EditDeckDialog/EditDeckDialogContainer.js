@@ -2,9 +2,9 @@ import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { EditDeckDialog } from 'components'
-import * as newDeckDialogActionCreators from 'redux/modules/newDeckDialog'
+import * as editDeckDialogActionCreators from 'redux/modules/editDeckDialog'
 
-class NewDeckDialogContainer extends React.Component {
+class EditDeckDialogContainer extends React.Component {
   constructor() {
     super()
     this.handleSave = this.handleSave.bind(this)
@@ -13,24 +13,25 @@ class NewDeckDialogContainer extends React.Component {
     this.handleDescriptionChange = this.handleDescriptionChange.bind(this)
   }
   handleNameChange(name) {
-    this.props.updateNewDeckName(name)
+    this.props.updateEditDeckName(name)
   }
   handleDescriptionChange(description) {
-    this.props.updateNewDeckDescription(description)
+    this.props.updateEditDeckDescription(description)
   }
   handleSave() {
-    this.props.saveAndHandleNewDeck()
+    this.props.saveAndHandleEditDeck()
   }
   handleCancel() {
-    this.props.closeNewDeckDialog()
+    this.props.closeEditDeckDialog()
   }
   render () {
-    const { isActive, isSaving, name, description } = this.props
+    const { isActive, isSaving, deckId, name, description } = this.props
     return (
       <EditDeckDialog
         isActive={isActive}
         isSaving={isSaving}
-        title={'Create New Deck'}
+        deckId={deckId}
+        title={'Edit Deck'}
         name={name}
         description={description}
         onNameChange={this.handleNameChange}
@@ -42,31 +43,32 @@ class NewDeckDialogContainer extends React.Component {
   }
 }
 
-NewDeckDialogContainer.propTypes = {
+EditDeckDialogContainer.propTypes = {
   isActive: PropTypes.bool.isRequired,
   isSaving: PropTypes.bool.isRequired,
+  deckId: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
-  updateNewDeckName: PropTypes.func.isRequired,
-  updateNewDeckDescription: PropTypes.func.isRequired,
-  saveAndHandleNewDeck: PropTypes.func.isRequired,
-  closeNewDeckDialog: PropTypes.func.isRequired,
+  updateEditDeckName: PropTypes.func.isRequired,
+  updateEditDeckDescription: PropTypes.func.isRequired,
+  saveAndHandleEditDeck: PropTypes.func.isRequired,
+  closeEditDeckDialog: PropTypes.func.isRequired,
 }
 
-function mapStateToProps ({newDeckDialog}, props) {
+function mapStateToProps ({editDeckDialog}, props) {
   return {
-    isActive: newDeckDialog.get('isActive'),
-    isSaving: newDeckDialog.get('isSaving'),
-    name: newDeckDialog.get('name'),
-    description: newDeckDialog.get('description'),
+    isActive: editDeckDialog.get('isActive'),
+    isSaving: editDeckDialog.get('isSaving'),
+    name: editDeckDialog.get('name'),
+    description: editDeckDialog.get('description'),
   }
 }
 
 function mapDispatchToProps (dispatch, props) {
-  return bindActionCreators(newDeckDialogActionCreators, dispatch)
+  return bindActionCreators(editDeckDialogActionCreators, dispatch)
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(NewDeckDialogContainer)
+)(EditDeckDialogContainer)

@@ -3,25 +3,33 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { DeckRTCard } from 'components'
 import * as deckActionCreators from 'redux/modules/decks'
+import * as editDeckDialogActionCreators from 'redux/modules/editDeckDialog'
 
 class DeckRTCardContainer extends React.Component {
   constructor() {
     super()
     this.handleDeleteDeck = this.handleDeleteDeck.bind(this)
+    this.handleOpenEditDialog = this.handleOpenEditDialog.bind(this)
   }
   handleDeleteDeck() {
     const { uid, deckId, deleteAndHandleDeck } = this.props
     deleteAndHandleDeck(uid, deckId)
   }
+  handleOpenEditDialog() {
+    const { openEditDeckDialog, deckId, name, description } = this.props
+    this.props.openEditDeckDialog(deckId, name, description)
+  }
   render () {
-    const { isDeleting, name, description } = this.props
+    const { deckId, isDeleting, name, description } = this.props
 
     return (
       <DeckRTCard
+        deckId={deckId}
         isDeleting={isDeleting}
         name={name}
         description={description}
-        onDelete={this.handleDeleteDeck} />
+        onDelete={this.handleDeleteDeck}
+        onOpenEditDialog={this.handleOpenEditDialog} />
     )
   }
 }
@@ -33,6 +41,7 @@ DeckRTCardContainer.propTypes = {
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   deleteAndHandleDeck: PropTypes.func.isRequired,
+  openEditDeckDialog: PropTypes.func.isRequired,
 }
 
 function mapStateToProps ({ auth, decks }, props) {
@@ -46,7 +55,10 @@ function mapStateToProps ({ auth, decks }, props) {
 }
 
 function mapDispatchToProps (dispatch, props) {
-  return bindActionCreators(deckActionCreators, dispatch)
+  return bindActionCreators({
+    ...deckActionCreators,
+    ...editDeckDialogActionCreators
+  }, dispatch)
 }
 
 export default connect(
