@@ -25,10 +25,11 @@ class NewDeckDialogContainer extends React.Component {
     this.props.closeNewDeckDialog()
   }
   render () {
-    const { isActive, name, description } = this.props
+    const { isActive, isSaving, name, description } = this.props
     return (
       <NewDeckDialog
         isActive={isActive}
+        isSaving={isSaving}
         name={name}
         description={description}
         onNameChange={this.handleNameChange}
@@ -41,6 +42,7 @@ class NewDeckDialogContainer extends React.Component {
 
 NewDeckDialogContainer.propTypes = {
   isActive: PropTypes.bool.isRequired,
+  isSaving: PropTypes.bool.isRequired,
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   updateNewDeckName: PropTypes.func.isRequired,
@@ -53,6 +55,7 @@ function mapStateToProps ({newDeckDialog}, props) {
   // TODO: Display loading animation while saving
   return {
     isActive: newDeckDialog.get('isActive'),
+    isSaving: newDeckDialog.get('isSaving'),
     name: newDeckDialog.get('name'),
     description: newDeckDialog.get('description'),
   }
