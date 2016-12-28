@@ -9,6 +9,14 @@ class NewDeckDialogContainer extends React.Component {
     super()
     this.handleSave = this.handleSave.bind(this)
     this.handleCancel = this.handleCancel.bind(this)
+    this.handleNameChange = this.handleNameChange.bind(this)
+    this.handleDescriptionChange = this.handleDescriptionChange.bind(this)
+  }
+  handleNameChange(name) {
+    this.props.updateNewDeckName(name)
+  }
+  handleDescriptionChange(description) {
+    this.props.updateNewDeckDescription(description)
   }
   handleSave() {
     this.props.closeNewDeckDialog()
@@ -17,9 +25,14 @@ class NewDeckDialogContainer extends React.Component {
     this.props.closeNewDeckDialog()
   }
   render () {
+    const { isActive, name, description } = this.props
     return (
       <NewDeckDialog
-        isActive={this.props.isActive}
+        isActive={isActive}
+        name={name}
+        description={description}
+        onNameChange={this.handleNameChange}
+        onDescriptionChange={this.handleDescriptionChange}
         onSave={this.handleSave}
         onCancel={this.handleCancel} />
     )
@@ -28,12 +41,18 @@ class NewDeckDialogContainer extends React.Component {
 
 NewDeckDialogContainer.propTypes = {
   isActive: PropTypes.bool.isRequired,
+  name: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  updateNewDeckName: PropTypes.func.isRequired,
+  updateNewDeckDescription: PropTypes.func.isRequired,
   closeNewDeckDialog: PropTypes.func.isRequired,
 }
 
 function mapStateToProps ({newDeckDialog}, props) {
   return {
-    isActive: newDeckDialog.get('isActive')
+    isActive: newDeckDialog.get('isActive'),
+    name: newDeckDialog.get('name'),
+    description: newDeckDialog.get('description'),
   }
 }
 
