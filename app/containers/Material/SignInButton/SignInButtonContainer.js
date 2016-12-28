@@ -21,7 +21,7 @@ class SignInButtonContainer extends React.Component {
   }
   render () {
     return (
-      <Button label={'Sign In'} onClick={this.handleClick} />
+      <Button style={{color: 'white'}} label={'Sign In'} onClick={this.handleClick} />
     )
   }
 }

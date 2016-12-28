@@ -13,8 +13,9 @@ function Deck({deck}) {
       <CardTitle title={name} subtitle={'Placeholder count'} />
       <CardText>{'Placeholder description'}</CardText>
       <CardActions>
+        <Button label={'View'} />
         <Button label={'Edit'} />
-        <Button label={'Review'} />
+        <Button label={'Delete'} />
       </CardActions>
     </Card>
   )

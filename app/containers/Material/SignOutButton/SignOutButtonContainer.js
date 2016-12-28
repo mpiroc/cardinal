@@ -17,7 +17,7 @@ class SignOutButtonContainer extends React.Component {
   }
   render () {
     return (
-      <Button label={'Sign Out'} onClick={this.handleClick} />
+      <Button style={{color: 'white'}} label={'Sign Out'} onClick={this.handleClick} />
     )
   }
 }

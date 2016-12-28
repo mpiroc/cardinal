@@ -10,7 +10,7 @@ export default function MainAppBar (props) {
   return (
     <AppBar leftIcon='menu' title={'Cardinal'} onLeftIconClick={props.onToggleNavDrawer}>
       <Navigation type='horizontal'>
-        <Button label={'Profile'} />
+        <Button label={'Profile'} style={{color: 'white'}} />
         {
           props.isAuthed ?
             <SignOutButtonContainer /> :
