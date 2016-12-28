@@ -10,6 +10,7 @@ import {
   setUserDeckRemovedListener,
 } from 'helpers/firebase'
 import {
+  setDeckValueListener,
   updateDeck,
   removeDeck,
 } from './decks'
@@ -51,6 +52,7 @@ export function setUserDeckCollectionListeners(uid) {
         deck => {
           dispatch(userDeckAddedReceived(uid, deck))
           dispatch(updateDeck(deck.deckId, deck))
+          dispatch(setDeckValueListener(uid, deck.deckId))
         },
         error => dispatch(settingAddOrRemoveUserDeckListenerFailure(uid, error)),
       )
