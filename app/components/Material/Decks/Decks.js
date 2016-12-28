@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import { Card, CardMedia, CardTitle, CardText, CardActions } from 'react-toolbox/lib/card';
 import { Button } from 'react-toolbox/lib/button';
-import { NewDeckRTCard } from 'components/Material'
+import { NewDeckRTCardContainer } from 'containers/Material'
 
 function Deck({deck}) {
   const name = deck.get('name')
@@ -34,7 +34,7 @@ export default function Decks ({decks}) {
           deckId => <Deck key={deckId} deck={decks.get(deckId)} />
         )
       }</div>
-      <NewDeckRTCard />
+      <NewDeckRTCardContainer />
     </div>
   )
 }
