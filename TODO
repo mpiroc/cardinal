@@ -1,23 +1,18 @@
 TODO: Once the basic skeleton is ready, choose project management service and start tracking user stories
 
 Next steps:
-  - Snackbars for Deck view and New/Edit Card view
-  - Separate CardRTCard view from Deck view
-  - Implement Edit card and Delete card actions
-
-Future:
   - Implement NavDrawer actions
   - Better redux route protection
   - Firebase route protection
 
 At this point, ready to pick a project management service. Some stories to add:
+  - Unit tests
+  - Continuous integration
+  - Continuous deployment
   - Review view
   - Profile view
   - Gravatar support
   - Markdown support
-  - Unit tests
-  - Continuous integration
-  - Continuous deployment
   - Alternate version using GraphQL/Relay/Reindex?
   
 
