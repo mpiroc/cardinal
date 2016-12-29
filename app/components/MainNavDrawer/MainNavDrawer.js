@@ -1,17 +1,21 @@
 import React, { PropTypes } from 'react'
 import {
   NavDrawer,
-  Navigation,
-  Button,
 } from 'react-toolbox'
+import {
+  Menu,
+  MenuItem,
+} from 'react-toolbox/lib/menu'
 
 export default function MainNavDrawer ({ isActive, onClose }) {
   return (
-    <NavDrawer active={isActive}>
-      <Navigation type='vertical'>
-        <Button label={'Close'} onClick={onClose} />
-        <Button label={'Decks'} />
-      </Navigation>
+    <NavDrawer
+        active={isActive}
+        onOverlayClick={onClose}>
+      <Menu outline={false}>
+        <MenuItem caption={'Profile'} />
+        <MenuItem caption={'Decks'} />
+      </Menu>
     </NavDrawer>
   )
 }
