@@ -31,8 +31,8 @@ class DeckRTCardContainer extends React.Component {
         name={name}
         description={description}
         onView={this.handleViewDeck}
-        onEdit={onDelete}
-        onDelete={onEdit}
+        onEdit={onEdit}
+        onDelete={onDelete}
       />
     )
   }

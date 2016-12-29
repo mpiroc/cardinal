@@ -11,8 +11,6 @@ class SignInButtonContainer extends React.Component {
     this.handleClick = this.handleClick.bind(this)
   }
   async handleClick(event) {
-    event.preventDefault()
-
     const { authAndSaveUser, setAndHandleUserValueListener, authedUid } = this.props
     await authAndSaveUser()
     setAndHandleUserValueListener(authedUid)

@@ -10,8 +10,6 @@ class SignOutButtonContainer extends React.Component {
     this.handleClick = this.handleClick.bind(this)
   }
   async handleClick(event) {
-    event.preventDefault()
-
     await this.props.signOutAndUnauth()
     this.context.router.replace('/')
   }
