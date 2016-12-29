@@ -2,53 +2,48 @@ import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Button } from 'react-toolbox'
-import * as authActionCreators from 'redux/modules/auth'
-import * as userActionCreators from 'redux/modules/users'
+import { authAndSaveUser } from 'redux/modules/auth'
+import { setAndHandleUserValueListener } from 'redux/modules/users'
 
 class SignInButtonContainer extends React.Component {
-  constructor() {
-    super()
-    this.handleClick = this.handleClick.bind(this)
-  }
-  async handleClick(event) {
-    const { authAndSaveUser, setAndHandleUserValueListener, authedUid } = this.props
-    await authAndSaveUser()
-    setAndHandleUserValueListener(authedUid)
-    
-    this.context.router.replace('decks')
-  }
   render () {
     return (
-      <Button style={{color: 'white'}} label={'Sign In'} onClick={this.handleClick} />
+      <Button style={{color: 'white'}} label={'Sign In'} onClick={this.props.onSignIn} />
     )
   }
 }
 
-SignInButtonContainer.contextTypes = {
-  router: PropTypes.object.isRequired,
-}
-
 SignInButtonContainer.propTypes = {
-  authAndSaveUser: PropTypes.func.isRequired,
-  setAndHandleUserValueListener: PropTypes.func.isRequired,
-  authedUid: PropTypes.string.isRequired,
+  onSignIn: PropTypes.func.isRequired,
 }
 
 
-function mapStateToProps ({auth, users}, props) {
+function mapStateToProps ({auth, users}, ownProps) {
   return {
     authedUid: auth.get('authedUid')
   }
 }
 
-function mapDispatchToProps (dispatch, props) {
+function mapDispatchToProps (dispatch, ownProps) {
   return bindActionCreators({
-    ...authActionCreators,
-    ...userActionCreators,
+    authAndSaveUser,
+    setAndHandleUserValueListener,
   }, dispatch)
+}
+
+function mergeProps (stateProps, dispatchProps, ownProps) {
+  return {
+    onSignIn: async () => {
+      await dispatchProps.authAndSaveUser()
+      dispatchProps.setAndHandleUserValueListener(stateProps.authedUid)
+      
+      ownProps.router.replace('/decks')
+    }
+  }
 }
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
+  mergeProps,
 )(SignInButtonContainer)

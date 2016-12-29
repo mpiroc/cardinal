@@ -1,43 +1,36 @@
 import React, { PropTypes } from 'react'
-import { bindActionCreators } from 'redux'
+import { withRouter } from 'react-router'
 import { connect } from 'react-redux'
 import { Button } from 'react-toolbox'
-import * as authActionCreators from 'redux/modules/auth'
+import { signOutAndUnauth } from 'redux/modules/auth'
 
 class SignOutButtonContainer extends React.Component {
-  constructor() {
-    super()
-    this.handleClick = this.handleClick.bind(this)
-  }
-  async handleClick(event) {
-    await this.props.signOutAndUnauth()
-    this.context.router.replace('/')
-  }
   render () {
     return (
-      <Button style={{color: 'white'}} label={'Sign Out'} onClick={this.handleClick} />
+      <Button style={{color: 'white'}} label={'Sign Out'} onClick={this.props.onSignOut} />
     )
   }
 }
 
 SignOutButtonContainer.propTypes = {
-  signOutAndUnauth: PropTypes.func.isRequired,
+  onSignOut: PropTypes.func.isRequired,
 }
 
-SignOutButtonContainer.contextTypes = {
-  router: PropTypes.object.isRequired,
-}
-
-function mapStateToProps (state, props) {
+function mapStateToProps (state, ownProps) {
   return {
   }
 }
 
-function mapDispatchToProps (dispatch, props) {
-  return bindActionCreators(authActionCreators, dispatch)
+function mapDispatchToProps (dispatch, ownProps) {
+  return {
+    onSignOut: async () => {
+      await dispatch(signOutAndUnauth())
+      ownProps.router.replace('/')
+    }
+  }
 }
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(SignOutButtonContainer)
+)(SignOutButtonContainer))
