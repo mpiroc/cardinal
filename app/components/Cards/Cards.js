@@ -1,26 +1,25 @@
 import React, { PropTypes } from 'react'
-import { Card, CardMedia, CardTitle, CardText, CardActions } from 'react-toolbox/lib/card';
-import { Button } from 'react-toolbox/lib/button';
 import {
   CardRTCardContainer,
   NewCardRTCardContainer,
+  CardsSnackbarContainer,
 } from 'containers'
 
-export default function Cards ({deckId, name, cards}) {
+export default function Cards ({deckId, cards}) {
   return (
     <div>
       <div>{
         cards.keySeq().map(
-          cardId => <CardRTCardContainer key={cardId} cardId={cardId} />
+          cardId => <CardRTCardContainer key={cardId} deckId={deckId} cardId={cardId} />
         )
       }</div>
       <NewCardRTCardContainer deckId={deckId} />
+      <CardsSnackbarContainer />
     </div>
   )
 }
 
 Cards.propTypes = {
   deckId: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
   cards: PropTypes.object.isRequired,
 }

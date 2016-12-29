@@ -16,8 +16,8 @@ class CardsContainer extends React.Component {
     setDeckCardCollectionListeners(deckId)
   }
   render () {
-    const { deckId, name, cards } = this.props
-    return <Cards deckId={deckId} name={name} cards={cards} />
+    const { deckId, cards } = this.props
+    return <Cards deckId={deckId} cards={cards} />
   }
 }
 
@@ -37,7 +37,6 @@ function mapStateToProps ({ auth, decks, cards }, props) {
   return {
     deckId: deckId,
     authedUid: auth.get('authedUid'),
-    name: deck.get('name'),
     cards: deck.get('cards'),
   }
 }

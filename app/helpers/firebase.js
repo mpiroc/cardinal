@@ -53,6 +53,12 @@ export function saveExistingDeck(uid, { deckId, name, description }) {
   })
 }
 
+export function deleteCard(deckId, cardId) {
+  const deckCardRef = ref.child(`deckCards/${deckId}/${cardId}`)
+
+  return deckCardRef.remove()
+}
+
 export function saveNewCard(deckId, { side1, side2 }) {
   const deckCardRef = ref.child(`deckCards/${deckId}`).push()
   return deckCardRef.set({

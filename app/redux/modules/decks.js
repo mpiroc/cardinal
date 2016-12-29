@@ -71,7 +71,7 @@ export function setDeckCardCollectionListeners(deckId) {
       setDeckCardAddedListener(
         deckId,
         card => {
-          dispatch(deckCardAddedReceived(deckId, card))
+          dispatch(deckCardAddedReceived(deckId, card.cardId))
           dispatch(updateCard(card.cardId, card))
           dispatch(setCardValueListener(deckId, card.cardId))
         },
@@ -84,7 +84,7 @@ export function setDeckCardCollectionListeners(deckId) {
       setDeckCardRemovedListener(
         deckId,
         card => {
-          dispatch(deckCardRemovedReceived(deckId, card))
+          dispatch(deckCardRemovedReceived(deckId, card.cardId))
           dispatch(removeCard(card.cardId))
         },
         error => dispatch(settingAddOrRemoveDeckCardListenerFailure(deckId, error)))
@@ -93,15 +93,15 @@ export function setDeckCardCollectionListeners(deckId) {
 }
 
 // action creators
-function deckCardAddedReceived(deckId, card) {
+function deckCardAddedReceived(deckId, cardId) {
   return {
     type: DECK_CARD_ADDED_RECEIVED,
     deckId,
-    card,
+    cardId,
   }
 }
 
-function deckCardRemovedReceived(deckId, card) {
+function deckCardRemovedReceived(deckId, cardId) {
   return {
     type: DECK_CARD_REMOVED_RECEIVED,
     deckId,
@@ -203,9 +203,9 @@ const initialDeckState = Map({
 function deck(state = initialDeckState, action) {
   switch (action.type) {
     case DECK_CARD_ADDED_RECEIVED:
-      return state.setIn(['cards', action.card.cardId], true)
+      return state.setIn(['cards', action.cardId], true)
     case DECK_CARD_REMOVED_RECEIVED:
-      return state.deleteIn(['cards', action.card.cardId])
+      return state.deleteIn(['cards', action.cardId])
     case SETTING_ADD_OR_REMOVE_DECK_CARD_LISTENER_FAILURE:
       return state.set('addOrRemoveError', action.error)
     case SETTING_DECK_VALUE_LISTENER:
@@ -274,10 +274,6 @@ export default function decks(state = initialState, action) {
       path = ['decks', action.deckId]
       return state.setIn(path, deck(state.getIn(path), action))
     case DELETING_DECK:
-      path = ['decks', action.deckId]
-      return state
-        .setIn(path, deck(state.getIn(path), action))
-        .set('snackbar', snackbar(state.get('snackbar'), action))
     case DELETING_DECK_FAILURE:
       path = ['decks', action.deckId]
       return state
