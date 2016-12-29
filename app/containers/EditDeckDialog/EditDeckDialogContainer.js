@@ -25,7 +25,16 @@ class EditDeckDialogContainer extends React.Component {
     this.props.closeEditDeckDialog()
   }
   render () {
-    const { isActive, isSaving, deckId, name, description } = this.props
+    const {
+      isActive,
+      isSaving,
+      deckId,
+      name,
+      description,
+      isSnackbarActive,
+      snackbarError,
+      onDismissSnackbar,
+    } = this.props
     return (
       <EditDeckDialog
         isActive={isActive}
@@ -38,6 +47,9 @@ class EditDeckDialogContainer extends React.Component {
         onDescriptionChange={this.handleDescriptionChange}
         onSave={this.handleSave}
         onCancel={this.handleCancel}
+        isSnackbarActive={isSnackbarActive}
+        snackbarError={snackbarError}
+        onDismissSnackbar={onDismissSnackbar}
       />
     )
   }
@@ -53,22 +65,37 @@ EditDeckDialogContainer.propTypes = {
   updateEditDeckDescription: PropTypes.func.isRequired,
   saveAndHandleEditDeck: PropTypes.func.isRequired,
   closeEditDeckDialog: PropTypes.func.isRequired,
+  isSnackbarActive: PropTypes.bool.isRequired,
+  snackbarError: PropTypes.string.isRequired,
+  onDismissSnackbar: PropTypes.func.isRequired,
 }
 
-function mapStateToProps ({editDeckDialog}, props) {
+function mapStateToProps ({editDeckDialog}, ownProps) {
   return {
     isActive: editDeckDialog.get('isActive'),
     isSaving: editDeckDialog.get('isSaving'),
     name: editDeckDialog.get('name'),
     description: editDeckDialog.get('description'),
+    isSnackbarActive: editDeckDialog.getIn(['snackbar', 'isActive']),
+    snackbarError: editDeckDialog.getIn(['snackbar', 'error'])
   }
 }
 
-function mapDispatchToProps (dispatch, props) {
+function mapDispatchToProps (dispatch, ownProps) {
   return bindActionCreators(editDeckDialogActionCreators, dispatch)
+}
+
+function mergeProps (stateProps, dispatchProps, ownProps) {
+  return {
+    ...stateProps,
+    ...dispatchProps,
+    ...ownProps,
+    onDismissSnackbar: dispatchProps.dismissEditDeckSnackbar,
+  }
 }
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
+  mergeProps,
 )(EditDeckDialogContainer)

@@ -10,7 +10,6 @@ export DecksSnackbarContainer from './DecksSnackbar/DecksSnackbarContainer'
 export EditDeckDialogContainer from './EditDeckDialog/EditDeckDialogContainer'
 export NewDeckDialogContainer from './NewDeckDialog/NewDeckDialogContainer'
 export NewDeckRTCardContainer from './NewDeckRTCard/NewDeckRTCardContainer'
-export NewDeckDialogSnackbarContainer from './NewDeckDialogSnackbar/NewDeckDialogSnackbarContainer'
 
 export MainAppBarContainer from './MainAppBar/MainAppBarContainer'
 export MainContainer from './Main/MainContainer'

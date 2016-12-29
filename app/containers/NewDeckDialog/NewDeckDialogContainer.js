@@ -25,7 +25,15 @@ class NewDeckDialogContainer extends React.Component {
     this.props.closeNewDeckDialog()
   }
   render () {
-    const { isActive, isSaving, name, description } = this.props
+    const {
+      isActive,
+      isSaving,
+      name,
+      description,
+      isSnackbarActive,
+      snackbarError,
+      onDismissSnackbar,
+    } = this.props
     return (
       <EditDeckDialog
         isActive={isActive}
@@ -37,6 +45,9 @@ class NewDeckDialogContainer extends React.Component {
         onDescriptionChange={this.handleDescriptionChange}
         onSave={this.handleSave}
         onCancel={this.handleCancel}
+        isSnackbarActive={isSnackbarActive}
+        snackbarError={snackbarError}
+        onDismissSnackbar={onDismissSnackbar}
       />
     )
   }
@@ -51,22 +62,37 @@ NewDeckDialogContainer.propTypes = {
   updateNewDeckDescription: PropTypes.func.isRequired,
   saveAndHandleNewDeck: PropTypes.func.isRequired,
   closeNewDeckDialog: PropTypes.func.isRequired,
+  isSnackbarActive: PropTypes.bool.isRequired,
+  snackbarError: PropTypes.string.isRequired,
+  onDismissSnackbar: PropTypes.func.isRequired,
 }
 
-function mapStateToProps ({newDeckDialog}, props) {
+function mapStateToProps ({newDeckDialog}, ownProps) {
   return {
     isActive: newDeckDialog.get('isActive'),
     isSaving: newDeckDialog.get('isSaving'),
     name: newDeckDialog.get('name'),
     description: newDeckDialog.get('description'),
+    isSnackbarActive: newDeckDialog.getIn(['snackbar', 'isActive']),
+    snackbarError: newDeckDialog.getIn(['snackbar', 'error'])
   }
 }
 
-function mapDispatchToProps (dispatch, props) {
+function mapDispatchToProps (dispatch, ownProps) {
   return bindActionCreators(newDeckDialogActionCreators, dispatch)
+}
+
+function mergeProps(stateProps, dispatchProps, ownProps) {
+  return {
+    ...stateProps,
+    ...dispatchProps,
+    ...ownProps,
+    onDismissSnackbar: dispatchProps.dismissNewDeckSnackbar,
+  }
 }
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
+  mergeProps,
 )(NewDeckDialogContainer)

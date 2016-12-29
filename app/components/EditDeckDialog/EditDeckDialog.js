@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react'
 import Dialog from 'react-toolbox/lib/dialog'
 import Input from 'react-toolbox/lib/input'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
+import { WarningSnackbar } from 'components'
 import { NewDeckDialogSnackbarContainer } from 'containers'
 import Delay from 'react-delay'
 
@@ -16,6 +17,9 @@ export default function EditDeckDialog (props) {
     onDescriptionChange,
     onCancel,
     onSave,
+    isSnackbarActive,
+    snackbarError,
+    onDismissSnackbar,
   } = props
 
   const actions = [
@@ -61,7 +65,11 @@ export default function EditDeckDialog (props) {
           ) :
           null
       }
-      <NewDeckDialogSnackbarContainer />
+      <WarningSnackbar
+        isActive={isSnackbarActive}
+        error={snackbarError}
+        onDismissSnackbar={onDismissSnackbar}
+      />
     </Dialog>
   )
 }
@@ -76,4 +84,7 @@ EditDeckDialog.propTypes = {
   onDescriptionChange: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
+  isSnackbarActive: PropTypes.bool.isRequired,
+  snackbarError: PropTypes.string.isRequired,
+  onDismissSnackbar: PropTypes.func.isRequired,
 }
