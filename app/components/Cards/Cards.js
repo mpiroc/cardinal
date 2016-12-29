@@ -33,7 +33,7 @@ FlashCard.propTypes = {
   }).isRequired
 }
 
-export default function Deck ({deckId, name, cards}) {
+export default function Cards ({deckId, name, cards}) {
   return (
     <div>
       <div>{
@@ -46,7 +46,7 @@ export default function Deck ({deckId, name, cards}) {
   )
 }
 
-Deck.propTypes = {
+Cards.propTypes = {
   deckId: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   cards: PropTypes.object.isRequired,

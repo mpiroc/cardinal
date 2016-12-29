@@ -1,10 +1,10 @@
 import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { Deck } from 'components'
+import { Cards } from 'components'
 import * as deckActionCreators from 'redux/modules/decks'
 
-class DeckContainer extends React.Component {
+class CardsContainer extends React.Component {
   componentDidMount() {
     const {
       deckId,
@@ -17,11 +17,11 @@ class DeckContainer extends React.Component {
   }
   render () {
     const { deckId, name, cards } = this.props
-    return <Deck deckId={deckId} name={name} cards={cards} />
+    return <Cards deckId={deckId} name={name} cards={cards} />
   }
 }
 
-DeckContainer.propTypes = {
+CardsContainer.propTypes = {
   authedUid: PropTypes.string.isRequired,
   setDeckValueListener: PropTypes.func.isRequired,
   setDeckCardCollectionListeners: PropTypes.func.isRequired,
@@ -33,11 +33,6 @@ DeckContainer.propTypes = {
 function mapStateToProps ({ auth, decks, cards }, props) {
   const deckId = props.params.deckId
   const deck = decks.getIn(['decks', deckId])
-
-  const temp1 = deck.get('cards').toObject()
-  const temp2 = deck.get('cards').keySeq().toObject()
-  const temp3 = deck.get('cards').keySeq().map(cardId => cards.getIn(['cards', cardId])).toObject()
-  const temp4 = deck.get('cards').keySeq().map(cardId => cards.getIn(['cards', cardId])).filter(card => card !== undefined).toObject()
 
   return {
     deckId: deckId,
@@ -61,4 +56,4 @@ function mapDispatchToProps (dispatch, props) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(DeckContainer)
+)(CardsContainer)

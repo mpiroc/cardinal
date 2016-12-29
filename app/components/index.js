@@ -1,4 +1,4 @@
-export Deck from './Deck/Deck'
+export Cards from './Cards/Cards'
 export DeckRTCard from './DeckRTCard/DeckRTCard'
 export Decks from './Decks/Decks'
 export EditCardDialog from './EditCardDialog/EditCardDialog'

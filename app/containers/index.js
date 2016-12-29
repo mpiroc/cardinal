@@ -1,4 +1,4 @@
-export DeckContainer from './Deck/DeckContainer'
+export CardsContainer from './Cards/CardsContainer'
 export DeckRTCardContainer from './DeckRTCard/DeckRTCardContainer'
 export DeckSnackbarContainer from './DeckSnackbar/DeckSnackbarContainer'
 export DecksContainer from './Decks/DecksContainer'
