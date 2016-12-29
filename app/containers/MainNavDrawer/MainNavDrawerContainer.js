@@ -4,27 +4,6 @@ import { connect } from 'react-redux'
 import { MainNavDrawer } from 'components'
 import * as navDrawerActionCreators from 'redux/modules/navDrawer'
 
-class MainNavDrawerContainer extends React.Component {
-  constructor() {
-    super()
-    this.handleClose = this.handleClose.bind(this)
-  }
-  handleClose(event) {
-    event.preventDefault()
-    this.props.hideNavDrawer()
-  }
-  render () {
-    return (
-      <MainNavDrawer isActive={this.props.isActive} onClose={this.handleClose} />
-    )
-  }
-}
-
-MainNavDrawerContainer.propTypes = {
-  isActive: PropTypes.bool.isRequired,
-  hideNavDrawer: PropTypes.func.isRequired,
-}
-
 function mapStateToProps ({navDrawer}, props) {
   return {
     isActive: navDrawer.get('isActive')
@@ -32,10 +11,14 @@ function mapStateToProps ({navDrawer}, props) {
 }
 
 function mapDispatchToProps (dispatch, props) {
-  return bindActionCreators(navDrawerActionCreators, dispatch)
+  const boundActionCreators = bindActionCreators(navDrawerActionCreators, dispatch)
+
+  return {
+    onClose: boundActionCreators.hideNavDrawer,
+  }
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(MainNavDrawerContainer)
+)(MainNavDrawer)

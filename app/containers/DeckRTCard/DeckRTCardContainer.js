@@ -9,23 +9,20 @@ class DeckRTCardContainer extends React.Component {
   constructor() {
     super()
     this.handleViewDeck = this.handleViewDeck.bind(this)
-    this.handleEditDeck = this.handleEditDeck.bind(this)
-    this.handleDeleteDeck = this.handleDeleteDeck.bind(this)
   }
   handleViewDeck() {
     const { deckId } = this.props
     this.context.router.replace(`deck/${deckId}`)
   }
-  handleEditDeck() {
-    const { openEditDeckDialog, deckId, name, description } = this.props
-    this.props.openEditDeckDialog(deckId, name, description)
-  }
-  handleDeleteDeck() {
-    const { uid, deckId, deleteAndHandleDeck } = this.props
-    deleteAndHandleDeck(uid, deckId)
-  }
   render () {
-    const { deckId, isDeleting, name, description } = this.props
+    const {
+      deckId,
+      isDeleting,
+      name,
+      description,
+      onEdit,
+      onDelete,
+    } = this.props
 
     return (
       <DeckRTCard
@@ -34,8 +31,8 @@ class DeckRTCardContainer extends React.Component {
         name={name}
         description={description}
         onView={this.handleViewDeck}
-        onDelete={this.handleDeleteDeck}
-        onEdit={this.handleEditDeck}
+        onEdit={onDelete}
+        onDelete={onEdit}
       />
     )
   }
@@ -47,16 +44,16 @@ DeckRTCardContainer.propTypes = {
   isDeleting: PropTypes.bool.isRequired,
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
-  deleteAndHandleDeck: PropTypes.func.isRequired,
-  openEditDeckDialog: PropTypes.func.isRequired,
+  onEdit: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
 }
 
 DeckRTCardContainer.contextTypes = {
   router: PropTypes.object.isRequired,
 }
 
-function mapStateToProps ({ auth, decks }, props) {
-  const deck = decks.getIn(['decks', props.deckId])
+function mapStateToProps ({ auth, decks }, ownProps) {
+  const deck = decks.getIn(['decks', ownProps.deckId])
   return {
     uid: auth.get('authedUid'),
     isDeleting: deck.get('isDeleting'),
@@ -65,14 +62,24 @@ function mapStateToProps ({ auth, decks }, props) {
   }
 }
 
-function mapDispatchToProps (dispatch, props) {
+function mapDispatchToProps (dispatch, ownProps) {
   return bindActionCreators({
     ...deckActionCreators,
     ...editDeckDialogActionCreators
   }, dispatch)
 }
 
+function mergeProps (stateProps, dispatchProps, ownProps) {
+  return {
+    ...stateProps,
+    ...ownProps,
+    onEdit: () => dispatchProps.openEditDeckDialog(ownProps.deckId, stateProps.name, stateProps.description),
+    onDelete: () => dispatchProps.deleteAndHandleDeck(stateProps.uid, ownProps.deckId),
+  }
+}
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
+  mergeProps,
 )(DeckRTCardContainer)
