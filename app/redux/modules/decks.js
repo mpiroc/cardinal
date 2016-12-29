@@ -41,7 +41,7 @@ export function deleteAndHandleDeck(uid, deckId) {
       dispatch(deletingDeckSuccess(deckId))
     }
     catch (error) {
-      dispatch(deletingDeckFailure(deckId, error.message))
+      dispatch(deletingDeckFailure(deckId, `Error deleting deck: ${error.message}`))
     }
   }
 }
