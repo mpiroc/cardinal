@@ -3,7 +3,6 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import firebase from 'firebase'
 import { saveUser } from 'helpers/firebase'
-import { redirectIfNecessary } from 'helpers/routes'
 import { MainSidebar } from 'components'
 import {
   MainAppBarContainer
@@ -30,7 +29,7 @@ class MainContainer extends React.Component {
         authUser(user.uid)
         setAndHandleUserValueListener(user.uid)
 
-        redirectIfNecessary(true, this.props.location.pathname, this.context.router.replace)
+        this.context.router.replace('/')
       }
     })
   }

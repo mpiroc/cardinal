@@ -1,19 +1,21 @@
 import React from 'react'
-import { Router, Route, IndexRoute, Redirect } from 'react-router'
+import { Router, Route, IndexRoute, IndexRedirect } from 'react-router'
 import {
   CardsContainer,
   DecksContainer,
-  MainContainer
+  HomeContainer,
+  MainContainer,
 } from 'containers'
-import { Home } from 'components'
+import { Login } from 'components'
 
-export default function getRoutes (history, checkAuth) {
+export default function getRoutes (history, requireAuth, redirectFromHome) {
   return (
     <Router history={history}>
       <Router path='/' component={MainContainer}>
-        <IndexRoute component={Home} onEnter={checkAuth} />
-        <Route path='/decks' component={DecksContainer} onEnter={checkAuth} />
-        <Route path='/deck/:deckId' component={CardsContainer} onEnter={checkAuth} />
+        <IndexRoute onEnter={redirectFromHome} />
+        <Route path='/login' component={Login} />
+        <Route path='/decks' component={DecksContainer} onEnter={requireAuth} />
+        <Route path='/deck/:deckId' component={CardsContainer} onEnter={requireAuth} />
       </Router>
     </Router>
   )
