@@ -4,51 +4,8 @@ import { connect } from 'react-redux'
 import { CardRTCard } from 'components'
 import * as cardActionCreators from 'redux/modules/cards'
 
-class CardRTCardContainer extends React.Component {
-  constructor() {
-    super()
-    this.handleDeleteCard = this.handleDeleteCard.bind(this)
-  }
-  handleDeleteCard() {
-    const { deckId, cardId, deleteAndHandleCard } = this.props
-    deleteAndHandleCard(deckId, cardId)
-  }
-  render () {
-    const {
-      deckId,
-      cardId,
-      isDeleting,
-      side1,
-      side2,
-    } = this.props
-
-    return (
-      <CardRTCard
-        cardId={cardId}
-        isDeleting={isDeleting}
-        side1={side1}
-        side2={side2}
-        onDelete={this.handleDeleteCard}
-      />
-    )
-  }
-}
-
-CardRTCardContainer.propTypes = {
-  deckId: PropTypes.string.isRequired,
-  cardId: PropTypes.string.isRequired,
-  isDeleting: PropTypes.bool.isRequired,
-  side1: PropTypes.string.isRequired,
-  side2: PropTypes.string.isRequired,
-  deleteAndHandleCard: PropTypes.func.isRequired,
-}
-
-CardRTCardContainer.contextTypes = {
-  router: PropTypes.object.isRequired,
-}
-
-function mapStateToProps ({ cards }, props) {
-  const card = cards.getIn(['cards', props.cardId])
+function mapStateToProps ({ cards }, ownProps) {
+  const card = cards.getIn(['cards', ownProps.cardId])
 
   if (card === undefined) {
     return {
@@ -67,11 +24,15 @@ function mapStateToProps ({ cards }, props) {
   }
 }
 
-function mapDispatchToProps (dispatch, props) {
-  return bindActionCreators(cardActionCreators, dispatch)
+function mapDispatchToProps (dispatch, ownProps) {
+  const boundActionCreators = bindActionCreators(cardActionCreators, dispatch)
+
+  return {
+    onDelete: () => boundActionCreators.deleteAndHandleCard(ownProps.deckId, ownProps.cardId)
+  }
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(CardRTCardContainer)
+)(CardRTCard)
