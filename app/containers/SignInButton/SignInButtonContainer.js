@@ -1,22 +1,10 @@
 import React, { PropTypes } from 'react'
+import { withRouter } from 'react-router'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Button } from 'react-toolbox'
 import { authAndSaveUser } from 'redux/modules/auth'
 import { setAndHandleUserValueListener } from 'redux/modules/users'
-
-class SignInButtonContainer extends React.Component {
-  render () {
-    return (
-      <Button style={{color: 'white'}} label={'Sign In'} onClick={this.props.onSignIn} />
-    )
-  }
-}
-
-SignInButtonContainer.propTypes = {
-  onSignIn: PropTypes.func.isRequired,
-}
-
 
 function mapStateToProps ({auth, users}, ownProps) {
   return {
@@ -33,17 +21,19 @@ function mapDispatchToProps (dispatch, ownProps) {
 
 function mergeProps (stateProps, dispatchProps, ownProps) {
   return {
-    onSignIn: async () => {
+    style: {color: 'white'},
+    label: 'Sign In',
+    onClick: async () => {
       await dispatchProps.authAndSaveUser()
       dispatchProps.setAndHandleUserValueListener(stateProps.authedUid)
       
       ownProps.router.replace('/decks')
-    }
+    },
   }
 }
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps,
   mergeProps,
-)(SignInButtonContainer)
+)(Button))
