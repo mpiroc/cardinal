@@ -130,7 +130,6 @@ export function usersLogout(uid) {
 
 // user reducer
 const initialUserState = Map({
-  isLoading: true,
   loadingError: '',
   addOrRemoveError: '',
 
@@ -148,19 +147,14 @@ function user(state = initialUserState, action) {
     case SETTING_ADD_OR_REMOVE_USER_DECK_LISTENER_FAILURE:
       return state.set('addOrRemoveError', action.error)
     case SETTING_USER_VALUE_LISTENER:
-      return state
-        .set('isLoading', true)
-        .set('loadingError', '')
+      return state.set('loadingError', '')
     case SETTING_USER_VALUE_LISTENER_SUCCESS:
       // TODO: Can action.user be null?
       return state
-        .set('isLoading', false)
         .set('loadingError', '')
         .merge(action.user)
     case SETTING_USER_VALUE_LISTENER_FAILURE:
-      return state
-        .set('isLoading', false)
-        .set('loadingError', action.error)
+      return state.set('loadingError', action.error)
     default:
       return state
   }

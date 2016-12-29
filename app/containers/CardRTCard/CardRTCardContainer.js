@@ -31,15 +31,16 @@ CardRTCardContainer.contextTypes = {
 function mapStateToProps ({ cards }, props) {
   const card = cards.getIn(['cards', props.cardId])
 
-  // TODO: Better if card always exists, but has empty side1 and side2 with isLoading=true
   if (card === undefined) {
     return {
-      side1: 'Loading...',
-      side2: 'Loading...',
+      isLoading: true,
+      side1: '',
+      side2: '',
     }
   }
 
   return {
+    isLoading: false,
     side1: card.get('side1'),
     side2: card.get('side2'),
   }

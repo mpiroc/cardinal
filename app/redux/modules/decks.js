@@ -192,7 +192,6 @@ export function decksLogout() {
 // deck reducer
 const initialDeckState = Map({
   isDeleting: false,
-  isLoading: true,
   loadingError: '',
   addOrRemoveError: '',
 
@@ -210,19 +209,14 @@ function deck(state = initialDeckState, action) {
     case SETTING_ADD_OR_REMOVE_DECK_CARD_LISTENER_FAILURE:
       return state.set('addOrRemoveError', action.error)
     case SETTING_DECK_VALUE_LISTENER:
-      return state
-        .set('isLoading', true)
-        .set('loadingError', '')
+      return state.set('loadingError', '')
     case SETTING_DECK_VALUE_LISTENER_SUCCESS:
       // TODO: Can action.deck be null?
       return state
-        .set('isLoading', false)
         .set('loadingError', '')
         .merge(action.deck)
     case SETTING_DECK_VALUE_LISTENER_FAILURE:
-      return state
-        .set('isLoading', false)
-        .set('loadingError', action.error)
+      return state.set('loadingError', action.error)
     case DELETING_DECK:
       return state.set('isDeleting', true)
     case DELETING_DECK_FAILURE:

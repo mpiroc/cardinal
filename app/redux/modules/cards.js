@@ -74,7 +74,6 @@ export function cardsLogout() {
 
 // card reducer
 const initialCardState = Map({
-  isLoading: true,
   loadingError: '',
 
   cardId: '',
@@ -85,23 +84,16 @@ const initialCardState = Map({
 function card(state = initialCardState, action) {
   switch(action.type) {
     case SETTING_CARD_VALUE_LISTENER:
-      return state
-        .set('isLoading', true)
-        .set('loadingError', '')
+      return state.set('loadingError', '')
     case SETTING_CARD_VALUE_LISTENER_SUCCESS:
       // TODO: Can action.card be null?
       return state
-        .set('isLoading', false)
         .set('loadingError', '')
         .merge(action.card)
     case SETTING_CARD_VALUE_LISTENER_FAILURE:
-      return state
-        .set('isLoading', false)
-        .set('loadingError', action.error)
+      return state.set('loadingError', action.error)
     case UPDATE_CARD:
-      return state
-        .set('isLoading', false)
-        .merge(action.card)
+      return state.merge(action.card)
     default:
       return state
   }
