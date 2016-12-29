@@ -11,9 +11,9 @@ import {
 
 export default function MainAppBar (props) {
   return (
-    <AppBar leftIcon='menu' title={'Cardinal'} onLeftIconClick={props.onToggleNavDrawer}>
+    <AppBar title={'Cardinal'}>
       <Navigation type='horizontal'>
-        <Button label={'Profile'} style={{color: 'white'}} />
+        <Button label={'Home'} style={{color: 'white'}} />
         {
           props.isAuthed ?
             <SignOutButtonContainer /> :
@@ -26,5 +26,4 @@ export default function MainAppBar (props) {
 
 MainAppBar.propTypes = {
   isAuthed: PropTypes.bool.isRequired,
-  onToggleNavDrawer: PropTypes.func.isRequired,
 }

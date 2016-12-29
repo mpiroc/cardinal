@@ -14,7 +14,6 @@ export NewDeckRTCardContainer from './NewDeckRTCard/NewDeckRTCardContainer'
 
 export MainAppBarContainer from './MainAppBar/MainAppBarContainer'
 export MainContainer from './Main/MainContainer'
-export MainNavDrawerContainer from './MainNavDrawer/MainNavDrawerContainer'
 
 export SignInButtonContainer from './SignInButton/SignInButtonContainer'
 export SignOutButtonContainer from './SignOutButton/SignOutButtonContainer'

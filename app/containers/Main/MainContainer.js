@@ -6,7 +6,6 @@ import { saveUser } from 'helpers/firebase'
 import { redirectIfNecessary } from 'helpers/routes'
 import { MainSidebar } from 'components'
 import {
-  MainNavDrawerContainer,
   MainAppBarContainer
 } from 'containers'
 import {
@@ -39,7 +38,6 @@ class MainContainer extends React.Component {
     return (
       <div style={{height: '100vh'}}>
         <Layout>
-          <MainNavDrawerContainer />
           <Panel>
             <MainAppBarContainer />
             <div style={{padding: '1.8rem', height: '100%' }}>
