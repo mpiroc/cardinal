@@ -69,9 +69,9 @@ MainContainer.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-function mapStateToProps({loginRedirect}, props) {
+function mapStateToProps({ loginRedirect }, { params }) {
   return {
-    deckId: props.params ? props.params.deckId : null,
+    deckId: params ? params.deckId : null,
     loginRedirect: loginRedirect.get('redirect'),
   }
 }

@@ -31,8 +31,8 @@ CardsContainer.propTypes = {
   })
 }
 
-function mapStateToProps ({ auth, decks, cards }, props) {
-  const deckId = props.params.deckId
+function mapStateToProps ({ auth, decks, cards }, { params }) {
+  const deckId = params.deckId
   const deck = decks.getIn(['decks', deckId])
 
   return {
@@ -43,7 +43,7 @@ function mapStateToProps ({ auth, decks, cards }, props) {
   }
 }
 
-function mapDispatchToProps (dispatch, props) {
+function mapDispatchToProps (dispatch, ownProps) {
   return bindActionCreators(deckActionCreators, dispatch)
 }
 

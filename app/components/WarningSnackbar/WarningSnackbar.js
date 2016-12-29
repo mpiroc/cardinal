@@ -1,12 +1,11 @@
 import React, { PropTypes } from 'react'
 import { Snackbar } from 'react-toolbox'
 
-export default function WarningSnackbar (props) {
-  const {
+export default function WarningSnackbar ({
     isActive,
     error,
     onDismissSnackbar,
-  } = props
+  }) {
 
   return (
     <Snackbar

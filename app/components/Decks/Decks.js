@@ -5,7 +5,7 @@ import {
   DecksSnackbarContainer,
 } from 'containers'
 
-export default function Decks ({decks}) {
+export default function Decks ({ decks }) {
   return (
     <div>
       <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap'}}>{

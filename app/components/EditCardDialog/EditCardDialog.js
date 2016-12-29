@@ -5,8 +5,7 @@ import ProgressBar from 'react-toolbox/lib/progress_bar'
 import { WarningSnackbar } from 'components'
 import Delay from 'react-delay'
 
-export default function EditCardDialog (props) {
-  const {
+export default function EditCardDialog ({
     isActive,
     isSaving,
     title,
@@ -19,8 +18,8 @@ export default function EditCardDialog (props) {
     isSnackbarActive,
     snackbarError,
     onDismissSnackbar,
-  } = props
-
+  }) {
+  
   const actions = [
     { label: 'Cancel', onClick: onCancel },
     { label: 'Save', onClick: onSave },

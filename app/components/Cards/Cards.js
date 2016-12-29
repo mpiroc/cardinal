@@ -5,7 +5,7 @@ import {
   CardsSnackbarContainer,
 } from 'containers'
 
-export default function Cards ({deckId, cards}) {
+export default function Cards ({ deckId, cards }) {
   return (
     <div>
       <div>{
