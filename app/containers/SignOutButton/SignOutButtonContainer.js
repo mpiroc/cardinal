@@ -9,20 +9,20 @@ function mapStateToProps (state, ownProps) {
   }
 }
 
-function mapDispatchToProps (dispatch, ownProps) {
+function mapDispatchToProps (dispatch, { router }) {
   return {
     onSignOut: async () => {
       await dispatch(signOutAndUnauth())
-      ownProps.router.replace('/')
+      router.replace('/')
     }
   }
 }
 
-function mergeProps (stateProps, dispatchProps, ownProps) {
+function mergeProps (stateProps, { onSignOut }, ownProps) {
   return {
     style: {color: 'white'},
     label: 'Sign Out',
-    onClick: dispatchProps.onSignOut,
+    onClick: onSignOut,
   }
 }
 

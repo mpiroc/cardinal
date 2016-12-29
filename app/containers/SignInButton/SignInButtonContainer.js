@@ -6,7 +6,7 @@ import { Button } from 'react-toolbox'
 import { authAndSaveUser } from 'redux/modules/auth'
 import { setAndHandleUserValueListener } from 'redux/modules/users'
 
-function mapStateToProps ({auth, users}, ownProps) {
+function mapStateToProps ({ auth }, ownProps) {
   return {
     authedUid: auth.get('authedUid')
   }
@@ -19,15 +19,18 @@ function mapDispatchToProps (dispatch, ownProps) {
   }, dispatch)
 }
 
-function mergeProps (stateProps, dispatchProps, ownProps) {
+function mergeProps (
+    { authedUid },
+    { authAndSaveUser, setAndHandleUserValueListener },
+    { router }) {
   return {
     style: {color: 'white'},
     label: 'Sign In',
     onClick: async () => {
-      await dispatchProps.authAndSaveUser()
-      dispatchProps.setAndHandleUserValueListener(stateProps.authedUid)
+      await authAndSaveUser()
+      setAndHandleUserValueListener(authedUid)
       
-      ownProps.router.replace('/decks')
+      router.replace('/decks')
     },
   }
 }
