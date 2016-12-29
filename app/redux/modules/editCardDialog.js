@@ -113,7 +113,7 @@ function snackbar(state = initialSnackbarState, action) {
     case SAVING_EDIT_CARD_FAILURE:
       return state
         .set('isActive', true)
-        .set('error', action.error)
+        .set('error', `Error saving existing card: ${action.error}`)
     case DISMISS_EDIT_CARD_SNACKBAR:
       // Don't reset 'error', so devs can still view it in the redux store.
       return state.set('isActive', false)

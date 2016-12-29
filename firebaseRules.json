@@ -1,0 +1,23 @@
+/* When creating a new firebase database, these rules should be pasted into the 'rules' tab */
+{
+  "rules": {
+    "users": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid",
+      }
+    },
+    "userDecks": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid",
+      }
+    },
+    "deckCards": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid",
+      }
+    },
+  }
+}
