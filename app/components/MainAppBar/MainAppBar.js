@@ -9,13 +9,13 @@ import {
   SignOutButtonContainer,
 } from 'containers'
 
-export default function MainAppBar (props) {
+export default function MainAppBar ({ isAuthed, onNavigateToHome }) {
   return (
     <AppBar title={'Cardinal'}>
       <Navigation type='horizontal'>
-        <Button label={'Home'} style={{color: 'white'}} />
+        <Button style={{color: 'white'}} label={'Home'} onClick={onNavigateToHome} />
         {
-          props.isAuthed ?
+          isAuthed ?
             <SignOutButtonContainer /> :
             <SignInButtonContainer />
         }
@@ -26,4 +26,5 @@ export default function MainAppBar (props) {
 
 MainAppBar.propTypes = {
   isAuthed: PropTypes.bool.isRequired,
+  onNavigateToHome: PropTypes.func.isRequired,
 }
