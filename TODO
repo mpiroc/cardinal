@@ -1,7 +1,6 @@
 TODO: Once the basic skeleton is ready, choose project management service and start tracking user stories
 
 Next steps:
-  - Better redux route protection
   - Firebase route protection
 
 At this point, ready to pick a project management service. Some stories to add:
