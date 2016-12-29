@@ -1,9 +1,7 @@
-TODO: Once the basic skeleton is ready, choose project management service and start tracking user stories
-
 Next steps:
-  - Firebase route protection (requires changing deckCards table to nest under uid)
+  - Pick a project management service, and move TODOs to that service as user stories.
 
-At this point, ready to pick a project management service. Some stories to add:
+TODO:
   - Unit tests
   - Continuous integration
   - Continuous deployment
