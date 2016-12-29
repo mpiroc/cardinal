@@ -17,23 +17,18 @@ function mapStateToProps ({editDeckDialog}, ownProps) {
 }
 
 function mapDispatchToProps (dispatch, ownProps) {
-  return bindActionCreators(editDeckDialogActionCreators, dispatch)
-}
+  const boundActionCreators = bindActionCreators(editDeckDialogActionCreators, dispatch)
 
-function mergeProps (stateProps, dispatchProps, ownProps) {
   return {
-    ...stateProps,
-    ...ownProps,
-    onNameChange: dispatchProps.updateEditDeckName,
-    onDescriptionChange: dispatchProps.updateEditDeckDescription,
-    onSave: dispatchProps.saveAndHandleEditDeck,
-    onCancel: dispatchProps.closeEditDeckDialog,
-    onDismissSnackbar: dispatchProps.dismissEditDeckSnackbar,
+    onNameChange: boundActionCreators.updateEditDeckName,
+    onDescriptionChange: boundActionCreators.updateEditDeckDescription,
+    onSave: boundActionCreators.saveAndHandleEditDeck,
+    onCancel: boundActionCreators.closeEditDeckDialog,
+    onDismissSnackbar: boundActionCreators.dismissEditDeckSnackbar,
   }
 }
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-  mergeProps,
 )(EditDeckDialog)
