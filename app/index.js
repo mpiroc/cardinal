@@ -7,6 +7,7 @@ import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'
 import { routerReducer, syncHistoryWithStore } from 'react-router-redux'
 import * as reducers from 'redux/modules'
+import { setLoginRedirect } from 'redux/modules/loginRedirect'
 import getRoutes from 'config/routes'
 import 'react-toolbox/lib/commons.scss'
 
@@ -21,6 +22,7 @@ function requireAuth(nextState, replace) {
   const isAuthed = store.getState().auth.get('isAuthed')
 
   if (isAuthed !== true) {
+    store.dispatch(setLoginRedirect(nextState.location.pathname))
     replace('/login')
   }
 }
@@ -32,6 +34,7 @@ function redirectFromHome(nextState, replace) {
     replace('/decks')
   }
   else {
+    store.dispatch(setLoginRedirect(nextState.location.pathname))
     replace('/login')
   }
 }

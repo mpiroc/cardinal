@@ -13,6 +13,7 @@ import {
 } from 'react-toolbox'
 import * as authActionCreators from 'redux/modules/auth'
 import * as userActionCreators from 'redux/modules/users'
+import * as loginRedirectActionCreators from 'redux/modules/loginRedirect'
 
 class MainContainer extends React.Component {
   componentDidMount() {
@@ -25,11 +26,17 @@ class MainContainer extends React.Component {
 
         await saveUser(user)
 
-        const { authUser, setAndHandleUserValueListener } = this.props
+        const { authUser, setAndHandleUserValueListener, loginRedirect, clearLoginRedirect } = this.props
         authUser(user.uid)
         setAndHandleUserValueListener(user.uid)
 
-        this.context.router.replace('/')
+        if (loginRedirect) {
+          clearLoginRedirect()
+          this.context.router.replace(loginRedirect)
+        }
+        else {
+          this.context.router.replace('/')
+        }
       }
     })
   }
@@ -54,15 +61,18 @@ MainContainer.propTypes = {
   authUser: PropTypes.func.isRequired,
   setAndHandleUserValueListener: PropTypes.func.isRequired,
   location: PropTypes.object.isRequired,
+  loginRedirect: PropTypes.string,
+  clearLoginRedirect: PropTypes.func.isRequired,
 }
 
 MainContainer.contextTypes = {
   router: PropTypes.object.isRequired
 }
 
-function mapStateToProps(state, props) {
+function mapStateToProps({loginRedirect}, props) {
   return {
-    deckId: props.params ? props.params.deckId : null
+    deckId: props.params ? props.params.deckId : null,
+    loginRedirect: loginRedirect.get('redirect'),
   }
 }
 
@@ -70,6 +80,7 @@ function mapDispatchToProps(dispatch, props) {
   return bindActionCreators({
     ...authActionCreators,
     ...userActionCreators,
+    ...loginRedirectActionCreators,
   }, dispatch)
 }
 

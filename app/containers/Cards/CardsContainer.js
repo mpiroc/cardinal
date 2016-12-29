@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import { Map } from 'immutable'
 import { Cards } from 'components'
 import * as deckActionCreators from 'redux/modules/decks'
 
@@ -37,7 +38,8 @@ function mapStateToProps ({ auth, decks, cards }, props) {
   return {
     deckId: deckId,
     authedUid: auth.get('authedUid'),
-    cards: deck.get('cards'),
+    // deck will briefly be undefined if we entered the app at this page, rather than from the decks list
+    cards: deck ? deck.get('cards') : Map(),
   }
 }
 
