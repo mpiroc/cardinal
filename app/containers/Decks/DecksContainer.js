@@ -23,14 +23,14 @@ DecksContainer.propTypes = {
   setUserDeckCollectionListeners: PropTypes.func.isRequired,
 }
 
-function mapStateToProps ({decks, auth}, props) {
+function mapStateToProps ({decks, auth}, ownProps) {
   return {
     decks: decks.get('decks'),
     authedUid: auth.get('authedUid')
   }
 }
 
-function mapDispatchToProps (dispatch, props) {
+function mapDispatchToProps (dispatch, ownProps) {
   return bindActionCreators(userActionCreators, dispatch)
 }
 

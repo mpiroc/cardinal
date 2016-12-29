@@ -4,12 +4,12 @@ import { connect } from 'react-redux'
 import { NewDeckRTCard } from 'components'
 import * as newDeckDialogActionCreators from 'redux/modules/newDeckDialog'
 
-function mapStateToProps (state, props) {
+function mapStateToProps (state, ownProps) {
   return {
   }
 }
 
-function mapDispatchToProps (dispatch, props) {
+function mapDispatchToProps (dispatch, ownProps) {
   const boundActionCreators = bindActionCreators(newDeckDialogActionCreators, dispatch)
 
   return {

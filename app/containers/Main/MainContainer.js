@@ -76,7 +76,7 @@ function mapStateToProps({ loginRedirect }, { params }) {
   }
 }
 
-function mapDispatchToProps(dispatch, props) {
+function mapDispatchToProps(dispatch, ownProps) {
   return bindActionCreators({
     ...authActionCreators,
     ...userActionCreators,

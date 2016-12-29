@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { WarningSnackbar } from 'components'
 import * as deckActionCreators from 'redux/modules/decks'
 
-function mapStateToProps ({decks}, props) {
+function mapStateToProps ({decks}, ownProps) {
   const snackbar = decks.get('snackbar')
   return {
     isActive: snackbar.get('isActive'),
@@ -12,11 +12,11 @@ function mapStateToProps ({decks}, props) {
   }
 }
 
-function mapDispatchToProps (dispatch, props) {
+function mapDispatchToProps (dispatch, ownProps) {
   return bindActionCreators(deckActionCreators, dispatch)
 }
 
-function mergeProps ({ isActive, error }, { dismissDecksSnackbar }, props) {
+function mergeProps ({ isActive, error }, { dismissDecksSnackbar }, ownProps) {
   return {
     isActive,
     error,
