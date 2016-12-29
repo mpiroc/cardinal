@@ -64,11 +64,13 @@ export function setDeckValueListener(uid, deckId) {
 
 export function setDeckCardCollectionListeners(deckId) {
   return (dispatch, getState) => {
-    const state = getState().listeners
+    const { auth, listeners } = getState()
+    const uid = auth.get('authedUid')
 
-    if (state.getIn(['deckCards', deckId, 'added']) !== true) {
+    if (listeners.getIn(['deckCards', deckId, 'added']) !== true) {
       dispatch(addDeckCardAddedListener(deckId))
       setDeckCardAddedListener(
+        uid,
         deckId,
         card => {
           dispatch(deckCardAddedReceived(deckId, card.cardId))
@@ -79,9 +81,10 @@ export function setDeckCardCollectionListeners(deckId) {
       )
     }
 
-    if (state.getIn(['deckCards', deckId, 'removed']) !== true) {
+    if (listeners.getIn(['deckCards', deckId, 'removed']) !== true) {
       dispatch(addDeckCardRemovedListener(deckId))
       setDeckCardRemovedListener(
+        uid,
         deckId,
         card => {
           dispatch(deckCardRemovedReceived(deckId, card.cardId))

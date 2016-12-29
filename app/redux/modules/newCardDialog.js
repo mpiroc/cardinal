@@ -17,12 +17,13 @@ export function saveAndHandleNewCard() {
     dispatch(savingNewCard())
 
     try {
-      const { newCardDialog } = getState()
+      const { auth, newCardDialog } = getState()
+      const uid = auth.get('authedUid')
       const deckId = newCardDialog.get('deckId')
       const side1 = newCardDialog.get('side1')
       const side2 = newCardDialog.get('side2')
 
-      await saveNewCard(deckId, {
+      await saveNewCard(uid, deckId, {
         side1,
         side2,
       })

@@ -20,28 +20,25 @@ const REMOVE_DECK_CARD_VALUE_LISTENER = 'REMOVE_DECK_CARD_VALUE_LISTENER'
 // thunks
 export function disableAndRemoveAllListeners() {
   return (dispatch, getState) => {
-    const { listeners } = getState()
+    const { auth, listeners } = getState()
+    const uid = auth.get('authedUid')
 
-    for (uid in listeners.get('users').keySeq()) {
-      removeUserValueListener(uid)
-      fbHelpers.removeUserValueListener(uid)
-    }
+    removeUserValueListener(uid)
+    fbHelpers.removeUserValueListener(uid)
 
     const userDecks = listeners.get('userDecks')
-    for (uid in userDecks.keySeq()) {
-      const userDeck = userDecks.get(uid)
-      if (userDeck.get('added') === true) {
-        removeUserDeckAddedListener(uid)
-        fbHelpers.removeUserDeckAddedListener(uid)
-      }
-      if (userDeck.get('removed') === true) {
-        removeUserDeckRemovedListener(uid)
-        fbHelpers.removeUserDeckRemovedListener(uid)
-      }
-      for (deckId in userDeck.get('decks').keySeq()) {
-        removeUserDeckValueListener(uid, deckId)
-        fbHelpers.removeUserDeckValueListener(uid, deckId)
-      }
+    const userDeck = userDecks.get(uid)
+    if (userDeck.get('added') === true) {
+      removeUserDeckAddedListener(uid)
+      fbHelpers.removeUserDeckAddedListener(uid)
+    }
+    if (userDeck.get('removed') === true) {
+      removeUserDeckRemovedListener(uid)
+      fbHelpers.removeUserDeckRemovedListener(uid)
+    }
+    for (deckId in userDeck.get('decks').keySeq()) {
+      removeUserDeckValueListener(uid, deckId)
+      fbHelpers.removeUserDeckValueListener(uid, deckId)
     }
 
     const deckCards = listeners.get('deckCards')
@@ -49,15 +46,15 @@ export function disableAndRemoveAllListeners() {
       const deckCard = deckCards.get('deckId')
       if (deckCard.get('added') === true) {
         removeDeckCardAddedListener(deckId)
-        fbHelpers.removeDeckCardAddedListener(deckId)
+        fbHelpers.removeDeckCardAddedListener(uid, deckId)
       }
       if (deckCard.get('removed') === true) {
         removeDeckCardRemovedListener(deckId)
-        fbHelpers.removeDeckCardRemovedListener(deckId)
+        fbHelpers.removeDeckCardRemovedListener(uid, deckId)
       }
       for (cardId in deckCard.get('cards').keySeq()) {
         removeDeckCardValueListener(deckId, cardId)
-        fbHelpers.removeDeckCardValueListener(deckId, cardId)
+        fbHelpers.removeDeckCardValueListener(uid, deckId, cardId)
       }
     }
   }

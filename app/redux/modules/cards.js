@@ -20,10 +20,12 @@ const CARDS_LOGOUT = 'CARDS_LOGOUT'
 // thunks
 export function deleteAndHandleCard(deckId, cardId) {
   return async (dispatch, getState) => {
+    const uid = getState().auth.get('authedUid')
+
     dispatch(deletingCard(cardId))
 
     try {
-      await deleteCard(deckId, cardId)
+      await deleteCard(uid, deckId, cardId)
       dispatch(deletingCardSuccess(cardId))
     }
     catch (error) {
@@ -34,13 +36,14 @@ export function deleteAndHandleCard(deckId, cardId) {
 
 export function setCardValueListener(deckId, cardId) {
   return (dispatch, getState) => {
-    const state = getState().listeners
+    const { auth, listeners } = getState()
+    const uid = auth.get('authedUid')
 
-    if (state.getIn(['deckCards', deckId, 'cards', cardId]) !== true) {
+    if (listeners.getIn(['deckCards', deckId, 'cards', cardId]) !== true) {
       dispatch(addDeckCardValueListener(deckId, cardId))
       dispatch(settingCardValueListener(cardId))
       setDeckCardValueListener(
-        deckId, cardId,
+        uid, deckId, cardId,
         card => dispatch(settingCardValueListenerSuccess(cardId, card)),
         error => dispatch(settingCardValueListenerFailure(cardId, error)),
       )
