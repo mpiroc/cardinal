@@ -11,6 +11,8 @@ function mapStateToProps ({newCardDialog}, ownProps) {
     title: 'Create New Card',
     side1: newCardDialog.get('side1'),
     side2: newCardDialog.get('side2'),
+    isSnackbarActive: newCardDialog.getIn(['snackbar', 'isActive']),
+    snackbarError: newCardDialog.getIn(['snackbar', 'error'])
   }
 }
 
@@ -22,6 +24,7 @@ function mapDispatchToProps (dispatch, ownProps) {
     onSide2Change: side2 => boundActionCreators.updateNewCardSide2(side2),
     onSave: boundActionCreators.saveAndHandleNewCard,
     onCancel: boundActionCreators.closeNewCardDialog,
+    onDismissSnackbar: boundActionCreators.dismissNewCardSnackbar,
   }
 }
 

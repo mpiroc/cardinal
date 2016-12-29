@@ -1,6 +1,7 @@
 export CardRTCardContainer from './CardRTCard/CardRTCardContainer'
 export CardsContainer from './Cards/CardsContainer'
 export CardsSnackbarContainer from './CardsSnackbar/CardsSnackbarContainer'
+export EditCardDialogContainer from './EditCardDialog/EditCardDialogContainer'
 export NewCardDialogContainer from './NewCardDialog/NewCardDialogContainer'
 export NewCardRTCardContainer from './NewCardRTCard/NewCardRTCardContainer'
 

@@ -69,7 +69,7 @@ export function saveNewCard(deckId, { side1, side2 }) {
 }
 
 export function saveExistingCard(deckId, { cardId, side1, side2 }) {
-  return ref.child(`deckCards/${deckId}`).set({
+  return ref.child(`deckCards/${deckId}/${cardId}`).set({
     cardId,
     side1,
     side2,

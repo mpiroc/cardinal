@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { CardRTCard } from 'components'
 import * as cardActionCreators from 'redux/modules/cards'
+import * as editCardDialogActionCreators from 'redux/modules/editCardDialog'
 
 function mapStateToProps ({ cards }, ownProps) {
   const card = cards.getIn(['cards', ownProps.cardId])
@@ -25,14 +26,31 @@ function mapStateToProps ({ cards }, ownProps) {
 }
 
 function mapDispatchToProps (dispatch, ownProps) {
-  const boundActionCreators = bindActionCreators(cardActionCreators, dispatch)
+  return bindActionCreators({
+    ...cardActionCreators,
+    ...editCardDialogActionCreators,
+  }, dispatch)
+}
 
+function mergeProps (stateProps, dispatchProps, ownProps) {
   return {
-    onDelete: () => boundActionCreators.deleteAndHandleCard(ownProps.deckId, ownProps.cardId)
+    ...stateProps,
+    ...ownProps,
+    onEdit: () => dispatchProps.openEditCardDialog(
+      ownProps.deckId,
+      ownProps.cardId,
+      stateProps.side1,
+      stateProps.side2,
+    ),
+    onDelete: () => dispatchProps.deleteAndHandleCard(
+      ownProps.deckId,
+      ownProps.cardId,
+    ),
   }
 }
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
+  mergeProps,
 )(CardRTCard)

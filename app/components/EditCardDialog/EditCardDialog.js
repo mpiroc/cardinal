@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 import Dialog from 'react-toolbox/lib/dialog'
 import Input from 'react-toolbox/lib/input'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
-//import { NewCardDialogSnackbarContainer } from 'containers'
+import { WarningSnackbar } from 'components'
 import Delay from 'react-delay'
 
 export default function EditCardDialog (props) {
@@ -16,6 +16,9 @@ export default function EditCardDialog (props) {
     onSide2Change,
     onCancel,
     onSave,
+    isSnackbarActive,
+    snackbarError,
+    onDismissSnackbar,
   } = props
 
   const actions = [
@@ -61,6 +64,11 @@ export default function EditCardDialog (props) {
           ) :
           null
       }
+      <WarningSnackbar
+        isActive={isSnackbarActive}
+        error={snackbarError}
+        onDismissSnackbar={onDismissSnackbar}
+      />
     </Dialog>
   )
 }
@@ -75,4 +83,7 @@ EditCardDialog.propTypes = {
   onSide2Change: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
+  isSnackbarActive: PropTypes.bool.isRequired,
+  snackbarError: PropTypes.string.isRequired,
+  onDismissSnackbar: PropTypes.func.isRequired,
 }

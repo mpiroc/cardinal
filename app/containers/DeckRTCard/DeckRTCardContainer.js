@@ -73,8 +73,15 @@ function mergeProps (stateProps, dispatchProps, ownProps) {
   return {
     ...stateProps,
     ...ownProps,
-    onEdit: () => dispatchProps.openEditDeckDialog(ownProps.deckId, stateProps.name, stateProps.description),
-    onDelete: () => dispatchProps.deleteAndHandleDeck(stateProps.uid, ownProps.deckId),
+    onEdit: () => dispatchProps.openEditDeckDialog(
+      ownProps.deckId,
+      stateProps.name,
+      stateProps.description,
+    ),
+    onDelete: () => dispatchProps.deleteAndHandleDeck(
+      stateProps.uid,
+      ownProps.deckId,
+    ),
   }
 }
 

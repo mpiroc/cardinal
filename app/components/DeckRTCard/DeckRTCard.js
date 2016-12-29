@@ -36,7 +36,7 @@ export default function DeckRTCard({
         <Button label={'View'} onClick={onView}/>
 
         <Button label={'Edit'} onClick={onEdit} />
-        <EditDeckDialogContainer deckId={deckId} />
+        <EditDeckDialogContainer />
         
         <Button label={'Delete'} onClick={onDelete} />
       </CardActions>

@@ -3,12 +3,14 @@ import { Card, CardMedia, CardTitle, CardText, CardActions } from 'react-toolbox
 import { Button } from 'react-toolbox/lib/button'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 import Delay from 'react-delay'
+import { EditCardDialogContainer } from 'containers'
 
 export default function CardRTCard ({
   cardId,
   isDeleting,
   side1,
   side2,
+  onEdit,
   onDelete,
 }) {
   return (
@@ -30,7 +32,9 @@ export default function CardRTCard ({
           }
         </CardText>
         <CardActions>
-          <Button label={'Edit'} />
+          <Button label={'Edit'} onClick={onEdit} />
+          <EditCardDialogContainer />
+
           <Button label={'Delete'} onClick={onDelete} />
         </CardActions>
       </Card>
@@ -44,9 +48,11 @@ export default function CardRTCard ({
 }
 
 CardRTCard.propTypes = {
+  deckId: PropTypes.string.isRequired,
   cardId: PropTypes.string.isRequired,
   isDeleting: PropTypes.bool.isRequired,
   side1: PropTypes.string.isRequired,
   side2: PropTypes.string.isRequired,
+  onEdit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
 }

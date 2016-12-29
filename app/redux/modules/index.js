@@ -1,6 +1,7 @@
 export auth from './auth'
 export cards from './cards'
 export decks from './decks'
+export editCardDialog from './editCardDialog'
 export editDeckDialog from './editDeckDialog'
 export listeners from './listeners'
 export navDrawer from './navDrawer'
