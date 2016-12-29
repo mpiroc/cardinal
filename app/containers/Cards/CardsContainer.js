@@ -38,14 +38,7 @@ function mapStateToProps ({ auth, decks, cards }, props) {
     deckId: deckId,
     authedUid: auth.get('authedUid'),
     name: deck.get('name'),
-    cards: deck
-      .get('cards')
-      .keySeq()
-      .map(cardId => { return {
-        cardId,
-        card: cards.getIn(['cards', cardId])
-      }})
-      .filter(card => card.card !== undefined)
+    cards: deck.get('cards'),
   }
 }
 

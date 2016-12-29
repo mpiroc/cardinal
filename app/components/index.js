@@ -1,3 +1,4 @@
+export CardRTCard from './CardRTCard/CardRTCard'
 export Cards from './Cards/Cards'
 export DeckRTCard from './DeckRTCard/DeckRTCard'
 export Decks from './Decks/Decks'
