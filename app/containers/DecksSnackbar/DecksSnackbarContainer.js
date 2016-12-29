@@ -16,10 +16,11 @@ function mapDispatchToProps (dispatch, props) {
   return bindActionCreators(deckActionCreators, dispatch)
 }
 
-function mergeProps (stateProps, dispatchProps, props) {
+function mergeProps ({ isActive, error }, { dismissDecksSnackbar }, props) {
   return {
-    ...stateProps,
-    onDismissSnackbar: dispatchProps.dismissDecksSnackbar,
+    isActive,
+    error,
+    onDismissSnackbar: dismissDecksSnackbar,
   }
 }
 

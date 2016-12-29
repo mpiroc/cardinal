@@ -9,11 +9,11 @@ function mapStateToProps (state, ownProps) {
   }
 }
 
-function mapDispatchToProps (dispatch, ownProps) {
+function mapDispatchToProps (dispatch, { deckId }) {
   const boundActionCreators = bindActionCreators(newCardDialogActionCreators, dispatch)
 
   return {
-    onOpenDialog: () => boundActionCreators.openNewCardDialog(ownProps.deckId)
+    onOpenDialog: () => boundActionCreators.openNewCardDialog(deckId)
   }
 }
 

@@ -10,8 +10,9 @@ class DecksContainer extends React.Component {
     setUserDeckCollectionListeners(authedUid)
   }
   render () {
+    const { decks } = this.props
     return (
-      <Decks decks={this.props.decks} />
+      <Decks decks={decks} />
     )
   }
 }

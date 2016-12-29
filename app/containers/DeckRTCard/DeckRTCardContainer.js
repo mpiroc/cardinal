@@ -6,14 +6,13 @@ import { DeckRTCard } from 'components'
 import * as deckActionCreators from 'redux/modules/decks'
 import * as editDeckDialogActionCreators from 'redux/modules/editDeckDialog'
 
-function mapStateToProps ({ auth, decks }, { deckId, router }) {
+function mapStateToProps ({ auth, decks }, { deckId }) {
   const deck = decks.getIn(['decks', deckId])
   return {
     uid: auth.get('authedUid'),
     isDeleting: deck.get('isDeleting'),
     name: deck.get('name'),
     description: deck.get('description'),
-    onView: () => router.replace(`deck/${deckId}`),
   }
 }
 
@@ -24,19 +23,18 @@ function mapDispatchToProps (dispatch, ownProps) {
   }, dispatch)
 }
 
-function mergeProps (stateProps, dispatchProps, ownProps) {
+function mergeProps (
+    { uid, isDeleting, name, description },
+    { openEditDeckDialog, deleteAndHandleDeck },
+    { deckId, router }) {
   return {
-    ...stateProps,
-    ...ownProps,
-    onEdit: () => dispatchProps.openEditDeckDialog(
-      ownProps.deckId,
-      stateProps.name,
-      stateProps.description,
-    ),
-    onDelete: () => dispatchProps.deleteAndHandleDeck(
-      stateProps.uid,
-      ownProps.deckId,
-    ),
+    deckId,
+    isDeleting,
+    name,
+    description,
+    onView: () => router.replace(`deck/${deckId}`),
+    onEdit: () => openEditDeckDialog(deckId, name, description),
+    onDelete: () => deleteAndHandleDeck(uid, deckId),
   }
 }
 

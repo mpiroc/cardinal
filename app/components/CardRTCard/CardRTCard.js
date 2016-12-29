@@ -48,7 +48,6 @@ export default function CardRTCard ({
 }
 
 CardRTCard.propTypes = {
-  deckId: PropTypes.string.isRequired,
   cardId: PropTypes.string.isRequired,
   isDeleting: PropTypes.bool.isRequired,
   side1: PropTypes.string.isRequired,

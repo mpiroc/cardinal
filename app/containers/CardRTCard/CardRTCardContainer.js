@@ -5,8 +5,8 @@ import { CardRTCard } from 'components'
 import * as cardActionCreators from 'redux/modules/cards'
 import * as editCardDialogActionCreators from 'redux/modules/editCardDialog'
 
-function mapStateToProps ({ cards }, ownProps) {
-  const card = cards.getIn(['cards', ownProps.cardId])
+function mapStateToProps ({ cards }, { cardId }) {
+  const card = cards.getIn(['cards', cardId])
 
   if (card === undefined) {
     return {
@@ -32,19 +32,25 @@ function mapDispatchToProps (dispatch, ownProps) {
   }, dispatch)
 }
 
-function mergeProps (stateProps, dispatchProps, ownProps) {
+function mergeProps (
+    { isLoading, isDeleting, side1, side2 },
+    { openEditCardDialog, deleteAndHandleCard },
+    { deckId, cardId }) {
   return {
-    ...stateProps,
-    ...ownProps,
-    onEdit: () => dispatchProps.openEditCardDialog(
-      ownProps.deckId,
-      ownProps.cardId,
-      stateProps.side1,
-      stateProps.side2,
+    isLoading,
+    isDeleting,
+    side1,
+    side2,
+    cardId,
+    onEdit: () => openEditCardDialog(
+      deckId,
+      cardId,
+      side1,
+      side2,
     ),
-    onDelete: () => dispatchProps.deleteAndHandleCard(
-      ownProps.deckId,
-      ownProps.cardId,
+    onDelete: () => deleteAndHandleCard(
+      deckId,
+      cardId,
     ),
   }
 }
