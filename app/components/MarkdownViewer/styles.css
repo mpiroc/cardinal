@@ -1,3 +1,11 @@
 .markdownViewer ul {
   list-style-position: inside;
 }
+
+.markdownViewer pre {
+  margin: 1em;
+}
+
+.markdownViewer p {
+  margin: 1em 0;
+}

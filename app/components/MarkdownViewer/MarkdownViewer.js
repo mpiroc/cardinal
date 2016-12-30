@@ -6,7 +6,7 @@ export default function MarkdownViewer (props) {
   marked.setOptions({
     gfm: true,
     tables: true,
-    breaks: true,
+    breaks: false,
     pedantic: false,
     sanitize: true,
     smartLists: true,
