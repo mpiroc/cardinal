@@ -39,7 +39,7 @@ export default function EditCardDialog ({
           <Input
             type='text' multiline
             label={'Side one'}
-            hint={'You can use Markdown!'}
+            hint={'You can use markdown here!'}
             maxLength={2000}
             value={side1}
             onChange={onSide1Change}
@@ -55,7 +55,7 @@ export default function EditCardDialog ({
           <Input
             type='text' multiline
             label={'Side two'}
-            hint={'You can use Markdown!'}
+            hint={'You can use markdown here!'}
             maxLength={2000}
             value={side2}
             onChange={onSide2Change}
