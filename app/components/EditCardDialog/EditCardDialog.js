@@ -1,9 +1,10 @@
 import React, { PropTypes } from 'react'
+import Delay from 'react-delay'
 import Dialog from 'react-toolbox/lib/dialog'
 import Input from 'react-toolbox/lib/input'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
-import { WarningSnackbar } from 'components'
-import Delay from 'react-delay'
+import { Card, CardMedia, CardTitle, CardText, CardActions } from 'react-toolbox/lib/card'
+import { WarningSnackbar, MarkdownViewer } from 'components'
 
 export default function EditCardDialog ({
     isActive,
@@ -34,22 +35,38 @@ export default function EditCardDialog ({
       title={title}
       >
       <section>
-        <Input
-          type='text' multiline
-          label={'Side one'}
-          maxLength={2000}
-          value={side1}
-          onChange={onSide1Change}
-          disabled={isSaving}
+        <div style={{display: 'flex', flexDirection: 'column', margin: '0 0 1.8em 0'}}>
+          <Input
+            type='text' multiline
+            label={'Side one'}
+            hint={'You can use Markdown!'}
+            maxLength={2000}
+            value={side1}
+            onChange={onSide1Change}
+            disabled={isSaving}
           />
-        <Input
-          type='text' multiline
-          label={'Side two'}
-          maxLength={2000}
-          value={side2}
-          onChange={onSide2Change}
-          disabled={isSaving}
+          <Card style={{margin: '1.8em 0 0 0', color: 'black'}}>
+            <CardText>
+              <MarkdownViewer markdown={side1} />
+            </CardText>
+          </Card>
+        </div>
+        <div style={{display: 'flex', flexDirection: 'column'}}>
+          <Input
+            type='text' multiline
+            label={'Side two'}
+            hint={'You can use Markdown!'}
+            maxLength={2000}
+            value={side2}
+            onChange={onSide2Change}
+            disabled={isSaving}
           />
+          <Card style={{margin: '1.8em 0 0 0', color: 'black'}}>
+            <CardText>
+              <MarkdownViewer markdown={side2} />
+            </CardText>
+          </Card>
+        </div>
       </section>
       {
         // If save completes quickly, we don't want to briefly flash the progress bar. So we
