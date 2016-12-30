@@ -4,7 +4,7 @@
   "description": "Spaced-repetition single-page application",
   "main": "app/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha tests/.setup.js tests/tests.js",
     "start": "webpack-dev-server",
     "production": "webpack -p"
   },
