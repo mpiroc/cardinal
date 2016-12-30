@@ -1,3 +1,5 @@
+// This file is purely for reference, it is not used anywhere in the application, nor is it automatically kept up-to-date.
+
 users
   [uid]
     uid: string
@@ -8,10 +10,12 @@ userDecks
     [deckId]
       deckId: string
       name: string
+      description: string
 
 deckCards
-  [deckId]
-    [cardId]
-      cardId: string
-      side1: string
-      side2: string
+  [uid]
+    [deckId]
+      [cardId]
+        cardId: string
+        side1: string
+        side2: string
