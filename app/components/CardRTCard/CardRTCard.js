@@ -15,7 +15,7 @@ export default function CardRTCard ({
   onDelete,
 }) {
   return (
-    <div style={{display: 'flex', flexDirection: 'row', margin: '0 0 1.8rem 0'}}>
+    <div style={{display: 'flex', flexDirection: 'row', margin: '0 auto 1.8rem auto', width: '80%'}}>
       <Card style={{ width: '50%' }}>
         <CardText>
           <MarkdownViewer markdown={side1} />
