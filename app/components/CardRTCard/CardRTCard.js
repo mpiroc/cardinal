@@ -3,6 +3,7 @@ import { Card, CardMedia, CardTitle, CardText, CardActions } from 'react-toolbox
 import { Button } from 'react-toolbox/lib/button'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 import Delay from 'react-delay'
+import { MarkdownViewer } from 'components'
 import { EditCardDialogContainer } from 'containers'
 
 export default function CardRTCard ({
@@ -17,7 +18,7 @@ export default function CardRTCard ({
     <div style={{display: 'flex', flexDirection: 'row', margin: '0 0 1.8rem 0'}}>
       <Card style={{ width: '50%' }}>
         <CardText>
-          <pre>{side1}</pre>
+          <MarkdownViewer markdown={side1} />
           {
             // If save completes quickly, we don't want to briefly flash the progress bar. So we
             // wait 250 milliseconds before showing it.
@@ -40,7 +41,7 @@ export default function CardRTCard ({
       </Card>
       <Card style={{ width: '50%' }}>
         <CardText>
-          <pre>{side2}</pre>
+          <MarkdownViewer markdown={side2} />
         </CardText>
       </Card>
     </div>
