@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { CardRTCard } from 'components'
+import CardRTCard from 'components/CardRTCard/CardRTCard'
 import * as cardActionCreators from 'redux/modules/cards'
 import * as editCardDialogActionCreators from 'redux/modules/editCardDialog'
 

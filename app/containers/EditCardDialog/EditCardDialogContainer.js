@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { EditCardDialog } from 'components'
+import EditCardDialog from 'components/EditCardDialog/EditCardDialog'
 import * as editCardDialogActionCreators from 'redux/modules/editCardDialog'
 
 function mapStateToProps({editCardDialog}, ownProps) {

@@ -4,10 +4,8 @@ import {
   Navigation,
   Button,
 } from 'react-toolbox'
-import {
-  SignInButtonContainer,
-  SignOutButtonContainer,
-} from 'containers'
+import SignInButtonContainer from 'containers/SignInButton/SignInButtonContainer'
+import SignOutButtonContainer from 'containers/SignOutButton/SignOutButtonContainer'
 
 export default function MainAppBar ({ isAuthed, onNavigateToHome }) {
   return (

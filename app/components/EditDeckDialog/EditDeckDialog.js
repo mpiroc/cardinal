@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 import Dialog from 'react-toolbox/lib/dialog'
 import Input from 'react-toolbox/lib/input'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
-import { WarningSnackbar } from 'components'
+import WarningSnackbar from 'components/WarningSnackbar/WarningSnackbar'
 import Delay from 'react-delay'
 
 export default function EditDeckDialog ({

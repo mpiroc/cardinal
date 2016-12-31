@@ -3,11 +3,10 @@ import { Card, CardMedia, CardTitle, CardText, CardActions } from 'react-toolbox
 import { Button } from 'react-toolbox/lib/button'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 import Delay from 'react-delay'
-import { MarkdownViewer } from 'components'
-import { EditCardDialogContainer } from 'containers'
+import MarkdownViewer from 'components/MarkdownViewer/MarkdownViewer'
+import EditCardDialogContainer from 'containers/EditCardDialog/EditCardDialogContainer'
 
 export default function CardRTCard ({
-  cardId,
   isDeleting,
   side1,
   side2,
@@ -23,9 +22,9 @@ export default function CardRTCard ({
             // If save completes quickly, we don't want to briefly flash the progress bar. So we
             // wait 250 milliseconds before showing it.
             isDeleting === true ? (
-                <Delay wait={250}>
+                <Delay id={'progressBarDelay'} wait={250}>
                   <div style={{margin: '1.8rem 0 0 0'}}>
-                    <ProgressBar type='linear' mode='indeterminate' />
+                    <ProgressBar id={'progressBar'} type='linear' mode='indeterminate' />
                   </div>
                 </Delay>
               ) :
@@ -49,7 +48,6 @@ export default function CardRTCard ({
 }
 
 CardRTCard.propTypes = {
-  cardId: PropTypes.string.isRequired,
   isDeleting: PropTypes.bool.isRequired,
   side1: PropTypes.string.isRequired,
   side2: PropTypes.string.isRequired,

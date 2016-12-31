@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 import { withRouter } from 'react-router'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { DeckRTCard } from 'components'
+import DeckRTCard from 'components/DeckRTCard/DeckRTCard'
 import * as deckActionCreators from 'redux/modules/decks'
 import * as editDeckDialogActionCreators from 'redux/modules/editDeckDialog'
 

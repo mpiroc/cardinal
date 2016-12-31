@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Map } from 'immutable'
-import { Cards } from 'components'
+import Cards from 'components/Cards/Cards'
 import * as deckActionCreators from 'redux/modules/decks'
 
 class CardsContainer extends React.Component {

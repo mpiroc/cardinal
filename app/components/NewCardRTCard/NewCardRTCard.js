@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 import { Card, CardMedia, CardTitle, CardText, CardActions } from 'react-toolbox/lib/card';
 import { Button } from 'react-toolbox/lib/button';
 import { FontIcon } from 'react-toolbox/lib/font_icon'
-import { NewCardDialogContainer } from 'containers'
+import NewCardDialogContainer from 'containers/NewCardDialog/NewCardDialogContainer'
 
 export default function NewCardRTCard ({ onOpenDialog }) {
   return (

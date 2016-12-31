@@ -3,7 +3,7 @@ import { Card, CardMedia, CardTitle, CardText, CardActions } from 'react-toolbox
 import { Button } from 'react-toolbox/lib/button'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 import Delay from 'react-delay'
-import { EditDeckDialogContainer } from 'containers'
+import EditDeckDialogContainer from 'containers/EditDeckDialog/EditDeckDialogContainer'
 
 export default function DeckRTCard({
     deckId,

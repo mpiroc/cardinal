@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { EditDeckDialog } from 'components'
+import EditDeckDialog from 'components/EditDeckDialog/EditDeckDialog'
 import * as newDeckDialogActionCreators from 'redux/modules/newDeckDialog'
 
 function mapStateToProps ({newDeckDialog}, ownProps) {

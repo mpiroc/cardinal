@@ -3,10 +3,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import firebase from 'firebase'
 import { saveUser } from 'helpers/firebase'
-import { MainSidebar } from 'components'
-import {
-  MainAppBarContainer
-} from 'containers'
+import MainAppBarContainer from 'containers/MainAppBar/MainAppBarContainer'
 import {
   Layout,
   Panel,

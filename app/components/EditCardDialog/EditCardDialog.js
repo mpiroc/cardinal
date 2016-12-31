@@ -4,7 +4,8 @@ import Dialog from 'react-toolbox/lib/dialog'
 import Input from 'react-toolbox/lib/input'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 import { Card, CardMedia, CardTitle, CardText, CardActions } from 'react-toolbox/lib/card'
-import { WarningSnackbar, MarkdownViewer } from 'components'
+import WarningSnackbar from 'components/WarningSnackbar/WarningSnackbar'
+import MarkdownViewer from 'components/MarkdownViewer/MarkdownViewer'
 
 export default function EditCardDialog ({
     isActive,

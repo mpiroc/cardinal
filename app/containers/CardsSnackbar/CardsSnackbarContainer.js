@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { WarningSnackbar } from 'components'
+import WarningSnackbar from 'components/WarningSnackbar/WarningSnackbar'
 import * as cardActionCreators from 'redux/modules/cards'
 
 function mapStateToProps ({cards}, ownProps) {
