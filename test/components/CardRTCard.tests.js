@@ -5,6 +5,7 @@ import { mount, render, shallow } from 'enzyme'
 import sinon from 'sinon'
 import React from 'react'
 import CardRTCard from '../../app/components/CardRTCard/CardRTCard'
+import MarkdownViewer from '../../app/components/MarkdownViewer/MarkdownViewer'
 
 chai.use(chaiEnzyme())
 
@@ -39,12 +40,20 @@ describe('CardRTCard component', function() {
 
   it('should render side1 as markdown', function() {
     const wrapper = shallow(<CardRTCard isDeleting={true} side1={'*side one*'} side2={''} onEdit={editSpy} onDelete={deleteSpy} />)
-    expect(wrapper.find('[data-test-id="side1MarkdownViewer"]')).to.exist
+    expect(
+      wrapper
+        .find('[data-test-id="side1MarkdownViewer"]')
+        .matchesElement(<MarkdownViewer markdown={'*side one*'} />))
+      .to.equal(true)
   })
 
   it('should render side2 as markdown', function() {
     const wrapper = shallow(<CardRTCard isDeleting={true} side1={''} side2={'*side two*'} onEdit={editSpy} onDelete={deleteSpy} />)
-    expect(wrapper.find('[data-test-id="side2MarkdownViewer"]')).to.exist
+    expect(
+      wrapper
+        .find('[data-test-id="side2MarkdownViewer"]')
+        .matchesElement(<MarkdownViewer markdown={'*side two*'} />))
+      .to.equal(true)
   })
 
   it('should have an edit button', function() {
