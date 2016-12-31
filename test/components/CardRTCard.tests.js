@@ -24,40 +24,48 @@ describe('CardRTCard component', function() {
 
   it('should hide progress bar while not deleting', function() {
     const wrapper = shallow(<CardRTCard isDeleting={false} side1={''} side2={''} onEdit={editSpy} onDelete={deleteSpy} />)
-    expect(wrapper.find('#progressBar')).to.not.exist
+    expect(wrapper.find('[data-test-id="progressBar"]')).to.not.exist
   })
 
   it('should show progress bar while deleting', function() {
     const wrapper = shallow(<CardRTCard isDeleting={true} side1={''} side2={''} onEdit={editSpy} onDelete={deleteSpy} />)
-    expect(wrapper.find('#progressBar')).to.exist
+    expect(wrapper.find('[data-test-id="progressBar"]')).to.exist
   })
 
   it('should briefly wait before showing progress bar', function() {
     const wrapper = shallow(<CardRTCard isDeleting={true} side1={''} side2={''} onEdit={editSpy} onDelete={deleteSpy} />)
-    expect(wrapper.find('#progressBarDelay')).to.exist
+    expect(wrapper.find('[data-test-id="progressBarDelay"]')).to.exist
   })
 
   it('should render side1 as markdown', function() {
     const wrapper = shallow(<CardRTCard isDeleting={true} side1={'*side one*'} side2={''} onEdit={editSpy} onDelete={deleteSpy} />)
+    expect(wrapper.find('[data-test-id="side1MarkdownViewer"]')).to.exist
   })
 
   it('should render side2 as markdown', function() {
     const wrapper = shallow(<CardRTCard isDeleting={true} side1={''} side2={'*side two*'} onEdit={editSpy} onDelete={deleteSpy} />)
+    expect(wrapper.find('[data-test-id="side2MarkdownViewer"]')).to.exist
   })
 
-  it('should have an edit action', function() {
+  it('should have an edit button', function() {
     const wrapper = shallow(<CardRTCard isDeleting={false} side1={''} side2={''} onEdit={editSpy} onDelete={deleteSpy} />)
+    expect(wrapper.find('[data-test-id="editButton"]')).to.exist
   })
 
-  it('should have a delete action', function() {
+  it('should have a delete button', function() {
     const wrapper = shallow(<CardRTCard isDeleting={false} side1={''} side2={''} onEdit={editSpy} onDelete={deleteSpy} />)
+    expect(wrapper.find('[data-test-id="deleteButton"]')).to.exist
   })
 
   it('should call onEdit when edit button is clicked', function() {
     const wrapper = shallow(<CardRTCard isDeleting={false} side1={''} side2={''} onEdit={editSpy} onDelete={deleteSpy} />)
+    wrapper.find('[data-test-id="editButton"]').simulate('click')
+    expect(editSpy).to.have.property('callCount', 1)
   })
 
   it('should call onDelete when delete button is clicked', function() {
     const wrapper = shallow(<CardRTCard isDeleting={false} side1={''} side2={''} onEdit={editSpy} onDelete={deleteSpy} />)
+    wrapper.find('[data-test-id="deleteButton"]').simulate('click')
+    expect(deleteSpy).to.have.property('callCount', 1)
   })
 })

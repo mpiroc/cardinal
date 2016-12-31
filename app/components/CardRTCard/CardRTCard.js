@@ -17,14 +17,14 @@ export default function CardRTCard ({
     <div style={{display: 'flex', flexDirection: 'row', margin: '0 auto 1.8rem auto', width: '80%'}}>
       <Card style={{ width: '50%', justifyContent: 'space-between' }}>
         <CardText>
-          <MarkdownViewer markdown={side1} />
+          <MarkdownViewer data-test-id='side1MarkdownViewer' markdown={side1} />
           {
             // If save completes quickly, we don't want to briefly flash the progress bar. So we
             // wait 250 milliseconds before showing it.
             isDeleting === true ? (
-                <Delay id={'progressBarDelay'} wait={250}>
+                <Delay data-test-id='progressBarDelay' wait={250}>
                   <div style={{margin: '1.8rem 0 0 0'}}>
-                    <ProgressBar id={'progressBar'} type='linear' mode='indeterminate' />
+                    <ProgressBar data-test-id='progressBar' type='linear' mode='indeterminate' />
                   </div>
                 </Delay>
               ) :
@@ -32,15 +32,15 @@ export default function CardRTCard ({
           }
         </CardText>
         <CardActions>
-          <Button label={'Edit'} onClick={onEdit} />
+          <Button data-test-id='editButton' label={'Edit'} onClick={onEdit} />
           <EditCardDialogContainer />
 
-          <Button label={'Delete'} onClick={onDelete} />
+          <Button data-test-id='deleteButton' label={'Delete'} onClick={onDelete} />
         </CardActions>
       </Card>
       <Card style={{ width: '50%' }}>
         <CardText>
-          <MarkdownViewer markdown={side2} />
+          <MarkdownViewer data-test-id='side2MarkdownViewer' markdown={side2} />
         </CardText>
       </Card>
     </div>
