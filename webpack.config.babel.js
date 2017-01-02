@@ -51,8 +51,9 @@ const baseConfig = {
 }
 
 const productionConfig = {
-  devtool: 'cheap-module-source-map',
+  devtool: 'cheap-inline-source-map',
   plugins: [
+    new ExtractTextPlugin('index_bundle.css', { allChunks: true }),
     new HtmlWebpackPlugin(htmlWebpackPluginConfig),
     new webpack.DefinePlugin({
       'process.env': {
@@ -73,7 +74,6 @@ const developmentConfig = {
   plugins: [
     new ExtractTextPlugin('index_bundle.css', { allChunks: true }),
     new HtmlWebpackPlugin(htmlWebpackPluginConfig),
-    new webpack.HotModuleReplacementPlugin(),
   ]
 }
 
