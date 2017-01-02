@@ -9,7 +9,8 @@ const isProduction = npmCommand === 'production'
 
 const paths = {
   app: path.join(__dirname, 'app'),
-  dist: path.join(__dirname, 'dist'),
+  production: path.join(__dirname, 'production'),
+  development: path.join(__dirname, 'development'),
 }
 
 const htmlWebpackPluginConfig = {
@@ -22,10 +23,6 @@ const baseConfig = {
   entry: [
     paths.app
   ],
-  output: {
-    path: paths.dist,
-    filename: 'index_bundle.js',
-  },
   module: {
     loaders: [
       {
@@ -52,6 +49,10 @@ const baseConfig = {
 
 const productionConfig = {
   devtool: 'cheap-inline-source-map',
+  output: {
+    path: paths.production,
+    filename: 'index_bundle.js',
+  },
   plugins: [
     new ExtractTextPlugin('index_bundle.css', { allChunks: true }),
     new HtmlWebpackPlugin(htmlWebpackPluginConfig),
@@ -65,8 +66,12 @@ const productionConfig = {
 
 const developmentConfig = {
   devtool: 'inline-source-map',
+  output: {
+    path: paths.development,
+    filename: 'index_bundle.js',
+  },
   devSever: {
-    contentBase: paths.dist,
+    contentBase: paths.development,
     hot: true,
     inline: true,
     progress: true,

@@ -6,6 +6,7 @@
   "scripts": {
     "test": "cross-env NODE_PATH=./app mocha",
     "start": "webpack-dev-server",
+    "development": "webpack",
     "production": "webpack -p"
   },
   "repository": {
