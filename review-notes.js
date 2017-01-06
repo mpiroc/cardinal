@@ -3,6 +3,8 @@
   side1: string,
   side2: string,
   isAnswerVisible: bool,
+  onGrade: func,
+  onToggleAnswerVisible: func,
 }
 
 // Controller
@@ -10,16 +12,17 @@ import { showNextCard /* thunk */, gradeCard /* thunk */, toggleAnswerVisible /*
 componentDidMount() {
   showNextCard(this.props.params.deckId)
 }
-async onGrade(grade) {
+async handleGrade(grade) {
   await gradeCard(grad)
   showNextCard(this.props.params.deckId)
 }
-onToggleAnswerVisible() {
+handleToggleAnswerVisible() {
   toggleAnswerVisible()
 }
 render() {
   const { side1, side2, isAnswerVisible } = this.props // from mapStateToProps
-  return <Review side1={side1} side2={side2} isAnswerVisible={isAnswerVisible} />
+  return <Review side1={side1} side2={side2} isAnswerVisible={isAnswerVisible}
+                 onGrade={this.handleGrade} onToggleAnswerVisible={handleToggleAnswerVisible} />
 }
 mapStateToProps(state, ownProps) {
   const { cards, review } = state
