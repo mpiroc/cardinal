@@ -1,11 +1,11 @@
 // Implementation of the SuperMemo 2 algorithm as specified here: https://www.supermemo.com/english/ol/sm2.htm
 import moment from 'moment'
 
-export function computeNewDifficulty(previousDifficulty, grade) {
-  const minimumDifficulty = 1.3
-  const minimumGrade = 0
-  const maximumGrade = 5
+const minimumDifficulty = 1.3
+const minimumGrade = 0
+const maximumGrade = 5
 
+export function computeNewDifficulty(previousDifficulty, grade) {
   if (previousDifficulty < minimumDifficulty) {
     throw Error(`difficulty should never fall below ${minimumDifficulty} (received ${previousDifficulty})`)
   }
@@ -25,6 +25,18 @@ export function computeNewDifficulty(previousDifficulty, grade) {
 }
 
 export function computeNewRepetitionCount(previousRepetitionCount, grade) {
+  if (previousRepetitionCount < 0) {
+    throw Error(`repetition count should be negative (received ${previousRepetitionCount})`)
+  }
+
+  if (Number.isInteger(grade) !== true) {
+    throw Error(`grade must be an integer (received ${grade})`)
+  }
+
+  if (grade < minimumGrade || grade > maximumGrade) {
+    throw Error(`grade must be an integer between 0-5 inclusive (received ${grade})`)
+  }
+
   if (grade < 3) {
     return 0
   }

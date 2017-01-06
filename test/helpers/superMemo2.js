@@ -41,6 +41,31 @@ describe('SuperMemo 2 helpers', function() {
     it('should exist', function() {
       expect(computeNewRepetitionCount).to.exist
     })
+
+    it('should throw on non-integer grades', function() {
+      expect(() => computeNewRepetitionCount(0, 1.5)).to.throw(Error)
+    })
+
+    it('should throw on grades outside of the allowable range (0-5)', function() {
+      expect(() => computeNewRepetitionCount(0, -1)).to.throw(Error)
+      expect(() => computeNewRepetitionCount(0, 6)).to.throw(Error)
+    })
+
+    it('should throw on negative repetition count', function() {
+      expect(() => computeNewRepetitionCount(-1, 0)).to.throw(Error)
+    })
+
+    it('should be 0 for grades 0-2', function() {
+      expect(computeNewRepetitionCount(3, 0)).to.equal(0)
+      expect(computeNewRepetitionCount(6, 1)).to.equal(0)
+      expect(computeNewRepetitionCount(8, 2)).to.equal(0)
+    })
+
+    it('should increment for grades 3-5', function() {
+      expect(computeNewRepetitionCount(2, 3)).to.equal(3)
+      expect(computeNewRepetitionCount(5, 4)).to.equal(6)
+      expect(computeNewRepetitionCount(7, 5)).to.equal(8)
+    })
   })
 
   describe('computeNextReviewMoment', function() {
