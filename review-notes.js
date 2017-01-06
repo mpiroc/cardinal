@@ -197,12 +197,14 @@ function setCardHistoryValueListener(uid, deckId, cardId, onSuccess, onFailure) 
 }
   
 // Super Memo 2
-function computeNewDifficulty(previousDifficulty, grade) {
-  const result = previousDifficulty - 0.8 + 0.28 * grade - 0.02 * grade * grade
-  return Math.max(result, 1.3)
+export function computeNewDifficulty(previousDifficulty, grade) {
+  let result = previousDifficulty - 0.8 + 0.28 * grade - 0.02 * grade * grade
+  result = result.toFixed(2)
+
+  return Math.max(result, minimumDifficulty)
 }
 
-function computeNewRepetitionCount(previousRepetitionCount, grade) {
+export function computeNewRepetitionCount(previousRepetitionCount, grade) {
   if (grade < 3) {
     return 0
   }
@@ -210,14 +212,13 @@ function computeNewRepetitionCount(previousRepetitionCount, grade) {
   return previousRepetitionCount + 1
 }
 
-import moment from 'moment'
-function computeNextReviewMoment(now, repetitionCount, difficulty, previousReviewMoment) {
-  const intervalMs = computeNewIntervalMs(repetitionCount, difficulty, previousReviewMoment.diff(now))
+export function computeNextReviewMoment(now, previousReviewMoment, repetitionCount, difficulty) {
+  const interval = computeNewInterval(repetitionCount, difficulty, now.diff(previousReviewMoment))
 
-  return now.add(intervalMs, 'milliseconds')
+  return now.add(interval)
 }
 
-function computeNewIntervalMs(repetitionCount, difficulty, previousIntervalMs) {
+function computeNewInterval(repetitionCount, difficulty, previousIntervalMs) {
   if (repetitionCount === 0) {
     return moment.duration(0, 'days')
   }
@@ -230,6 +231,5 @@ function computeNewIntervalMs(repetitionCount, difficulty, previousIntervalMs) {
     return moment.duration(6, 'days')
   }
 
-  return previousIntervalMs * difficulty
+  return moment.duration(previousIntervalMs * difficulty)
 }
-
