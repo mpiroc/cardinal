@@ -24,11 +24,17 @@ export function computeNewRepetitionCount(previousRepetitionCount, grade) {
   return previousRepetitionCount + 1
 }
 
-export function computeNextReviewMoment(now, repetitionCount, difficulty, previousReviewMoment) {
+export function computeNextReviewMoment(now, previousReviewMoment, repetitionCount, difficulty) {
   validateRepetitionCount(repetitionCount)
   validateDifficulty(difficulty)
+  validateMoment(now)
+  validateMoment(previousReviewMoment)
 
-  const interval = computeNewIntervalMs(repetitionCount, difficulty, previousReviewMoment.diff(now))
+  if (!previousReviewMoment.isBefore(now)) {
+    throw Error(`The last recorded review occurred in the future (received ${previousReviewMoment.format()}, but now is ${now.format()}`)
+  }
+
+  const interval = computeNewInterval(repetitionCount, difficulty, now.diff(previousReviewMoment))
 
   return now.add(interval)
 }
@@ -75,5 +81,11 @@ function validateRepetitionCount(repetitionCount) {
 
   if (repetitionCount < 0) {
     throw Error(`repetitionCount must not be negative (received ${repetitionCount})`)
+  }
+}
+
+function validateMoment(moment) {
+  if (!moment) {
+    throw Error(`moment must have a value (received ${moment})`)
   }
 }
