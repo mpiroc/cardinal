@@ -2,7 +2,6 @@ import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import firebase from 'firebase'
-import { saveUser } from 'helpers/firebase'
 import MainAppBarContainer from 'containers/MainAppBar/MainAppBarContainer'
 import {
   Layout,
@@ -16,14 +15,14 @@ class MainContainer extends React.Component {
   componentDidMount() {
     firebase.auth().onAuthStateChanged(async firebaseUser => {
       if (firebaseUser) {
+        const { authUser, saveUser, setAndHandleUserValueListener, loginRedirect, clearLoginRedirect } = this.props
+        
         const user = {
           uid: firebaseUser.uid,
           name: firebaseUser.displayName,
         }
 
         await saveUser(user)
-
-        const { authUser, setAndHandleUserValueListener, loginRedirect, clearLoginRedirect } = this.props
         authUser(user.uid)
         setAndHandleUserValueListener(user.uid)
 
@@ -56,6 +55,7 @@ class MainContainer extends React.Component {
 MainContainer.propTypes = {
   deckId: PropTypes.string,
   authUser: PropTypes.func.isRequired,
+  saveUser: PropTypes.func.isRequired,
   setAndHandleUserValueListener: PropTypes.func.isRequired,
   location: PropTypes.object.isRequired,
   loginRedirect: PropTypes.string,

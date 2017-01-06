@@ -5,6 +5,7 @@ import {
   addUserDeckRemovedListener,
 } from './listeners'
 import {
+  saveUser as saveUserToFirebase,
   setUserValueListener,
   setUserDeckAddedListener,
   setUserDeckRemovedListener,
@@ -25,6 +26,12 @@ const SETTING_USER_VALUE_LISTENER_FAILURE = 'SETTING_USER_VALUE_LISTENER_FAILURE
 const USERS_LOGOUT = 'USERS_LOGOUT'
 
 // thunks
+export function saveUser(user) {
+  return async (dispatch, getState) => {
+    await saveUserToFirebase(user)
+  }
+}
+
 export function setAndHandleUserValueListener(uid) {
   return (dispatch, getState) => {
     const state = getState().listeners
