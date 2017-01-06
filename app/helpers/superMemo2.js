@@ -2,21 +2,10 @@
 import moment from 'moment'
 
 const minimumDifficulty = 1.3
-const minimumGrade = 0
-const maximumGrade = 5
 
 export function computeNewDifficulty(previousDifficulty, grade) {
-  if (previousDifficulty < minimumDifficulty) {
-    throw Error(`difficulty should never fall below ${minimumDifficulty} (received ${previousDifficulty})`)
-  }
-
-  if (Number.isInteger(grade) !== true) {
-    throw Error(`grade must be an integer (received ${grade})`)
-  }
-
-  if (grade < minimumGrade || grade > maximumGrade) {
-    throw Error(`grade must be an integer between 0-5 inclusive (received ${grade})`)
-  }
+  validateDifficulty(previousDifficulty)
+  validateGrade(grade)
 
   let result = previousDifficulty - 0.8 + 0.28 * grade - 0.02 * grade * grade
   result = result.toFixed(2)
@@ -25,17 +14,8 @@ export function computeNewDifficulty(previousDifficulty, grade) {
 }
 
 export function computeNewRepetitionCount(previousRepetitionCount, grade) {
-  if (previousRepetitionCount < 0) {
-    throw Error(`repetition count should be negative (received ${previousRepetitionCount})`)
-  }
-
-  if (Number.isInteger(grade) !== true) {
-    throw Error(`grade must be an integer (received ${grade})`)
-  }
-
-  if (grade < minimumGrade || grade > maximumGrade) {
-    throw Error(`grade must be an integer between 0-5 inclusive (received ${grade})`)
-  }
+  validateRepetitionCount(previousRepetitionCount)
+  validateGrade(grade)
 
   if (grade < 3) {
     return 0
@@ -45,6 +25,9 @@ export function computeNewRepetitionCount(previousRepetitionCount, grade) {
 }
 
 export function computeNextReviewMoment(now, repetitionCount, difficulty, previousReviewMoment) {
+  validateRepetitionCount(repetitionCount)
+  validateDifficulty(difficulty)
+
   const interval = computeNewIntervalMs(repetitionCount, difficulty, previousReviewMoment.diff(now))
 
   return now.add(interval)
@@ -66,3 +49,31 @@ function computeNewInterval(repetitionCount, difficulty, previousIntervalMs) {
   return moment.duration(previousIntervalMs * difficulty)
 }
 
+function validateDifficulty(difficulty) {
+  if (difficulty < minimumDifficulty) {
+    throw Error(`difficulty should never fall below ${minimumDifficulty} (received ${difficulty})`)
+  }
+}
+
+function validateGrade(grade) {
+  const minimumGrade = 0
+  const maximumGrade = 5
+
+  if (Number.isInteger(grade) !== true) {
+    throw Error(`grade must be an integer (received ${grade})`)
+  }
+
+  if (grade < minimumGrade || grade > maximumGrade) {
+    throw Error(`grade must be an integer between ${minimumGrade}-${maximumGrade} inclusive (received ${grade})`)
+  }
+}
+
+function validateRepetitionCount(repetitionCount) {
+  if (Number.isInteger(repetitionCount) !== true) {
+    throw Error(`repetitionCount must be an integer (received ${repetitionCount})`)
+  }
+
+  if (repetitionCount < 0) {
+    throw Error(`repetitionCount must not be negative (received ${repetitionCount})`)
+  }
+}

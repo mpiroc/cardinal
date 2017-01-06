@@ -1,5 +1,6 @@
 import 'babel-polyfill'
 import chai, { expect } from 'chai'
+import moment from 'moment'
 import { computeNewDifficulty, computeNewRepetitionCount, computeNextReviewMoment } from 'helpers/superMemo2'
 
 describe('SuperMemo 2 helpers', function() {
@@ -55,6 +56,10 @@ describe('SuperMemo 2 helpers', function() {
       expect(() => computeNewRepetitionCount(-1, 0)).to.throw(Error)
     })
 
+    it('should throw on non-integer repetition count', function() {
+      expect(() => computeNewRepetitionCount(0.5, 0)).to.throw(Error)
+    })
+
     it('should be 0 for grades 0-2', function() {
       expect(computeNewRepetitionCount(3, 0)).to.equal(0)
       expect(computeNewRepetitionCount(6, 1)).to.equal(0)
@@ -73,4 +78,6 @@ describe('SuperMemo 2 helpers', function() {
       expect(computeNextReviewMoment).to.exist
     })
   })
+
+  describe
 })
