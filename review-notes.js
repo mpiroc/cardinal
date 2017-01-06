@@ -81,6 +81,7 @@ showNextCard(deckId) {
   return (dispatch, getState) => {
     const { cards, decks, review } = getState()
 
+    const now = moment()
     const currentCardId = review.get('currentCardId')
     const cardIds = decks
       .getIn('decks', [deckId], 'cards')
@@ -88,7 +89,10 @@ showNextCard(deckId) {
       .filter(cardId =>
         cardId !== currentCardId && (
           cards.getIn(['cards', cardId, 'history', 'grade']) <= 2 ||
-          cards.getIn(['cards', cardId, 'history', 'nextReviewMoment']) < /* Now */
+          moment(
+            cards.getIn(['cards', cardId, 'history', 'nextReviewMoment']),
+            'milliseconds'
+          ).isBefore(now)
         )
       )
     const randomCardId = cardIds
@@ -111,20 +115,21 @@ async function gradeCard(uid, deckId, cardId, grade) {
     try {
       const { cards } = getState()
       const history = cards.getIn(['cards', cardId, 'history'])
-      const difficulty = history.get('difficulty')
-      const repetitionCount = history.get('repetitionCount')
-      const previousReviewMoment = history.get('previousReviewMoment')
+      const oldDifficulty = history.get('difficulty')
+      const oldRepetitionCount = history.get('repetitionCount')
+      const oldPreviousReviewMoment = history.get('previousReviewMoment')
 
-      const now = /* Now */
-      const newDifficulty = computeNewDifficulty(difficulty, grade)
-      const newRepetitionCount = computeNewRepetitionCount(repetitionCount, grade)
+      const difficulty = computeNewDifficulty(oldDifficulty, grade)
+      const repetitionCount = computeNewRepetitionCount(oldRepetitionCount, grade)
+      const previousReviewMoment = moment()
+      const nextReviewMoment = computeNextReviewMoment(previousReviewMoment, repetitionCount, difficulty, oldPreviousReviewMoment)
 
       await saveCardHistory(uid, deckId, cardId, {
         grade,
-        difficulty: newDifficulty,
-        repetitionCount: newRepetitionCount,
-        previousReviewMoment: now,
-        nextReviewMoment: computeNextReviewMoment(now, newRepetitionCount, newDifficulty, previousReviewMoment),
+        difficulty,
+        repetitionCount,
+        previousReviewMoment,
+        nextReviewMoment,
       })
 
       dispatch(gradingCardSuccess())
@@ -193,7 +198,8 @@ function setCardHistoryValueListener(uid, deckId, cardId, onSuccess, onFailure) 
   
 // Super Memo 2
 function computeNewDifficulty(previousDifficulty, grade) {
-  return previousDifficulty - 0.8 + 0.28 * grade - 0.02 * grade * grade
+  const result = previousDifficulty - 0.8 + 0.28 * grade - 0.02 * grade * grade
+  return Math.max(result, 1.3)
 }
 
 function computeNewRepetitionCount(previousRepetitionCount, grade) {
@@ -206,12 +212,12 @@ function computeNewRepetitionCount(previousRepetitionCount, grade) {
 
 import moment from 'moment'
 function computeNextReviewMoment(now, repetitionCount, difficulty, previousReviewMoment) {
-  const interval = computeNewInterval(repetitionCount, difficulty, now - previousReviewMoment)
+  const intervalMs = computeNewIntervalMs(repetitionCount, difficulty, previousReviewMoment.diff(now))
 
-  return now + interval
+  return now.add(intervalMs, 'milliseconds')
 }
 
-function computeNewInterval(repetitionCount, difficulty, previousInterval) {
+function computeNewIntervalMs(repetitionCount, difficulty, previousIntervalMs) {
   if (repetitionCount === 0) {
     return moment.duration(0, 'days')
   }
@@ -224,6 +230,6 @@ function computeNewInterval(repetitionCount, difficulty, previousInterval) {
     return moment.duration(6, 'days')
   }
 
-  return previousInterval * difficulty
+  return previousIntervalMs * difficulty
 }
 
