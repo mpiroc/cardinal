@@ -1,10 +1,9 @@
-import firebase from 'firebase'
-import { ref } from 'config/firebase'
+import { ref, auth, FirebasePromise } from 'config/firebase'
 
 // Sign in helpers
 export async function signInWithPopup() {
-  const provider = new firebase.auth.GoogleAuthProvider()
-  const result = await firebase.auth().signInWithPopup(provider)
+  const provider = new auth.GoogleAuthProvider()
+  const result = await auth().signInWithPopup(provider)
   const { displayName, uid } = result.user
 
   return {
@@ -13,8 +12,12 @@ export async function signInWithPopup() {
   }
 }
 
-export function signOut () {
-  return firebase.auth().signOut()
+export function signOut() {
+  return auth().signOut()
+}
+
+export function setAuthStateChangedListener(onAuthStateChanged) {
+  auth().onAuthStateChanged(onAuthStateChanged) 
 }
 
 // Save item helpers
@@ -29,7 +32,7 @@ export function deleteDeck(uid, deckId) {
   const deckCardRef = ref.child(`deckCards/${deckId}`)
   const userDeckRef = ref.child(`userDecks/${uid}/${deckId}`)
 
-  return firebase.Promise.all([
+  return FirebasePromise.all([
     // TODO: Does this also trigger child_removed events on the deckCard's children?
     deckCardRef.remove(),
     userDeckRef.remove(),

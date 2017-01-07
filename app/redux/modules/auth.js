@@ -1,14 +1,15 @@
 import { Map } from 'immutable'
-import { setAndHandleUserValueListener } from './users'
 import {
   signInWithPopup,
   signOut,
-  saveUser,
+  setAuthStateChangedListener as firebaseSetAuthStateChangedListener,
+  saveUser
 } from 'helpers/firebase'
-import { disableAndRemoveAllListeners } from 'redux/modules/listeners'
-import { usersLogout } from 'redux/modules/users'
+import { addAuthStateChangedListener, disableAndRemoveAllListeners } from 'redux/modules/listeners'
+import { usersLogout, saveAndHandleUser, setAndHandleUserValueListener } from 'redux/modules/users'
 import { decksLogout } from 'redux/modules/decks'
 import { cardsLogout } from 'redux/modules/cards'
+import { clearLoginRedirect } from 'redux/modules/loginRedirect'
 
 // actions
 const AUTHING_USER = 'AUTHING_USER'
@@ -44,6 +45,39 @@ export function signOutAndUnauth() {
     dispatch(usersLogout())
     dispatch(decksLogout())
     dispatch(cardsLogout())
+  }
+}
+
+export function setAuthStateChangedListener(replace) {
+  return (dispatch, getState) => {
+    if (getState().listeners.get('authStateChanged') === true) {
+      return
+    }
+
+    dispatch(addAuthStateChangedListener())
+
+    firebaseSetAuthStateChangedListener(async firebaseUser => {
+      if (firebaseUser) {
+        const user = {
+          uid: firebaseUser.uid,
+          name: firebaseUser.displayName,
+        }
+
+        await saveUser(user)
+        dispatch(authUser(user.uid))
+        dispatch(setAndHandleUserValueListener(user.uid))
+
+        const loginRedirect = getState().loginRedirect.get('redirect')
+
+        if (loginRedirect) {
+          dispatch(clearLoginRedirect())
+          replace(loginRedirect)
+        }
+        else {
+          replace('/')
+        }
+      }
+    })
   }
 }
 

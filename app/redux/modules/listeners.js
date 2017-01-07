@@ -9,6 +9,7 @@ const ADD_USER_DECK_VALUE_LISTENER = 'ADD_USER_DECK_VALUE_LISTENER'
 const ADD_DECK_CARD_ADDED_LISTENER = 'ADD_DECK_CARD_ADDED_LISTENER'
 const ADD_DECK_CARD_REMOVED_LISTENER = 'ADD_DECK_CARD_REMOVED_LISTENER'
 const ADD_DECK_CARD_VALUE_LISTENER = 'ADD_DECK_CARD_VALUE_LISTENER'
+const ADD_AUTH_STATE_CHANGED_LISTENER = 'ADD_AUTH_STATE_CHANGED_LISTENER'
 const REMOVE_USER_VALUE_LISTENER = 'REMOVE_USER_LISTENER'
 const REMOVE_USER_DECK_ADDED_LISTENER = 'REMOVE_USER_DECK_ADDED_LISTENER'
 const REMOVE_USER_DECK_REMOVED_LISTENER = 'REMOVE_USER_DECK_REMOVED_LISTENER'
@@ -18,6 +19,7 @@ const REMOVE_DECK_CARD_REMOVED_LISTENER = 'REMOVE_DECK_CARD_REMOVED_LISTENER'
 const REMOVE_DECK_CARD_VALUE_LISTENER = 'REMOVE_DECK_CARD_VALUE_LISTENER'
 
 // thunks
+// Note: Should not disable auth state changed listener
 export function disableAndRemoveAllListeners() {
   return (dispatch, getState) => {
     const { auth, listeners } = getState()
@@ -112,6 +114,12 @@ export function addDeckCardValueListener(deckId, cardId) {
   }
 }
 
+export function addAuthStateChangedListener() {
+  return {
+    type: ADD_AUTH_STATE_CHANGED_LISTENER
+  }
+}
+
 export function removeUserValueListener(uid) {
   return {
     type: REMOVE_USER_VALUE_LISTENER,
@@ -179,9 +187,9 @@ function userDecks(state = initialUserDecksState, action) {
     case ADD_USER_DECK_VALUE_LISTENER:
       return state.setIn(['decks', action.deckId], true)
     case REMOVE_USER_DECK_ADDED_LISTENER:
-      return state.delete('added')
+      return state.set('added', false)
     case REMOVE_USER_DECK_REMOVED_LISTENER:
-      return state.delete('removed')
+      return state.set('removed', false)
     case REMOVE_USER_DECK_VALUE_LISTENER:
       return state.deleteIn(['decks', action.deckId])
     default:
@@ -205,9 +213,9 @@ function deckCards(state = initialDeckCardsState, action) {
     case ADD_DECK_CARD_VALUE_LISTENER:
       return state.setIn(['cards', action.cardId], true)
     case REMOVE_DECK_CARD_ADDED_LISTENER:
-      return state.delete('added')
+      return state.set('added', false)
     case REMOVE_DECK_CARD_REMOVED_LISTENER:
-      return state.delete('removed')
+      return state.set('removed', false)
     case REMOVE_DECK_CARD_VALUE_LISTENER:
       return state.deleteIn(['cards', action.cardId])
     default:
@@ -220,6 +228,7 @@ const initialState = Map({
   users: Map(),
   userDecks: Map(),
   deckCards: Map(),
+  authStateChanged: false,
 })
 
 export default function listeners (state = initialState, action) {
@@ -237,6 +246,8 @@ export default function listeners (state = initialState, action) {
     case ADD_DECK_CARD_VALUE_LISTENER:
       path = ['deckCards', action.deckId]
       return state.setIn(path, deckCards(state.getIn(path), action))
+    case ADD_AUTH_STATE_CHANGED_LISTENER:
+      return state.set('authStateChanged', true)
     case REMOVE_USER_VALUE_LISTENER:
       return state.deleteIn(['users', action.uid], true)
     case REMOVE_USER_DECK_ADDED_LISTENER:
