@@ -13,7 +13,7 @@ const DISMISS_NEW_CARD_SNACKBAR = 'DISMISS_NEW_CARD_SNACKBAR'
 
 // thunks
 export function saveAndHandleNewCard() {
-  return async (dispatch, getState) => {
+  return async (dispatch, getState, firebaseContext) => {
     dispatch(savingNewCard())
 
     try {
@@ -23,7 +23,7 @@ export function saveAndHandleNewCard() {
       const side1 = newCardDialog.get('side1')
       const side2 = newCardDialog.get('side2')
 
-      await saveNewCard(uid, deckId, {
+      await saveNewCard(firebaseContext, uid, deckId, {
         side1,
         side2,
       })

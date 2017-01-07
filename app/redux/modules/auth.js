@@ -20,12 +20,12 @@ const UNAUTH_USER = 'UNAUTH_USER'
 
 // thunks
 export function authAndSaveUser() {
-  return async (dispatch, getState) => {
+  return async (dispatch, getState, firebaseContext) => {
     dispatch(authingUser())
 
     try {
-      const user = await signInWithPopup()
-      await saveUser(user)
+      const user = await signInWithPopup(firebaseContext)
+      await saveUser(firebaseContext, user)
 
       dispatch(setAndHandleUserValueListener(user.uid))
       dispatch(authingUserSuccess(user.uid))
@@ -37,9 +37,9 @@ export function authAndSaveUser() {
 }
 
 export function signOutAndUnauth() {
-  return async (dispatch, getState) => {
+  return async (dispatch, getState, firebaseContext) => {
     disableAndRemoveAllListeners()
-    await signOut()
+    await signOut(firebaseContext)
 
     dispatch(unauthUser())
     dispatch(usersLogout())
@@ -49,21 +49,21 @@ export function signOutAndUnauth() {
 }
 
 export function setAuthStateChangedListener(replace) {
-  return (dispatch, getState) => {
+  return (dispatch, getState, firebaseContext) => {
     if (getState().listeners.get('authStateChanged') === true) {
       return
     }
 
     dispatch(addAuthStateChangedListener())
 
-    firebaseSetAuthStateChangedListener(async firebaseUser => {
+    firebaseSetAuthStateChangedListener(firebaseContext, async firebaseUser => {
       if (firebaseUser) {
         const user = {
           uid: firebaseUser.uid,
           name: firebaseUser.displayName,
         }
 
-        await saveUser(user)
+        await saveUser(firebaseContext, user)
         dispatch(authUser(user.uid))
         dispatch(setAndHandleUserValueListener(user.uid))
 

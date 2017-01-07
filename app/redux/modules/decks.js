@@ -33,11 +33,11 @@ const DECKS_LOGOUT = 'DECKS_LOGOUT'
 
 // thunks
 export function deleteAndHandleDeck(uid, deckId) {
-  return async (dispatch, getState) => {
+  return async (dispatch, getState, firebaseContext) => {
     dispatch(deletingDeck(deckId))
 
     try {
-      await deleteDeck(uid, deckId)
+      await deleteDeck(firebaseContext, uid, deckId)
       dispatch(deletingDeckSuccess(deckId))
     }
     catch (error) {
@@ -47,13 +47,14 @@ export function deleteAndHandleDeck(uid, deckId) {
 }
 
 export function setDeckValueListener(uid, deckId) {
-  return (dispatch, getState) => {
+  return (dispatch, getState, firebaseContext) => {
     const listeners = getState().listeners
 
     if (listeners.getIn(['userDecks', uid, 'decks', deckId]) !== true) {
       dispatch(addUserDeckValueListener(uid, deckId))
       dispatch(settingDeckValueListener(deckId))
       setUserDeckValueListener(
+        firebaseContext,
         uid, deckId,
         deck => dispatch(settingDeckValueListenerSuccess(deckId, deck)),
         error => dispatch(settingDeckValueListenerFailure(deckId, error)),
@@ -63,13 +64,14 @@ export function setDeckValueListener(uid, deckId) {
 }
 
 export function setDeckCardCollectionListeners(deckId) {
-  return (dispatch, getState) => {
+  return (dispatch, getState, firebaseContext) => {
     const { auth, listeners } = getState()
     const uid = auth.get('authedUid')
 
     if (listeners.getIn(['deckCards', deckId, 'added']) !== true) {
       dispatch(addDeckCardAddedListener(deckId))
       setDeckCardAddedListener(
+        firebaseContext,
         uid,
         deckId,
         card => {
@@ -84,6 +86,7 @@ export function setDeckCardCollectionListeners(deckId) {
     if (listeners.getIn(['deckCards', deckId, 'removed']) !== true) {
       dispatch(addDeckCardRemovedListener(deckId))
       setDeckCardRemovedListener(
+        firebaseContext,
         uid,
         deckId,
         card => {

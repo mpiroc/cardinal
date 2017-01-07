@@ -26,13 +26,14 @@ const USERS_LOGOUT = 'USERS_LOGOUT'
 
 // thunks
 export function setAndHandleUserValueListener(uid) {
-  return (dispatch, getState) => {
+  return (dispatch, getState, firebaseContext) => {
     const state = getState().listeners
 
     if (state.getIn(['users', uid]) !== true) {
       dispatch(addUserValueListener(uid))
       dispatch(settingUserValueListener(uid))
       setUserValueListener(
+        firebaseContext,
         uid,
         user => dispatch(settingUserValueListenerSuccess(uid, user)),
         error => dispatch(settingUserValueListenerFailure(uid, error)),
@@ -42,12 +43,13 @@ export function setAndHandleUserValueListener(uid) {
 }
 
 export function setUserDeckCollectionListeners(uid) {
-  return (dispatch, getState) => {
+  return (dispatch, getState, firebaseContext) => {
     const state = getState().listeners
 
     if (state.getIn(['userDecks', uid, 'added']) !== true) {
       dispatch(addUserDeckAddedListener(uid))
       setUserDeckAddedListener(
+        firebaseContext,
         uid,
         deck => {
           dispatch(userDeckAddedReceived(uid, deck))
@@ -61,6 +63,7 @@ export function setUserDeckCollectionListeners(uid) {
     if (state.getIn(['userDecks', uid, 'removed']) !== true) {
       dispatch(addUserDeckRemovedListener(uid))
       setUserDeckRemovedListener(
+        firebaseContext,
         uid,
         deck => {
           dispatch(userDeckRemovedReceived(uid, deck))

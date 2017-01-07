@@ -10,9 +10,10 @@ import * as reducers from 'redux/modules'
 import { setLoginRedirect } from 'redux/modules/loginRedirect'
 import getRoutes from 'config/routes'
 import 'react-toolbox/lib/commons.scss'
+import firebaseContext from 'config/firebase'
 
 const store = createStore(combineReducers({...reducers, routing: routerReducer}), compose(
-  applyMiddleware(thunk),
+  applyMiddleware(thunk.withExtraArgument(firebaseContext)),
   window.devToolsExtension ? window.devToolsExtension() : (f) => f
 ))
 

@@ -13,7 +13,7 @@ const DISMISS_NEW_DECK_SNACKBAR = 'DISMISS_NEW_DECK_SNACKBAR'
 
 // thunks
 export function saveAndHandleNewDeck() {
-  return async (dispatch, getState) => {
+  return async (dispatch, getState, firebaseContext) => {
     dispatch(savingNewDeck())
 
     try {
@@ -22,7 +22,7 @@ export function saveAndHandleNewDeck() {
       const name = newDeckDialog.get('name')
       const description = newDeckDialog.get('description')
 
-      await saveNewDeck(uid, {
+      await saveNewDeck(firebaseContext, uid, {
         name,
         description,
       })

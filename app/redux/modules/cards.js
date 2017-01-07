@@ -19,13 +19,13 @@ const CARDS_LOGOUT = 'CARDS_LOGOUT'
 
 // thunks
 export function deleteAndHandleCard(deckId, cardId) {
-  return async (dispatch, getState) => {
+  return async (dispatch, getState, firebaseContext) => {
     const uid = getState().auth.get('authedUid')
 
     dispatch(deletingCard(cardId))
 
     try {
-      await deleteCard(uid, deckId, cardId)
+      await deleteCard(firebaseContext, uid, deckId, cardId)
       dispatch(deletingCardSuccess(cardId))
     }
     catch (error) {
@@ -35,7 +35,7 @@ export function deleteAndHandleCard(deckId, cardId) {
 }
 
 export function setCardValueListener(deckId, cardId) {
-  return (dispatch, getState) => {
+  return (dispatch, getState, firebaseContext) => {
     const { auth, listeners } = getState()
     const uid = auth.get('authedUid')
 
@@ -43,6 +43,7 @@ export function setCardValueListener(deckId, cardId) {
       dispatch(addDeckCardValueListener(deckId, cardId))
       dispatch(settingCardValueListener(cardId))
       setDeckCardValueListener(
+        firebaseContext,
         uid, deckId, cardId,
         card => dispatch(settingCardValueListenerSuccess(cardId, card)),
         error => dispatch(settingCardValueListenerFailure(cardId, error)),

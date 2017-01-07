@@ -21,26 +21,26 @@ const REMOVE_DECK_CARD_VALUE_LISTENER = 'REMOVE_DECK_CARD_VALUE_LISTENER'
 // thunks
 // Note: Should not disable auth state changed listener
 export function disableAndRemoveAllListeners() {
-  return (dispatch, getState) => {
+  return (dispatch, getState, firebaseContext) => {
     const { auth, listeners } = getState()
     const uid = auth.get('authedUid')
 
     removeUserValueListener(uid)
-    fbHelpers.removeUserValueListener(uid)
+    fbHelpers.removeUserValueListener(firebaseContext, uid)
 
     const userDecks = listeners.get('userDecks')
     const userDeck = userDecks.get(uid)
     if (userDeck.get('added') === true) {
       removeUserDeckAddedListener(uid)
-      fbHelpers.removeUserDeckAddedListener(uid)
+      fbHelpers.removeUserDeckAddedListener(firebaseContext, uid)
     }
     if (userDeck.get('removed') === true) {
       removeUserDeckRemovedListener(uid)
-      fbHelpers.removeUserDeckRemovedListener(uid)
+      fbHelpers.removeUserDeckRemovedListener(firebaseContext, uid)
     }
     for (deckId in userDeck.get('decks').keySeq()) {
       removeUserDeckValueListener(uid, deckId)
-      fbHelpers.removeUserDeckValueListener(uid, deckId)
+      fbHelpers.removeUserDeckValueListener(firebaseContext, uid, deckId)
     }
 
     const deckCards = listeners.get('deckCards')
@@ -48,15 +48,15 @@ export function disableAndRemoveAllListeners() {
       const deckCard = deckCards.get('deckId')
       if (deckCard.get('added') === true) {
         removeDeckCardAddedListener(deckId)
-        fbHelpers.removeDeckCardAddedListener(uid, deckId)
+        fbHelpers.removeDeckCardAddedListener(firebaseContext, uid, deckId)
       }
       if (deckCard.get('removed') === true) {
         removeDeckCardRemovedListener(deckId)
-        fbHelpers.removeDeckCardRemovedListener(uid, deckId)
+        fbHelpers.removeDeckCardRemovedListener(firebaseContext, uid, deckId)
       }
       for (cardId in deckCard.get('cards').keySeq()) {
         removeDeckCardValueListener(deckId, cardId)
-        fbHelpers.removeDeckCardValueListener(uid, deckId, cardId)
+        fbHelpers.removeDeckCardValueListener(firebaseContext, uid, deckId, cardId)
       }
     }
   }

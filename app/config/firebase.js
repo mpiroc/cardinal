@@ -10,6 +10,10 @@ var config = {
 
 firebase.initializeApp(config);
 
-export const ref = firebase.database().ref()
-export const auth = firebase.auth
-export const FirebasePromise = firebase.Promise
+const firebaseContext = {
+  ref: firebase.database().ref(),
+  auth: firebase.auth,
+  all: firebase.Promise.all,
+}
+
+export default firebaseContext
