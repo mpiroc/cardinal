@@ -1,7 +1,5 @@
-Next steps:
-  - Pick a project management service, and move TODOs to that service as user stories.
-
-TODO:
+  - Favicon
+  - React Memoization
   - Unit tests (Mocha + Enzyme?)
   - Continuous integration (Travis CI?)
   - Continuous deployment (Travis CI? AWS?)
