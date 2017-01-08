@@ -18,7 +18,7 @@ export function setAuthStateChangedListener({ auth }, onAuthStateChanged) {
   auth().onAuthStateChanged(onAuthStateChanged) 
 }
 
-// Save item helpers
+// user create/update/delete helpers
 export function saveUser({ ref }, { uid, name }) {
   return ref.child(`users/${uid}`).set({
     uid,
@@ -26,6 +26,7 @@ export function saveUser({ ref }, { uid, name }) {
   })
 }
 
+// deck create/update/delete helpers
 export function deleteDeck({ ref, all }, uid, deckId) {
   const deckCardRef = ref.child(`deckCards/${deckId}`)
   const userDeckRef = ref.child(`userDecks/${uid}/${deckId}`)
@@ -54,19 +55,33 @@ export function saveExistingDeck({ ref }, uid, { deckId, name, description }) {
   })
 }
 
-export function deleteCard({ ref }, uid, deckId, cardId) {
+// card create/update/delete helpers
+export function deleteCard({ ref, all }, uid, deckId, cardId) {
   const deckCardRef = ref.child(`deckCards/${uid}/${deckId}/${cardId}`)
 
-  return deckCardRef.remove()
+  return all([
+    deckCardRef.remove(),
+    deleteCardHistory({ ref }, uid, deckId, cardId)
+  ])
 }
 
-export function saveNewCard({ ref }, uid, deckId, { side1, side2 }) {
+export function saveNewCard({ ref, all }, uid, deckId, { side1, side2 }) {
   const deckCardRef = ref.child(`deckCards/${uid}/${deckId}`).push()
-  return deckCardRef.set({
-    cardId: deckCardRef.key,
-    side1,
-    side2,
-  })
+
+  return all([
+    deckCardRef.set({
+      cardId: deckCardRef.key,
+      side1,
+      side2,
+    }),
+    saveCardHistory({ ref }, uid, deckId, deckCardRef.key, {
+      grade: -1,
+      difficulty: 2.5,
+      repetitionCount: 0,
+      previousReviewMoment: -1,
+      nextReviewMoment: -1,
+    })
+  ])
 }
 
 export function saveExistingCard({ ref }, uid, deckId, { cardId, side1, side2 }) {
@@ -74,6 +89,31 @@ export function saveExistingCard({ ref }, uid, deckId, { cardId, side1, side2 })
     cardId,
     side1,
     side2,
+  })
+}
+
+// cardHistory create/update/delete helpers
+function deleteCardHistory({ ref }, uid, deckId, cardId) {
+  const cardHistoryRef = ref.child(`cardHistory/${uid}/${deckId}/${cardId}`)
+
+  return cardHistoryRef.remove()
+}
+
+export function saveCardHistory({ ref }, uid, deckId, cardId, {
+  grade,
+  difficulty,
+  repetitionCount,
+  previousReviewMoment,
+  nextReviewMoment,
+}) {
+  const cardHistoryRef = ref.child(`cardHistory/${uid}/${deckId}/${cardId}`)
+
+  return cardHistoryRef.set({
+    grade,
+    difficulty,
+    repetitionCount,
+    previousReviewMoment,
+    nextReviewMoment,
   })
 }
 

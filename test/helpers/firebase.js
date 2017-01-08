@@ -257,11 +257,13 @@ describe('firebase helpers', function() {
   })
 
   describe('deleteCard', function() {
+    let allStub
     let refMock
     let childStub
     let removeStub
 
     beforeEach(function() {
+      allStub = sinon.stub().returns(Promise.resolve())
       removeStub = sinon.stub()
       childStub = sinon.stub().returns({
         remove: removeStub
@@ -276,28 +278,34 @@ describe('firebase helpers', function() {
     })
 
     it('should delete correct path', function() {
-      deleteCard({ ref: refMock }, 'myUid', 'myDeckId', 'myCardId')
+      deleteCard({ ref: refMock, all: allStub }, 'myUid', 'myDeckId', 'myCardId')
 
-      expect(childStub).to.have.been.calledOnce
+      expect(childStub).to.have.been.calledTwice
       expect(childStub).to.have.been.calledWith('deckCards/myUid/myDeckId/myCardId')
-      expect(removeStub).to.have.been.calledOnce
+      expect(childStub).to.have.been.calledWith('cardHistory/myUid/myDeckId/myCardId')
+      expect(removeStub).to.have.been.calledTwice
     })
   })
 
   describe('saveNewCard', function() {
+    let allStub
     let refMock
     let childStub
     let pushStub
-    let setStub
+    let childSetStub
+    let pushSetStub
 
     beforeEach(function() {
-      setStub = sinon.stub()
+      allStub = sinon.stub().returns(Promise.resolve())
+      childSetStub = sinon.stub()
+      pushSetStub = sinon.stub()
       pushStub = sinon.stub().returns({
         key: 'myNewCardId',
-        set: setStub,
+        set: pushSetStub,
       })
       childStub = sinon.stub().returns({
-        push: pushStub
+        push: pushStub,
+        set: childSetStub,
       })
       refMock = {
         child: childStub
@@ -309,17 +317,18 @@ describe('firebase helpers', function() {
     })
 
     it('should save to correct deck', function() {
-      saveNewCard({ ref: refMock }, 'myUid', 'myDeckId', {
+      saveNewCard({ ref: refMock, all: allStub }, 'myUid', 'myDeckId', {
         side1: 'mySide1',
         side2: 'mySide2',
       })
 
-      expect(childStub).to.have.been.calledOnce
+      expect(childStub).to.have.been.calledTwice
       expect(childStub).to.have.been.calledWith('deckCards/myUid/myDeckId')
+      expect(childStub).to.have.been.calledWith('cardHistory/myUid/myDeckId/myNewCardId')
     })
 
     it('should generate new cardId', function() {
-      saveNewCard({ ref: refMock }, 'myUid', 'myDeckId', {
+      saveNewCard({ ref: refMock, all: allStub }, 'myUid', 'myDeckId', {
         side1: 'mySide1',
         side2: 'mySide2',
       })
@@ -328,16 +337,25 @@ describe('firebase helpers', function() {
     })
 
     it('should save correct data', function() {
-      saveNewCard({ ref: refMock }, 'myUid', 'myDeckId', {
+      saveNewCard({ ref: refMock, all: allStub }, 'myUid', 'myDeckId', {
         side1: 'mySide1',
         side2: 'mySide2',
       })
 
-      expect(setStub).to.have.been.calledOnce
-      expect(setStub).to.have.been.calledWith(sinon.match({
+      expect(pushSetStub).to.have.been.calledOnce
+      expect(pushSetStub).to.have.been.calledWith(sinon.match({
         cardId: 'myNewCardId',
         side1: 'mySide1',
         side2: 'mySide2'
+      }))
+
+      expect(childSetStub).to.have.been.calledOnce
+      expect(childSetStub).to.have.been.calledWith(sinon.match({
+        grade: -1,
+        difficulty: 2.5,
+        repetitionCount: 0,
+        previousReviewMoment: -1,
+        nextReviewMoment: -1,
       }))
     })
   })
