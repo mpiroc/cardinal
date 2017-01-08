@@ -15,6 +15,26 @@ import {
   saveNewCard,
   saveExistingCard,
   saveCardHistory,
+  setUserValueListener,
+  setUserDeckAddedListener,
+  setUserDeckRemovedListener,
+  setUserDeckValueListener,
+  setDeckCardAddedListener,
+  setDeckCardRemovedListener,
+  setDeckCardValueListener,
+  setCardHistoryAddedListener,
+  setCardHistoryRemovedListener,
+  setCardHistoryValueListener,
+  removeUserValueListener,
+  removeUserDeckAddedListener,
+  removeUserDeckRemovedListener,
+  removeUserDeckValueListener,
+  removeDeckCardAddedListener,
+  removeDeckCardRemovedListener,
+  removeDeckCardValueListener,
+  removeCardHistoryAddedListener,
+  removeCardHistoryRemovedListener,
+  removeCardHistoryValueListener,
 } from 'helpers/firebase'
 
 chai.use(sinonChai)
@@ -475,6 +495,346 @@ describe('firebase helpers', function() {
         previousReviewMoment: previousReviewMoment.valueOf(),
         nextReviewMoment: nextReviewMoment.valueOf(),
       })
+    })
+  })
+
+  describe('setUserValueListener', function() {
+    let refMock
+    let childStub
+    let onStub
+
+    beforeEach(function() {
+      onStub = sinon.stub()
+      childStub = sinon.stub().returns({
+        on: onStub
+      })
+      refMock = {
+        child: childStub
+      }
+    })
+
+    it('exists', function() {
+      expect(setUserValueListener).to.exist
+    })
+
+    it('listens on correct path', function() {
+      setUserValueListener({ ref: refMock }, 'myUid', val => {}, error => {})
+      
+      expect(childStub).to.have.been.calledOnce
+      expect(childStub).to.have.been.calledWith('users/myUid')
+    })
+
+    it('listens for correct event', function() {
+      setUserValueListener({ ref: refMock }, 'myUid', val => {}, error => {})
+      
+      expect(onStub).to.have.been.calledOnce
+      expect(onStub).to.have.been.calledWith('value')
+    })
+  })
+
+  describe('setUserDeckAddedListener', function() {
+    let refMock
+    let childStub
+    let onStub
+
+    beforeEach(function() {
+      onStub = sinon.stub()
+      childStub = sinon.stub().returns({
+        on: onStub
+      })
+      refMock = {
+        child: childStub
+      }
+    })
+
+    it('exists', function() {
+      expect(setUserDeckAddedListener).to.exist
+    })
+
+    it('listens on correct path', function() {
+      setUserDeckAddedListener({ ref: refMock }, 'myUid', val => {}, error => {})
+      
+      expect(childStub).to.have.been.calledOnce
+      expect(childStub).to.have.been.calledWith('userDecks/myUid')
+    })
+
+    it('listens for correct event', function() {
+      setUserDeckAddedListener({ ref: refMock }, 'myUid', val => {}, error => {})
+      
+      expect(onStub).to.have.been.calledOnce
+      expect(onStub).to.have.been.calledWith('child_added')
+    })
+  })
+
+  describe('setUserDeckRemovedListener', function() {
+    let refMock
+    let childStub
+    let onStub
+
+    beforeEach(function() {
+      onStub = sinon.stub()
+      childStub = sinon.stub().returns({
+        on: onStub
+      })
+      refMock = {
+        child: childStub
+      }
+    })
+
+    it('exists', function() {
+      expect(setUserDeckRemovedListener).to.exist
+    })
+
+    it('listens on correct path', function() {
+      setUserDeckRemovedListener({ ref: refMock }, 'myUid', val => {}, error => {})
+      
+      expect(childStub).to.have.been.calledOnce
+      expect(childStub).to.have.been.calledWith('userDecks/myUid')
+    })
+
+    it('listens for correct event', function() {
+      setUserDeckRemovedListener({ ref: refMock }, 'myUid', val => {}, error => {})
+      
+      expect(onStub).to.have.been.calledOnce
+      expect(onStub).to.have.been.calledWith('child_removed')
+    })
+  })
+
+  describe('setUserDeckValueListener', function() {
+    let refMock
+    let childStub
+    let onStub
+
+    beforeEach(function() {
+      onStub = sinon.stub()
+      childStub = sinon.stub().returns({
+        on: onStub
+      })
+      refMock = {
+        child: childStub
+      }
+    })
+
+    it('exists', function() {
+      expect(setUserDeckValueListener).to.exist
+    })
+
+    it('listens on correct path', function() {
+      setUserDeckValueListener({ ref: refMock }, 'myUid', 'myDeckId', val => {}, error => {})
+      
+      expect(childStub).to.have.been.calledOnce
+      expect(childStub).to.have.been.calledWith('userDecks/myUid/myDeckId')
+    })
+
+    it('listens for correct event', function() {
+      setUserDeckValueListener({ ref: refMock }, 'myUid', 'myDeckId', val => {}, error => {})
+      
+      expect(onStub).to.have.been.calledOnce
+      expect(onStub).to.have.been.calledWith('value')
+    })
+  })
+
+  describe('setDeckCardAddedListener', function() {
+    let refMock
+    let childStub
+    let onStub
+
+    beforeEach(function() {
+      onStub = sinon.stub()
+      childStub = sinon.stub().returns({
+        on: onStub
+      })
+      refMock = {
+        child: childStub
+      }
+    })
+
+    it('exists', function() {
+      expect(setDeckCardAddedListener).to.exist
+    })
+
+    it('listens on correct path', function() {
+      setDeckCardAddedListener({ ref: refMock }, 'myUid', 'myDeckId', val => {}, error => {})
+      
+      expect(childStub).to.have.been.calledOnce
+      expect(childStub).to.have.been.calledWith('deckCards/myUid/myDeckId')
+    })
+
+    it('listens for correct event', function() {
+      setDeckCardAddedListener({ ref: refMock }, 'myUid', 'myDeckId', val => {}, error => {})
+      
+      expect(onStub).to.have.been.calledOnce
+      expect(onStub).to.have.been.calledWith('child_added')
+    })
+  })
+
+  describe('setDeckCardRemovedListener', function() {
+    let refMock
+    let childStub
+    let onStub
+
+    beforeEach(function() {
+      onStub = sinon.stub()
+      childStub = sinon.stub().returns({
+        on: onStub
+      })
+      refMock = {
+        child: childStub
+      }
+    })
+
+    it('exists', function() {
+      expect(setDeckCardRemovedListener).to.exist
+    })
+
+    it('listens on correct path', function() {
+      setDeckCardRemovedListener({ ref: refMock }, 'myUid', 'myDeckId', val => {}, error => {})
+      
+      expect(childStub).to.have.been.calledOnce
+      expect(childStub).to.have.been.calledWith('deckCards/myUid/myDeckId')
+    })
+
+    it('listens for correct event', function() {
+      setDeckCardRemovedListener({ ref: refMock }, 'myUid', 'myDeckId', val => {}, error => {})
+      
+      expect(onStub).to.have.been.calledOnce
+      expect(onStub).to.have.been.calledWith('child_removed')
+    })
+  })
+
+  describe('setDeckCardValueListener', function() {
+    let refMock
+    let childStub
+    let onStub
+
+    beforeEach(function() {
+      onStub = sinon.stub()
+      childStub = sinon.stub().returns({
+        on: onStub
+      })
+      refMock = {
+        child: childStub
+      }
+    })
+
+    it('exists', function() {
+      expect(setDeckCardValueListener).to.exist
+    })
+
+    it('listens on correct path', function() {
+      setDeckCardValueListener({ ref: refMock }, 'myUid', 'myDeckId', 'myCardId', val => {}, error => {})
+      
+      expect(childStub).to.have.been.calledOnce
+      expect(childStub).to.have.been.calledWith('deckCards/myUid/myDeckId/myCardId')
+    })
+
+    it('listens for correct event', function() {
+      setDeckCardValueListener({ ref: refMock }, 'myUid', 'myDeckId', 'myCardId', val => {}, error => {})
+      
+      expect(onStub).to.have.been.calledOnce
+      expect(onStub).to.have.been.calledWith('value')
+    })
+  })
+
+  describe('setCardHistoryAddedListener', function() {
+    let refMock
+    let childStub
+    let onStub
+
+    beforeEach(function() {
+      onStub = sinon.stub()
+      childStub = sinon.stub().returns({
+        on: onStub
+      })
+      refMock = {
+        child: childStub
+      }
+    })
+
+    it('exists', function() {
+      expect(setCardHistoryAddedListener).to.exist
+    })
+
+    it('listens on correct path', function() {
+      setCardHistoryAddedListener({ ref: refMock }, 'myUid', 'myDeckId', val => {}, error => {})
+      
+      expect(childStub).to.have.been.calledOnce
+      expect(childStub).to.have.been.calledWith('cardHistory/myUid/myDeckId')
+    })
+
+    it('listens for correct event', function() {
+      setCardHistoryAddedListener({ ref: refMock }, 'myUid', 'myDeckId', val => {}, error => {})
+      
+      expect(onStub).to.have.been.calledOnce
+      expect(onStub).to.have.been.calledWith('child_added')
+    })
+  })
+
+  describe('setCardHistoryRemovedListener', function() {
+    let refMock
+    let childStub
+    let onStub
+
+    beforeEach(function() {
+      onStub = sinon.stub()
+      childStub = sinon.stub().returns({
+        on: onStub
+      })
+      refMock = {
+        child: childStub
+      }
+    })
+
+    it('exists', function() {
+      expect(setCardHistoryRemovedListener).to.exist
+    })
+
+    it('listens on correct path', function() {
+      setCardHistoryRemovedListener({ ref: refMock }, 'myUid', 'myDeckId', val => {}, error => {})
+      
+      expect(childStub).to.have.been.calledOnce
+      expect(childStub).to.have.been.calledWith('cardHistory/myUid/myDeckId')
+    })
+
+    it('listens for correct event', function() {
+      setCardHistoryRemovedListener({ ref: refMock }, 'myUid', 'myDeckId', val => {}, error => {})
+      
+      expect(onStub).to.have.been.calledOnce
+      expect(onStub).to.have.been.calledWith('child_removed')
+    })
+  })
+
+  describe('setCardHistoryValueListener', function() {
+    let refMock
+    let childStub
+    let onStub
+
+    beforeEach(function() {
+      onStub = sinon.stub()
+      childStub = sinon.stub().returns({
+        on: onStub
+      })
+      refMock = {
+        child: childStub
+      }
+    })
+
+    it('exists', function() {
+      expect(setCardHistoryValueListener).to.exist
+    })
+
+    it('listens on correct path', function() {
+      setCardHistoryValueListener({ ref: refMock }, 'myUid', 'myDeckId', 'myCardId', val => {}, error => {})
+      
+      expect(childStub).to.have.been.calledOnce
+      expect(childStub).to.have.been.calledWith('cardHistory/myUid/myDeckId/myCardId')
+    })
+
+    it('listens for correct event', function() {
+      setCardHistoryValueListener({ ref: refMock }, 'myUid', 'myDeckId', 'myCardId', val => {}, error => {})
+      
+      expect(onStub).to.have.been.calledOnce
+      expect(onStub).to.have.been.calledWith('value')
     })
   })
 })

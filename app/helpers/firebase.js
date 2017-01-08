@@ -153,6 +153,23 @@ export function setDeckCardValueListener({ ref }, uid, deckId, cardId, onSuccess
     .on('value', snapshop => onSuccess(snapshop.val()), onFailure)
 }
 
+export function setCardHistoryAddedListener({ ref }, uid, deckId, onSuccess, onFailure) {
+  ref.child(`cardHistory/${uid}/${deckId}`)
+    .on('child_added', snapshot => onSuccess(snapshot.val()), onFailure)
+}
+
+export function setCardHistoryRemovedListener({ ref }, uid, deckId, onSuccess, onFailure) {
+  ref
+    .child(`cardHistory/${uid}/${deckId}`)
+    .on('child_removed', snapshot => onSuccess(snapshot.val()), onFailure)
+}
+
+export function setCardHistoryValueListener({ ref }, uid, deckId, cardId, onSuccess, onFailure) {
+  ref
+    .child(`cardHistory/${uid}/${deckId}/${cardId}`)
+    .on('value', snapshot => onSuccess(snapshot.val()), onFailure)
+}
+
 export function removeUserValueListener({ ref }, uid, onSuccess, onFailure) {
   return ref.child(`users/${uid}`).off('value')
 }
@@ -179,4 +196,16 @@ export function removeDeckCardRemovedListener({ ref }, uid, deckId, onSuccess, o
 
 export function removeDeckCardValueListener({ ref }, uid, deckId, cardId, onSuccess, onFailure) {
   return ref.child(`deckCards/${uid}/${deckId}/${cardId}`).off('value')
+}
+
+export function removeCardHistoryAddedListener({ ref }, uid, deckId, onSuccess, onFailure) {
+  return ref.child(`cardHistory/${uid}/${deckId}`).off('child_added')
+}
+
+export function removeCardHistoryRemovedListener({ ref }, uid, deckId, onSuccess, onFailure) {
+  return ref.child(`cardHistory/${uid}/${deckId}`).off('child_removed')
+}
+
+export function removeCardHistoryValueListener({ ref }, uid, deckId, cardId, onSuccess, onFailure) {
+  return ref.child(`cardHistory/${uid}/${deckId}/${cardId}`).off('value')
 }
