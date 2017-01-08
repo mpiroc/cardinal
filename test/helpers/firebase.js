@@ -2,6 +2,7 @@ import 'babel-polyfill'
 import chai, { expect } from 'chai'
 import sinonChai from 'sinon-chai'
 import sinon from 'sinon'
+import moment from 'moment'
 import {
   signInWithPopup,
   signOut,
@@ -13,6 +14,7 @@ import {
   deleteCard,
   saveNewCard,
   saveExistingCard,
+  saveCardHistory,
 } from 'helpers/firebase'
 
 chai.use(sinonChai)
@@ -416,6 +418,63 @@ describe('firebase helpers', function() {
         side1: 'mySide1',
         side2: 'mySide2',
       }))
+    })
+  })
+
+  describe('saveCardHistory', function() {
+    let refMock
+    let childStub
+    let setStub
+    let previousReviewMoment
+    let nextReviewMoment
+
+
+    beforeEach(function() {
+      setStub = sinon.stub()
+      childStub = sinon.stub().returns({
+        set: setStub
+      })
+      refMock = {
+        child: childStub
+      }
+      previousReviewMoment = moment([2017, 0, 5, 0, 0, 0, 0])
+      nextReviewMoment = moment([2017, 0, 8, 0, 0, 0, 0])
+    })
+
+    it('exists', function() {
+      expect(saveCardHistory).to.exist
+    })
+
+    it('saves to correct path', function() {
+      saveCardHistory({ ref: refMock }, 'myUid', 'myDeckId', 'myCardId', {
+        grade: 3,
+        difficulty: 2.2,
+        repetitionCount: 3,
+        previousReviewMoment: previousReviewMoment.valueOf(),
+        nextReviewMoment: nextReviewMoment.valueOf(),
+      })
+
+      expect(childStub).to.have.been.calledOnce
+      expect(childStub).to.have.been.calledWith('cardHistory/myUid/myDeckId/myCardId')
+    })
+
+    it('saves correct data', function() {
+      saveCardHistory({ ref: refMock }, 'myUid', 'myDeckId', 'myCardId', {
+        grade: 3,
+        difficulty: 2.2,
+        repetitionCount: 3,
+        previousReviewMoment: previousReviewMoment.valueOf(),
+        nextReviewMoment: nextReviewMoment.valueOf(),
+      })
+
+      expect(setStub).to.have.been.calledOnce
+      expect(setStub).to.have.been.calledWith({
+        grade: 3,
+        difficulty: 2.2,
+        repetitionCount: 3,
+        previousReviewMoment: previousReviewMoment.valueOf(),
+        nextReviewMoment: nextReviewMoment.valueOf(),
+      })
     })
   })
 })
