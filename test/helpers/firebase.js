@@ -260,14 +260,24 @@ describe('firebase helpers', function() {
     let allStub
     let refMock
     let childStub
-    let removeStub
+    let removeDeckCardStub
+    let removeCardHistoryStub
 
     beforeEach(function() {
       allStub = sinon.stub().returns(Promise.resolve())
-      removeStub = sinon.stub()
-      childStub = sinon.stub().returns({
-        remove: removeStub
-      })
+
+      removeDeckCardStub = sinon.stub()
+      removeCardHistoryStub = sinon.stub()
+      
+      childStub = sinon.stub()
+      childStub
+        .withArgs('deckCards/myUid/myDeckId/myCardId').returns({
+          remove: removeDeckCardStub
+        })
+        .withArgs('cardHistory/myUid/myDeckId/myCardId').returns({
+          remove: removeCardHistoryStub
+        })
+
       refMock = {
         child: childStub
       }
@@ -280,10 +290,10 @@ describe('firebase helpers', function() {
     it('should delete correct path', function() {
       deleteCard({ ref: refMock, all: allStub }, 'myUid', 'myDeckId', 'myCardId')
 
-      expect(childStub).to.have.been.calledTwice
-      expect(childStub).to.have.been.calledWith('deckCards/myUid/myDeckId/myCardId')
-      expect(childStub).to.have.been.calledWith('cardHistory/myUid/myDeckId/myCardId')
-      expect(removeStub).to.have.been.calledTwice
+      expect(childStub.withArgs('deckCards/myUid/myDeckId/myCardId')).to.have.been.calledOnce
+      expect(childStub.withArgs('cardHistory/myUid/myDeckId/myCardId')).to.have.been.calledOnce
+      expect(removeDeckCardStub).to.have.been.calledOnce
+      expect(removeCardHistoryStub).to.have.been.calledOnce
     })
   })
 
@@ -292,20 +302,24 @@ describe('firebase helpers', function() {
     let refMock
     let childStub
     let pushStub
-    let childSetStub
-    let pushSetStub
+    let deckCardSetStub
+    let cardHistorySetStub
 
     beforeEach(function() {
       allStub = sinon.stub().returns(Promise.resolve())
-      childSetStub = sinon.stub()
-      pushSetStub = sinon.stub()
+      deckCardSetStub = sinon.stub()
+      cardHistorySetStub = sinon.stub()
       pushStub = sinon.stub().returns({
         key: 'myNewCardId',
-        set: pushSetStub,
+        set: deckCardSetStub,
       })
-      childStub = sinon.stub().returns({
-        push: pushStub,
-        set: childSetStub,
+      childStub = sinon.stub()
+      childStub.withArgs('deckCards/myUid/myDeckId').returns({
+          push: pushStub,
+          set: deckCardSetStub,
+        })
+      childStub.withArgs('cardHistory/myUid/myDeckId/myNewCardId').returns({
+        set: cardHistorySetStub,
       })
       refMock = {
         child: childStub
@@ -316,15 +330,14 @@ describe('firebase helpers', function() {
       expect(saveNewCard).to.exist
     })
 
-    it('should save to correct deck', function() {
+    it('should save to correct paths', function() {
       saveNewCard({ ref: refMock, all: allStub }, 'myUid', 'myDeckId', {
         side1: 'mySide1',
         side2: 'mySide2',
       })
 
-      expect(childStub).to.have.been.calledTwice
-      expect(childStub).to.have.been.calledWith('deckCards/myUid/myDeckId')
-      expect(childStub).to.have.been.calledWith('cardHistory/myUid/myDeckId/myNewCardId')
+      expect(childStub.withArgs('deckCards/myUid/myDeckId')).to.have.been.calledOnce
+      expect(childStub.withArgs('cardHistory/myUid/myDeckId/myNewCardId')).to.have.been.calledOnce
     })
 
     it('should generate new cardId', function() {
@@ -342,15 +355,15 @@ describe('firebase helpers', function() {
         side2: 'mySide2',
       })
 
-      expect(pushSetStub).to.have.been.calledOnce
-      expect(pushSetStub).to.have.been.calledWith(sinon.match({
+      expect(deckCardSetStub).to.have.been.calledOnce
+      expect(deckCardSetStub).to.have.been.calledWith(sinon.match({
         cardId: 'myNewCardId',
         side1: 'mySide1',
         side2: 'mySide2'
       }))
 
-      expect(childSetStub).to.have.been.calledOnce
-      expect(childSetStub).to.have.been.calledWith(sinon.match({
+      expect(cardHistorySetStub).to.have.been.calledOnce
+      expect(cardHistorySetStub).to.have.been.calledWith(sinon.match({
         grade: -1,
         difficulty: 2.5,
         repetitionCount: 0,
