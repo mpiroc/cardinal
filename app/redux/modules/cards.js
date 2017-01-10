@@ -53,14 +53,14 @@ export function setCardValueListener(deckId, cardId) {
 }
 
 // action creators
-function settingCardValueListener(cardId) {
+export function settingCardValueListener(cardId) {
   return {
     type: SETTING_CARD_VALUE_LISTENER,
     cardId,
   }
 }
 
-function settingCardValueListenerSuccess(cardId, card) {
+export function settingCardValueListenerSuccess(cardId, card) {
   return {
     type: SETTING_CARD_VALUE_LISTENER_SUCCESS,
     cardId,
@@ -68,7 +68,7 @@ function settingCardValueListenerSuccess(cardId, card) {
   }
 }
 
-function settingCardValueListenerFailure(cardId, error) {
+export function settingCardValueListenerFailure(cardId, error) {
   return {
     type: SETTING_CARD_VALUE_LISTENER_FAILURE,
     cardId,
@@ -76,21 +76,21 @@ function settingCardValueListenerFailure(cardId, error) {
   }
 }
 
-function deletingCard(cardId) {
+export function deletingCard(cardId) {
   return {
     type: DELETING_CARD,
     cardId,
   }
 }
 
-function deletingCardSuccess(cardId) {
+export function deletingCardSuccess(cardId) {
   return { 
     type: DELETING_CARD_SUCCESS,
     cardId,
   }
 }
 
-function deletingCardFailure(cardId, error) {
+export function deletingCardFailure(cardId, error) {
   return {
     type: DELETING_CARD_FAILURE,
     cardId,
@@ -129,6 +129,7 @@ export function cardsLogout() {
 const initialCardState = Map({
   isDeleting: false,
   loadingError: '',
+  deletingError: '',
 
   cardId: '',
   side1: '',
@@ -138,7 +139,7 @@ const initialCardState = Map({
 function card(state = initialCardState, action) {
   switch(action.type) {
     case SETTING_CARD_VALUE_LISTENER:
-      return state.set('loadingError', '')
+      return state.set('cardId', action.cardId)
     case SETTING_CARD_VALUE_LISTENER_SUCCESS:
       // TODO: Can action.card be null?
       return state
@@ -149,7 +150,9 @@ function card(state = initialCardState, action) {
     case DELETING_CARD:
       return state.set('isDeleting', true)
     case DELETING_CARD_FAILURE:
-      return state.set('isDeleting', false)
+      return state
+        .set('isDeleting', false)
+        .set('deletingError', action.error)
     case UPDATE_CARD:
       return state.merge(action.card)
     default:
@@ -212,7 +215,7 @@ export default function cards(state = initialState, action) {
     case REMOVE_CARD:
       return state.deleteIn(['cards', action.cardId])
     case CARDS_LOGOUT:
-      return state.set('cards', Map())
+      return cards(undefined, { type: undefined })
     default:
       return state
   }
