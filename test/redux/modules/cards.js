@@ -5,6 +5,7 @@ import sinon from 'sinon'
 import { createStore, applyMiddleware, combineReducers } from 'redux'
 import thunk from 'redux-thunk'
 import * as reducers from 'redux/modules'
+import { authUser } from 'redux/modules/auth'
 import {
   settingCardValueListener,
   settingCardValueListenerSuccess,
@@ -265,11 +266,27 @@ describe('cards redux module', function() {
 
   describe('thunks', function() {
     describe('deleteAndHandleCard', function() {
-      
+      // it will be removed when the firebase listener sends a child_removed event
+      it('does not remove the card from state', function() {
+        store.dispatch(authUser('myUid'))
+        store.dispatch(settingCardValueListenerSuccess('myCardId', {
+          cardId: 'myCardId',
+          side1: 'mySideOne',
+          side2: 'mySideTwo',
+        }))
+        store.dispatch(deleteAndHandleCard('myDeckId', 'myCardId'))
+
+        const card = store.getState().cards.getIn(['cards', 'myCardId'])
+        expect(card).to.exist
+        expect(card.get('isDeleting')).to.be.true
+        expect(card.get('deletingError')).to.equal('')
+      })
     })
 
+    /*
     describe('setCardValueListener', function() {
-      
+      // TODO: Need a more complete mock of the firebase context to ensure that callbacks are triggered.
     })
+    */
   })
 })
