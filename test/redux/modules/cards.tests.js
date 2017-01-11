@@ -305,6 +305,8 @@ describe('redux cards module', function() {
       it('should reset deletingError', function() {
         expect(card.get('deletingError')).to.equal('')
       })
+
+      it('should log and display an error message if an error occurs while communicating with firebase')
     })
 
     /*
