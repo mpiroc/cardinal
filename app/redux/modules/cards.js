@@ -15,6 +15,7 @@ const DELETING_CARD_FAILURE = 'DELETING_CARD_FAILURE'
 const DISMISS_CARDS_SNACKBAR = 'DISMISS_CARDS_SNACKBAR'
 const UPDATE_CARD = 'UPDATE_CARD'
 const REMOVE_CARD = 'REMOVE_CARD'
+const UPDATE_CARD_HISTORY = 'UPDATE_CARD_HISTORY'
 const CARDS_LOGOUT = 'CARDS_LOGOUT'
 
 // thunks
@@ -112,6 +113,14 @@ export function updateCard(cardId, card) {
   }
 }
 
+export function updateCardHistory(cardId, history) {
+  return {
+    type: UPDATE_CARD_HISTORY,
+    cardId,
+    history,
+  }
+}
+
 export function removeCard(cardId) {
   return {
     type: REMOVE_CARD,
@@ -125,8 +134,26 @@ export function cardsLogout() {
   }
 }
 
+const initialHistoryState = Map({
+  grade: 0,
+  difficulty: 2.5,
+  repetitionCount : 0,
+  previousReviewMoment: undefined,
+  nextReviewMoment: undefined,
+})
+
+function history(state = initialHistoryState, action) {
+  switch(action.type) {
+    case UPDATE_CARD_HISTORY:
+      return state.merge(action.history)
+    default:
+      return state
+  }
+}
+
 // card reducer
 const initialCardState = Map({
+  history: history(undefined, { type: undefined }),
   isDeleting: false,
   loadingError: '',
   deletingError: '',
@@ -155,6 +182,8 @@ function card(state = initialCardState, action) {
         .set('deletingError', action.error)
     case UPDATE_CARD:
       return state.merge(action.card)
+    case UPDATE_CARD_HISTORY:
+      return state.set('history', history(state.get('history'), action))
     default:
       return state
   }
@@ -200,6 +229,7 @@ export default function cards(state = initialState, action) {
     case SETTING_CARD_VALUE_LISTENER_SUCCESS:
     case SETTING_CARD_VALUE_LISTENER_FAILURE:
     case UPDATE_CARD:
+    case UPDATE_CARD_HISTORY:
       path = ['cards', action.cardId]
       return state.setIn(path, card(state.getIn(path), action))
     case DELETING_CARD:

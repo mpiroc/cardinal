@@ -4,6 +4,7 @@ import sinonChai from 'sinon-chai'
 import sinon from 'sinon'
 import { createStore, applyMiddleware, combineReducers } from 'redux'
 import thunk from 'redux-thunk'
+import moment from 'moment'
 import * as reducers from 'redux/modules'
 import { authUser } from 'redux/modules/auth'
 import {
@@ -16,6 +17,7 @@ import {
   dismissCardsSnackbar,
   updateCard,
   removeCard,
+  updateCardHistory,
   cardsLogout,
   deleteAndHandleCard,
   setCardValueListener,
@@ -41,10 +43,12 @@ describe('cards redux module', function() {
       on: onStub,
       off: offStub,
     })
+    const allStub = sinon.stub().returns(Promise.resolve())
     const firebaseContext = {
       ref: {
         child: childStub
-      }
+      },
+      all: allStub,
     }
     store = createStore(
       combineReducers(reducers),
@@ -239,6 +243,39 @@ describe('cards redux module', function() {
       })
     })
 
+    describe('updateCardHistory', function() {
+      beforeEach(function() {
+        store.dispatch(updateCardHistory('myCardId', {
+          grade: 4,
+          difficulty: 3.5,
+          repetitionCount : 3,
+          previousReviewMoment: moment([2017, 0, 1, 0, 0, 0, 0]).valueOf(),
+          nextReviewMoment: moment([2017, 0, 5, 0, 0, 0, 0]).valueOf(),
+        }))
+      })
+
+      it("sets the specified values in the card's history", function() {
+        const history = store.getState().cards.getIn(['cards', 'myCardId', 'history'])
+        expect(history).to.exist
+        expect(history.get('grade')).to.equal(4)
+        expect(history.get('difficulty')).to.equal(3.5)
+        expect(history.get('repetitionCount')).to.equal(3)
+        expect(history.get('previousReviewMoment')).to.equal(moment([2017, 0, 1, 0, 0, 0, 0]).valueOf())
+        expect(history.get('nextReviewMoment')).to.equal(moment([2017, 0, 5, 0, 0, 0, 0]).valueOf())
+      })
+
+      it('retains old values not specified in new history', function() {
+        store.dispatch(updateCardHistory('myCardId', {
+          difficulty: 3.2,
+        }))
+        
+        const history = store.getState().cards.getIn(['cards', 'myCardId', 'history'])
+        expect(history).to.exist
+        expect(history.get('grade')).to.equal(4)
+        expect(history.get('difficulty')).to.equal(3.2)
+      })
+    })
+
     describe('cardsLogout', function() {
       let cards
       beforeEach(function() {
@@ -278,8 +315,8 @@ describe('cards redux module', function() {
 
         const card = store.getState().cards.getIn(['cards', 'myCardId'])
         expect(card).to.exist
-        expect(card.get('isDeleting')).to.be.true
         expect(card.get('deletingError')).to.equal('')
+        expect(card.get('isDeleting')).to.be.true
       })
     })
 
