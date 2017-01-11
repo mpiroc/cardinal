@@ -103,7 +103,7 @@ export function setDeckCardCollectionListeners(deckId) {
 }
 
 // action creators
-function deckCardAddedReceived(deckId, cardId) {
+export function deckCardAddedReceived(deckId, cardId) {
   return {
     type: DECK_CARD_ADDED_RECEIVED,
     deckId,
@@ -111,7 +111,7 @@ function deckCardAddedReceived(deckId, cardId) {
   }
 }
 
-function deckCardRemovedReceived(deckId, cardId) {
+export function deckCardRemovedReceived(deckId, cardId) {
   return {
     type: DECK_CARD_REMOVED_RECEIVED,
     deckId,
@@ -119,7 +119,7 @@ function deckCardRemovedReceived(deckId, cardId) {
   }
 }
 
-function settingAddOrRemoveDeckCardListenerFailure(deckId, error) {
+export function settingAddOrRemoveDeckCardListenerFailure(deckId, error) {
   return {
     type: SETTING_ADD_OR_REMOVE_DECK_CARD_LISTENER_FAILURE,
     deckId,
@@ -127,14 +127,14 @@ function settingAddOrRemoveDeckCardListenerFailure(deckId, error) {
   }
 }
 
-function settingDeckValueListener(deckId) {
+export function settingDeckValueListener(deckId) {
   return {
     type: SETTING_DECK_VALUE_LISTENER,
     deckId,
   }
 }
 
-function settingDeckValueListenerSuccess(deckId, deck) {
+export function settingDeckValueListenerSuccess(deckId, deck) {
   return {
     type: SETTING_DECK_VALUE_LISTENER_SUCCESS,
     deckId,
@@ -142,7 +142,7 @@ function settingDeckValueListenerSuccess(deckId, deck) {
   }
 }
 
-function settingDeckValueListenerFailure(deckId, error) {
+export function settingDeckValueListenerFailure(deckId, error) {
   return {
     type: SETTING_DECK_VALUE_LISTENER_FAILURE,
     deckId,
@@ -150,21 +150,21 @@ function settingDeckValueListenerFailure(deckId, error) {
   }
 }
 
-function deletingDeck(deckId) {
+export function deletingDeck(deckId) {
   return {
     type: DELETING_DECK,
     deckId,
   }
 }
 
-function deletingDeckSuccess(deckId) {
+export function deletingDeckSuccess(deckId) {
   return { 
     type: DELETING_DECK_SUCCESS,
     deckId,
   }
 }
 
-function deletingDeckFailure(deckId, error) {
+export function deletingDeckFailure(deckId, error) {
   return {
     type: DELETING_DECK_FAILURE,
     deckId,
@@ -246,13 +246,14 @@ const initialSnackbarState = Map({
 function snackbar(state = initialSnackbarState, action) {
   switch(action.type) {
     case DELETING_DECK:
-      return state
-        .set('isActive', false)
-        .set('error', '')
     case DELETING_DECK_SUCCESS:
+    case SETTING_DECK_VALUE_LISTENER:
+    case SETTING_DECK_VALUE_LISTENER_SUCCESS:
       return state
         .set('isActive', false)
         .set('error', '')
+    case SETTING_ADD_OR_REMOVE_DECK_CARD_LISTENER_FAILURE:
+    case SETTING_DECK_VALUE_LISTENER_FAILURE:
     case DELETING_DECK_FAILURE:
       return state
         .set('isActive', true)
@@ -281,8 +282,6 @@ export default function decks(state = initialState, action) {
     case SETTING_DECK_VALUE_LISTENER_SUCCESS:
     case SETTING_DECK_VALUE_LISTENER_FAILURE:
     case UPDATE_DECK:
-      path = ['decks', action.deckId]
-      return state.setIn(path, deck(state.getIn(path), action))
     case DELETING_DECK:
     case DELETING_DECK_FAILURE:
       path = ['decks', action.deckId]

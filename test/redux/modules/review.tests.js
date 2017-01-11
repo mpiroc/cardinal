@@ -4,8 +4,10 @@ import sinonChai from 'sinon-chai'
 import sinon from 'sinon'
 import { updateDeck } from 'redux/modules/decks'
 import { updateCard } from 'redux/modules/cards'
-import reviewReducer from 'redux/modules/review'
-import { setCurrentCard, toggleAnswerVisible } from 'redux/modules/review'
+import reviewReducer, {
+  setCurrentCard,
+  toggleAnswerVisible
+} from 'redux/modules/review'
 import createStoreMock from '../../testUtils/createStoreMock'
 
 chai.use(sinonChai)
