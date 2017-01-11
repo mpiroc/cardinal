@@ -18,6 +18,9 @@ import decksReducer, {
   updateDeck,
   removeDeck,
   decksLogout,
+  fetchingDeckHistory,
+  fetchingDeckHistorySuccess,
+  fetchingDeckHistoryFailure,
   deleteAndHandleDeck,
   setDeckValueListener,
   setDeckCardCollectionListeners,
@@ -139,9 +142,12 @@ describe('redux decks module', function() {
         store.dispatch(settingDeckValueListenerSuccess('myDeckId', {}))
 
         const deck = store.getState().decks.getIn(['decks', 'myDeckId'])
+        expect(deck.get('isFetchingHistory')).to.be.false
         expect(deck.get('isDeleting')).to.be.false
         expect(deck.get('loadingError')).to.equal('')
         expect(deck.get('addOrRemoveError')).to.equal('')
+        expect(deck.get('deletingError')).to.equal('')
+        expect(deck.get('fetchingHistoryError')).to.equal('')
         expect(deck.get('deckId')).to.equal('')
         expect(deck.get('name')).to.equal('')
         expect(deck.get('cards')).to.exist
@@ -363,6 +369,79 @@ describe('redux decks module', function() {
         expect(snackbar).to.exist
         expect(snackbar.get('isActive')).to.be.false
         expect(snackbar.get('error')).to.equal('')
+      })
+    })
+
+    describe('fetchingDeckHistory', function() {
+      it('should exist', function() {
+        expect(fetchingDeckHistory).to.exist
+      })
+
+      it('should set the isFetchingHistory flag', function() {
+        store.dispatch(fetchingDeckHistory('myDeckId'))
+
+        const deck = store.getState().decks.getIn(['decks', 'myDeckId'])
+        expect(deck.get('isFetchingHistory')).to.be.true
+      })
+    })
+
+    describe('fetchingDeckHistorySuccess', function() {
+      it('should exist', function() {
+        expect(fetchingDeckHistorySuccess).to.exist
+      })
+
+      it('should clear the isFetchingHistory flag', function() {
+        store.dispatch(fetchingDeckHistory('myDeckId'))
+        store.dispatch(fetchingDeckHistorySuccess('myDeckId'))
+
+        const deck = store.getState().decks.getIn(['decks', 'myDeckId'])
+        expect(deck.get('isFetchingHistory')).to.be.false
+      })
+
+      it('should clear any previous fetchingHistory error message', function() {
+        store.dispatch(fetchingDeckHistoryFailure('myDeckId', 'myErrorMessage'))
+        store.dispatch(fetchingDeckHistorySuccess('myDeckId'))
+
+        const deck = store.getState().decks.getIn(['decks', 'myDeckId'])
+        expect(deck.get('fetchingHistoryError')).to.equal('')
+      })
+
+      it('should not reset the snackbar', function() {
+        store.dispatch(fetchingDeckHistoryFailure('myDeckId', 'myErrorMessage'))
+        store.dispatch(fetchingDeckHistorySuccess('myDeckId'))
+
+        const snackbar = store.getState().decks.get('snackbar')
+        expect(snackbar.get('isActive')).to.be.true
+        expect(snackbar.get('error')).to.equal('myErrorMessage')
+      })
+    })
+
+    describe('fetchingDeckHistoryFailure', function() {
+      it('should exist', function() {
+        expect(fetchingDeckHistoryFailure).to.exist
+      })
+
+      it('should clear the isFetchingHistory flag', function() {
+        store.dispatch(fetchingDeckHistory('myDeckId'))
+        store.dispatch(fetchingDeckHistoryFailure('myDeckId', 'myErrorMessage'))
+
+        const deck = store.getState().decks.getIn(['decks', 'myDeckId'])
+        expect(deck.get('isFetchingHistory')).to.be.false
+      })
+
+      it('should log any error in the deck itself', function() {
+        store.dispatch(fetchingDeckHistoryFailure('myDeckId', 'myErrorMessage'))
+
+        const deck = store.getState().decks.getIn(['decks', 'myDeckId'])
+        expect(deck.get('fetchingHistoryError')).to.equal('myErrorMessage')
+      })
+
+      it('should show any error in the snackbar', function() {
+        store.dispatch(fetchingDeckHistoryFailure('myDeckId', 'myErrorMessage'))
+
+        const snackbar = store.getState().decks.get('snackbar')
+        expect(snackbar.get('isActive')).to.be.true
+        expect(snackbar.get('error')).to.equal('myErrorMessage')
       })
     })
   })

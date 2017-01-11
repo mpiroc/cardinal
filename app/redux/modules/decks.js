@@ -30,7 +30,6 @@ const DISMISS_DECKS_SNACKBAR = 'DISMISS_DECKS_SNACKBAR'
 const UPDATE_DECK = 'UPDATE_DECK'
 const REMOVE_DECK = 'REMOVE_DECK'
 const DECKS_LOGOUT = 'DECKS_LOGOUT'
-
 const FETCHING_DECK_HISTORY = 'FETCHING_DECK_HISTORY'
 const FETCHING_DECK_HISTORY_SUCCESS = 'FETCHING_DECK_HISTORY_SUCCESS'
 const FETCHING_DECK_HISTORY_FAILURE = 'FETCHING_DECK_HISTORY_FAILURE'
@@ -199,15 +198,41 @@ export function decksLogout() {
   }
 }
 
+export function fetchingDeckHistory(deckId) {
+  return {
+    type: FETCHING_DECK_HISTORY,
+    deckId,
+  }
+}
+
+export function fetchingDeckHistorySuccess(deckId) {
+  return {
+    type: FETCHING_DECK_HISTORY_SUCCESS,
+    deckId,
+  }
+}
+
+export function fetchingDeckHistoryFailure(deckId, error) {
+  return {
+    type: FETCHING_DECK_HISTORY_FAILURE,
+    deckId,
+    error,
+  }
+}
+
 // deck reducer
 const initialDeckState = Map({
+  isFetchingHistory: false,
   isDeleting: false,
+
   loadingError: '',
   addOrRemoveError: '',
   deletingError: '',
+  fetchingHistoryError: '',
 
   deckId: '',
   name: '',
+
   cards: Map(),
 })
 
@@ -236,6 +261,16 @@ function deck(state = initialDeckState, action) {
         .set('deletingError', action.error)
     case UPDATE_DECK:
       return state.merge(action.deck)
+    case FETCHING_DECK_HISTORY:
+      return state.set('isFetchingHistory', true)
+    case FETCHING_DECK_HISTORY_SUCCESS:
+      return state
+        .set('isFetchingHistory', false)
+        .set('fetchingHistoryError', '')
+    case FETCHING_DECK_HISTORY_FAILURE:
+      return state
+        .set('isFetchingHistory', false)
+        .set('fetchingHistoryError', action.error)
     default:
       return state
   }
@@ -251,6 +286,7 @@ function snackbar(state = initialSnackbarState, action) {
     case SETTING_ADD_OR_REMOVE_DECK_CARD_LISTENER_FAILURE:
     case SETTING_DECK_VALUE_LISTENER_FAILURE:
     case DELETING_DECK_FAILURE:
+    case FETCHING_DECK_HISTORY_FAILURE:
       return state
         .set('isActive', true)
         .set('error', action.error)
@@ -280,6 +316,9 @@ export default function decks(state = initialState, action) {
     case UPDATE_DECK:
     case DELETING_DECK:
     case DELETING_DECK_FAILURE:
+    case FETCHING_DECK_HISTORY:
+    case FETCHING_DECK_HISTORY_SUCCESS:
+    case FETCHING_DECK_HISTORY_FAILURE:
       path = ['decks', action.deckId]
       return state
         .setIn(path, deck(state.getIn(path), action))
