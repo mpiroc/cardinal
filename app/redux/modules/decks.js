@@ -14,6 +14,7 @@ import {
   setCardValueListener,
   updateCard,
   removeCard,
+  updateCardHistory,
 } from './cards'
 
 // actions
@@ -35,6 +36,29 @@ const FETCHING_DECK_HISTORY_SUCCESS = 'FETCHING_DECK_HISTORY_SUCCESS'
 const FETCHING_DECK_HISTORY_FAILURE = 'FETCHING_DECK_HISTORY_FAILURE'
 
 // thunks
+/*
+export function fetchAndHandleDeckHistory(uid, deckId) {
+  return async (dispatch, getState, firebaseContext) => {
+    dispatch(fetchingDeckHistory(deckId))
+
+    try {
+      const cardHistories = await fetchDeckHistory(firebaseContext, uid, deckId)
+
+      for (cardHistory in cardHistories) {
+        updateCardHistory(cardHistory.cardId, cardHistory)
+        // TODO: Set card history value listener
+      }
+
+      // TODO: Set deck history collection listeners
+      dispatch(fetchingDeckHistorySuccess(deckId))
+    }
+    catch (error) {
+      dispatch(fetchingDeckHistoryFailure(deckId, `Error fetching deck history: ${error.message}`))
+    }
+  }
+}
+*/
+
 export function deleteAndHandleDeck(uid, deckId) {
   return async (dispatch, getState, firebaseContext) => {
     dispatch(deletingDeck(deckId))

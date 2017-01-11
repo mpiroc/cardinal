@@ -15,6 +15,7 @@ import {
   saveNewCard,
   saveExistingCard,
   saveCardHistory,
+  fetchDeckHistory,
   setUserValueListener,
   setUserDeckAddedListener,
   setUserDeckRemovedListener,
@@ -448,7 +449,6 @@ describe('firebase helpers', function() {
     let previousReviewMoment
     let nextReviewMoment
 
-
     beforeEach(function() {
       setStub = sinon.stub()
       childStub = sinon.stub().returns({
@@ -495,6 +495,40 @@ describe('firebase helpers', function() {
         previousReviewMoment: previousReviewMoment.valueOf(),
         nextReviewMoment: nextReviewMoment.valueOf(),
       })
+    })
+  })
+
+  describe('fetchDeckHistory', function() {
+    it('should exist', function() {
+      expect(fetchDeckHistory).to.exist
+    })
+
+    it('listens on correct path', function() {
+      const onceStub = sinon.stub()
+      const childStub = sinon.stub().returns({
+        once: onceStub
+      })
+      const refMock = {
+        child: childStub
+      }
+
+      fetchDeckHistory({ ref: refMock }, 'myUid', 'myDeckId', val => {}, error => {})
+      expect(childStub).to.have.been.calledOnce
+      expect(childStub).to.have.been.calledWith('cardHistory/myUid/myDeckId')
+    })
+
+    it('listens for correct event', function() {
+      const onceStub = sinon.stub()
+      const childStub = sinon.stub().returns({
+        once: onceStub
+      })
+      const refMock = {
+        child: childStub
+      }
+
+      fetchDeckHistory({ ref: refMock }, 'myUid', 'myDeckId', val => {}, error => {})
+      expect(onceStub).to.have.been.calledOnce
+      expect(onceStub).to.have.been.calledWith('value')
     })
   })
 

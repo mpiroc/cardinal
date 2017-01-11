@@ -117,6 +117,12 @@ export function saveCardHistory({ ref }, uid, deckId, cardId, {
   })
 }
 
+// One-time fetch of history for all cards in a deck
+export function fetchDeckHistory({ ref }, uid, deckId, onSuccess, onFailure) {
+  return ref.child(`cardHistory/${uid}/${deckId}`)
+    .once('value', snapshop => onSuccess(snapshop.val()), onFailure)
+}
+
 // Listener helpers
 export function setUserValueListener({ ref }, uid, onSuccess, onFailure) {
   return ref.child(`users/${uid}`)
