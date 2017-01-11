@@ -21,6 +21,7 @@ import decksReducer, {
   fetchingDeckHistory,
   fetchingDeckHistorySuccess,
   fetchingDeckHistoryFailure,
+  fetchAndHandleDeckHistory,
   deleteAndHandleDeck,
   setDeckValueListener,
   setDeckCardCollectionListeners,
@@ -447,6 +448,18 @@ describe('redux decks module', function() {
   })
 
   describe('thunk', function() {
+    describe('fetchAndHandleDeckHistory', function() {
+      it('should exist', function() {
+        expect(fetchAndHandleDeckHistory).to.exist
+      })
+
+      it('should set the isFetching flag on the deck')
+
+      it('should add the history to the cards module when a value event is received')
+
+      it('should log and display an error message if an error occurs')
+    })
+
     describe('deleteAndHandleDeck', function() {
       it('should exist', function() {
         expect(deleteAndHandleDeck).to.exist
