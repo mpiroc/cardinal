@@ -36,6 +36,7 @@ describe('redux decks module', function() {
   it('should initialize all properties', function() {
     const { decks } = store.getState()
     expect(decks.get('decks')).to.exist
+    expect(decks.get('decks').size).to.equal(0)
 
     const snackbar = decks.get('snackbar')
     expect(snackbar).to.exist
@@ -105,13 +106,13 @@ describe('redux decks module', function() {
         expect(deck.get('loadingError')).to.equal('')
       })
       
-      it('should reset the snackbar', function() {
+      it('should not reset the snackbar', function() {
         store.dispatch(settingDeckValueListenerFailure('myDeckId', 'myErrorMessage'))
         store.dispatch(settingDeckValueListener('myDeckId'))
 
         const snackbar = store.getState().decks.get('snackbar')
-        expect(snackbar.get('isActive')).to.be.false
-        expect(snackbar.get('error')).to.equal('')
+        expect(snackbar.get('isActive')).to.be.true
+        expect(snackbar.get('error')).to.equal('myErrorMessage')
       })
     })
     
@@ -120,8 +121,41 @@ describe('redux decks module', function() {
         expect(settingDeckValueListenerSuccess).to.exist
       })
 
-      it('should load the retrieved data')
-      it('should reset the snackbar')
+      it('should load the retrieved data', function() {
+        store.dispatch(settingDeckValueListenerSuccess('myDeckId', {
+          deckId: 'myDeckId',
+          name: 'myDeckName',
+        }))
+
+        const deck = store.getState().decks.getIn(['decks', 'myDeckId'])
+        expect(deck.get('deckId')).to.equal('myDeckId')
+        expect(deck.get('name')).to.equal('myDeckName')
+      })
+
+      it('should set appropriate defaults', function() {
+        store.dispatch(settingDeckValueListenerSuccess('myDeckId', {}))
+
+        const deck = store.getState().decks.getIn(['decks', 'myDeckId'])
+        expect(deck.get('isDeleting')).to.be.false
+        expect(deck.get('loadingError')).to.equal('')
+        expect(deck.get('addOrRemoveError')).to.equal('')
+        expect(deck.get('deckId')).to.equal('')
+        expect(deck.get('name')).to.equal('')
+        expect(deck.get('cards')).to.exist
+        expect(deck.get('cards').size).to.equal(0)
+      })
+
+      it('should not reset the snackbar', function() {
+        store.dispatch(settingDeckValueListenerFailure('myDeckId', 'myErrorMessage'))
+        store.dispatch(settingDeckValueListenerSuccess('myDeckId', {
+          deckId: 'myDeckId',
+          name: 'myDeckName',
+        }))
+
+        const snackbar = store.getState().decks.get('snackbar')
+        expect(snackbar.get('isActive')).to.be.true
+        expect(snackbar.get('error')).to.equal('myErrorMessage')
+      })
     })
     
     describe('settingDeckValueListenerFailure', function() {
@@ -129,8 +163,20 @@ describe('redux decks module', function() {
         expect(settingDeckValueListenerFailure).to.exist
       })
 
-      it('should log error in the deck itself')
-      it('should show error in the snackbar')
+      it('should log error in the deck itself', function() {
+        store.dispatch(settingDeckValueListenerFailure('myDeckId', 'myErrorMessage'))
+
+        const deck = store.getState().decks.getIn(['decks', 'myDeckId'])
+        expect(deck.get('loadingError')).to.equal('myErrorMessage')
+      })
+
+      it('should show error in the snackbar', function() {
+        store.dispatch(settingDeckValueListenerFailure('myDeckId', 'myErrorMessage'))
+
+        const snackbar = store.getState().decks.get('snackbar')
+        expect(snackbar.get('isActive')).to.be.true
+        expect(snackbar.get('error')).to.equal('myErrorMessage')
+      })
     })
     
     describe('deletingDeck', function() {
@@ -138,9 +184,21 @@ describe('redux decks module', function() {
         expect(deletingDeck).to.exist
       })
 
-      it('should set the isDeleting flag')
-      it('should clear any previous error from the deck')
-      it('should reset the snackbar')
+      it('should set the isDeleting flag', function() {
+        store.dispatch(deletingDeck('myDeckId'))
+
+        const deck = store.getState().decks.getIn(['decks', 'myDeckId'])
+        expect(deck.get('isDeleting')).to.be.true
+      })
+
+      it('should not reset the snackbar', function() {
+        store.dispatch(settingDeckValueListenerFailure('myDeckId', 'myErrorMessage'))
+        store.dispatch(deletingDeck('myDeckId'))
+
+        const snackbar = store.getState().decks.get('snackbar')
+        expect(snackbar.get('isActive')).to.be.true
+        expect(snackbar.get('error')).to.equal('myErrorMessage')
+      })
     })
     
     describe('deletingDeckSuccess', function() {
@@ -148,10 +206,37 @@ describe('redux decks module', function() {
         expect(deletingDeckSuccess).to.exist
       })
 
-      it('should not remove the deck from state')
-      it('should not reset the isDeleting flag')
-      it('should clear any previous error')
-      it('should clear the snackbar')
+      it('should not remove the deck from state', function() {
+        store.dispatch(updateDeck('myDeckId', {
+          deckId: 'myDeckId',
+          name: 'myDeckName',
+        }))
+        store.dispatch(deletingDeckSuccess('myDeckId'))
+
+        const deck = store.getState().decks.getIn(['decks', 'myDeckId'])
+        expect(deck).to.exist
+      })
+
+      it('should not reset the isDeleting flag', function() {
+        store.dispatch(updateDeck('myDeckId', {
+          deckId: 'myDeckId',
+          name: 'myDeckName',
+        }))
+        store.dispatch(deletingDeck('myDeckId'))
+        store.dispatch(deletingDeckSuccess('myDeckId'))
+
+        const deck = store.getState().decks.getIn(['decks', 'myDeckId'])
+        expect(deck.get('isDeleting')).to.be.true
+      })
+      
+      it('should not reset the snackbar', function() {
+        store.dispatch(deletingDeckFailure('myDeckId', 'myErrorMessage'))
+        store.dispatch(deletingDeckSuccess('myDeckId'))
+
+        const snackbar = store.getState().decks.get('snackbar')
+        expect(snackbar.get('isActive')).to.be.true
+        expect(snackbar.get('error')).to.equal('myErrorMessage')
+      })
     })
     
     describe('deletingDeckFailure', function() {
@@ -159,9 +244,28 @@ describe('redux decks module', function() {
         expect(deletingDeckFailure).to.exist
       })
 
-      it('should log the error in the deck itself')
-      it('should clear the isDeleting flag')
-      it('should show the error in the snackbar')
+      it('should log the error in the deck itself', function() {
+        store.dispatch(deletingDeckFailure('myDeckId', 'myErrorMessage'))
+
+        const deck = store.getState().decks.getIn(['decks', 'myDeckId'])
+        expect(deck.get('deletingError')).to.equal('myErrorMessage')
+      })
+      
+      it('should clear the isDeleting flag', function() {
+        store.dispatch(deletingDeck('myDeckId'))
+        store.dispatch(deletingDeckFailure('myDeckId', 'myErrorMessage'))
+
+        const deck = store.getState().decks.getIn(['decks', 'myDeckId'])
+        expect(deck.get('isDeleting')).to.be.false
+      })
+      
+      it('should show the error in the snackbar', function() {
+        store.dispatch(deletingDeckFailure('myDeckId', 'myErrorMessage'))
+
+        const snackbar = store.getState().decks.get('snackbar')
+        expect(snackbar.get('isActive')).to.be.true
+        expect(snackbar.get('error')).to.equal('myErrorMessage')
+      })
     })
     
     describe('dismissDecksSnackbar', function() {
@@ -169,8 +273,21 @@ describe('redux decks module', function() {
         expect(dismissDecksSnackbar).to.exist
       })
 
-      it('should hide the snackbar')
-      it('should not clear the error message from the snackbar')
+      it('should hide the snackbar', function() {
+        store.dispatch(deletingDeckFailure('myDeckId', 'myErrorMessage'))
+        store.dispatch(dismissDecksSnackbar())
+
+        const snackbar = store.getState().decks.get('snackbar')
+        expect(snackbar.get('isActive')).to.be.false
+      })
+
+      it('should not clear the error message from the snackbar', function() {
+        store.dispatch(deletingDeckFailure('myDeckId', 'myErrorMessage'))
+        store.dispatch(dismissDecksSnackbar())
+
+        const snackbar = store.getState().decks.get('snackbar')
+        expect(snackbar.get('error')).to.equal('myErrorMessage')
+      })
     })
     
     describe('updateDeck', function() {
@@ -178,8 +295,31 @@ describe('redux decks module', function() {
         expect(updateDeck).to.exist
       })
 
-      it('should merge all new data into the deck')
-      it('should retain all data not overwritten by new data')
+      it('should merge all new data into the deck', function() {
+        store.dispatch(updateDeck('myDeckId', {
+          deckId: 'myDeckId',
+          name: 'myDeckName'
+        }))
+
+        const deck = store.getState().decks.getIn(['decks', 'myDeckId'])
+        expect(deck.get('deckId')).to.equal('myDeckId')
+        expect(deck.get('name')).to.equal('myDeckName')
+      })
+
+      it('should retain all data not overwritten by new data', function() {
+        store.dispatch(updateDeck('myDeckId', {
+          isDeleting: true,
+          error: 'myErrorMessage'
+        }))
+        store.dispatch(updateDeck('myDeckId', {
+          deckId: 'myDeckId',
+          name: 'myDeckName'
+        }))
+
+        const deck = store.getState().decks.getIn(['decks', 'myDeckId'])
+        expect(deck.get('isDeleting')).to.be.true
+        expect(deck.get('error')).to.equal('myErrorMessage')
+      })
     })
     
     describe('removeDeck', function() {
@@ -187,7 +327,16 @@ describe('redux decks module', function() {
         expect(removeDeck).to.exist
       })
 
-      it('should remove the deck from state')
+      it('should remove the deck from state', function() {
+        store.dispatch(updateDeck('myDeckId', {
+          deckId: 'myDeckId',
+          name: 'myDeckName'
+        }))
+        store.dispatch(removeDeck('myDeckId'))
+
+        const deck = store.getState().decks.getIn(['decks', 'myDeckId'])
+        expect(deck).to.not.exist
+      })
     })
     
     describe('decksLogout', function() {
@@ -195,7 +344,23 @@ describe('redux decks module', function() {
         expect(decksLogout).to.exist
       })
 
-      it('should reset the state to the initial state')
+      it('should reset the state to the initial state', function() {
+        store.dispatch(updateDeck('myDeckId', {
+          deckId: 'myDeckId',
+          name: 'myDeckName'
+        }))
+        store.dispatch(deletingDeckFailure('myDeckId', 'myErrorMessage'))
+        store.dispatch(decksLogout())
+
+        const { decks } = store.getState()
+        expect(decks.get('decks')).to.exist
+        expect(decks.get('decks').size).to.equal(0)
+
+        const snackbar = decks.get('snackbar')
+        expect(snackbar).to.exist
+        expect(snackbar.get('isActive')).to.be.false
+        expect(snackbar.get('error')).to.equal('')
+      })
     })
   })
 })

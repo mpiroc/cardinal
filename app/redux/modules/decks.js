@@ -204,6 +204,7 @@ const initialDeckState = Map({
   isDeleting: false,
   loadingError: '',
   addOrRemoveError: '',
+  deletingError: '',
 
   deckId: '',
   name: '',
@@ -230,7 +231,9 @@ function deck(state = initialDeckState, action) {
     case DELETING_DECK:
       return state.set('isDeleting', true)
     case DELETING_DECK_FAILURE:
-      return state.set('isDeleting', false)
+      return state
+        .set('isDeleting', false)
+        .set('deletingError', action.error)
     case UPDATE_DECK:
       return state.merge(action.deck)
     default:
@@ -245,13 +248,6 @@ const initialSnackbarState = Map({
 
 function snackbar(state = initialSnackbarState, action) {
   switch(action.type) {
-    case DELETING_DECK:
-    case DELETING_DECK_SUCCESS:
-    case SETTING_DECK_VALUE_LISTENER:
-    case SETTING_DECK_VALUE_LISTENER_SUCCESS:
-      return state
-        .set('isActive', false)
-        .set('error', '')
     case SETTING_ADD_OR_REMOVE_DECK_CARD_LISTENER_FAILURE:
     case SETTING_DECK_VALUE_LISTENER_FAILURE:
     case DELETING_DECK_FAILURE:
@@ -295,7 +291,9 @@ export default function decks(state = initialState, action) {
     case REMOVE_DECK:
       return state.deleteIn(['decks', action.deckId])
     case DECKS_LOGOUT:
-      return state.set('decks', Map())
+      return state
+        .set('decks', Map())
+        .set('snackbar', snackbar(undefined, { type: undefined }))
     default:
       return state
   }
