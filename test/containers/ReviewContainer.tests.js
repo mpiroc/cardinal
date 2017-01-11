@@ -6,23 +6,20 @@ import React from 'react'
 import { Provider } from 'react-redux'
 import jsdomGlobal from 'jsdom-global'
 import createStoreMock from '../testUtils/createStoreMock'
-import CardRTCardContainer from '../../app/containers/CardRTCard/CardRTCardContainer'
+import ReviewContainer from '../../app/containers/Review/ReviewContainer'
 
 jsdomGlobal()
 chai.use(chaiEnzyme())
 
-describe('CardRTCard container', function() {
-  let wrapper
-  beforeEach(function() {
+describe('Review container', function() {
+  it('exists', function() {
     const store = createStoreMock()
-    wrapper = mount(
+    const wrapper = mount(
       <Provider store={store}>
-        <CardRTCardContainer deckId={'myDeckId'} cardId={'myCardId'} />
+        <ReviewContainer />
       </Provider>
     )
-  })
 
-  it('exists', function() {
     expect(wrapper).to.exist
   })
 })

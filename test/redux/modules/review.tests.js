@@ -2,11 +2,18 @@ import 'babel-polyfill'
 import chai, { expect } from 'chai'
 import sinonChai from 'sinon-chai'
 import sinon from 'sinon'
-import { updateDeck } from 'redux/modules/decks'
-import { updateCard } from 'redux/modules/cards'
+import {
+  updateDeck,
+  deckCardAddedReceived,
+} from 'redux/modules/decks'
+import {
+  updateCard,
+  updateCardHistory,
+} from 'redux/modules/cards'
 import reviewReducer, {
   setCurrentCard,
-  toggleAnswerVisible
+  toggleAnswerVisible,
+  showNextCard,
 } from 'redux/modules/review'
 import createStoreMock from '../../testUtils/createStoreMock'
 
@@ -74,31 +81,31 @@ describe('redux review module', function() {
         store.dispatch(updateDeck('myDeckId', {
           deckId: 'myDeckId',
           name: 'myDeckName',
-          cards: new Map(),
         }))
 
         expect(() => store.dispatch(showNextCard('myDeckId'))).to.not.throw
       })
       
-      // TODO: Implement updateCardHistory on cards module. Remaining tests require this action creator.
-      /*
       // TODO: For now we work around the randomness of showNextCard by only including one card in the deck.
       // In the future we should allow the random provider to be injected, and also test with multiple cards.
       it('should show card if deck has any cards', function() {
         store.dispatch(updateDeck('myDeckId', {
           deckId: 'myDeckId',
           name: 'myDeckName',
-          cards: new Map({
-            'myCardId': true
-          }),
         }))
+        store.dispatch(deckCardAddedReceived('myDeckId', 'myCardId'))
         store.dispatch(updateCard('myCardId', {
           cardId: 'myCardId',
           side1: 'mySide1',
           side2: 'mySide2',
         }))
+        //store.dispatch(updateCardHistory)
+        store.dispatch(showNextCard('myDeckId'))
+
+        const review = store.getState().review
+        expect(review.get('isAnswerVisible')).to.be.false
+        expect(review.get('currentCardId')).to.equal('myCardId')
       })
-      */
     })
   })
 })
