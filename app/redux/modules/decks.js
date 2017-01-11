@@ -31,6 +31,10 @@ const UPDATE_DECK = 'UPDATE_DECK'
 const REMOVE_DECK = 'REMOVE_DECK'
 const DECKS_LOGOUT = 'DECKS_LOGOUT'
 
+const FETCHING_DECK_HISTORY = 'FETCHING_DECK_HISTORY'
+const FETCHING_DECK_HISTORY_SUCCESS = 'FETCHING_DECK_HISTORY_SUCCESS'
+const FETCHING_DECK_HISTORY_FAILURE = 'FETCHING_DECK_HISTORY_FAILURE'
+
 // thunks
 export function deleteAndHandleDeck(uid, deckId) {
   return async (dispatch, getState, firebaseContext) => {

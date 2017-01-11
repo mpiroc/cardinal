@@ -2,11 +2,9 @@ import 'babel-polyfill'
 import chai, { expect } from 'chai'
 import sinonChai from 'sinon-chai'
 import sinon from 'sinon'
-import { createStore, applyMiddleware, combineReducers } from 'redux'
-import thunk from 'redux-thunk'
 import moment from 'moment'
-import * as reducers from 'redux/modules'
 import { authUser } from 'redux/modules/auth'
+import cardsReducer from 'redux/modules/cards'
 import {
   settingCardValueListener,
   settingCardValueListenerSuccess,
@@ -22,42 +20,19 @@ import {
   deleteAndHandleCard,
   setCardValueListener,
 } from 'redux/modules/cards'
+import createStoreMock from '../../testUtils/createStoreMock'
 
 chai.use(sinonChai)
 
-describe('cards redux module', function() {
+describe('redux cards module', function() {
   let store
 
   beforeEach(function() {
-    const setStub = sinon.stub()
-    const removeStub = sinon.stub()
-    const onStub = sinon.stub()
-    const offStub = sinon.stub()
-    const pushStub = sinon.stub().returns({
-      key: 'myKey',
-      set: setStub,
-    })
-    const childStub = sinon.stub().returns({
-      set: setStub,
-      remove: removeStub,
-      on: onStub,
-      off: offStub,
-    })
-    const allStub = sinon.stub().returns(Promise.resolve())
-    const firebaseContext = {
-      ref: {
-        child: childStub
-      },
-      all: allStub,
-    }
-    store = createStore(
-      combineReducers(reducers),
-      applyMiddleware(thunk.withExtraArgument(firebaseContext))
-    )
+    store = createStoreMock()
   })
 
   it('should exist', function() {
-    expect(reducers.cards).to.exist
+    expect(cardsReducer).to.exist
   })
 
   it('should initialize all properties', function() {
@@ -254,7 +229,7 @@ describe('cards redux module', function() {
         }))
       })
 
-      it("sets the specified values in the card's history", function() {
+      it("should set the specified values in the card's history", function() {
         const history = store.getState().cards.getIn(['cards', 'myCardId', 'history'])
         expect(history).to.exist
         expect(history.get('grade')).to.equal(4)
@@ -264,7 +239,7 @@ describe('cards redux module', function() {
         expect(history.get('nextReviewMoment')).to.equal(moment([2017, 0, 5, 0, 0, 0, 0]).valueOf())
       })
 
-      it('retains old values not specified in new history', function() {
+      it('should retain old values not specified in new history', function() {
         store.dispatch(updateCardHistory('myCardId', {
           difficulty: 3.2,
         }))
@@ -303,8 +278,8 @@ describe('cards redux module', function() {
 
   describe('thunks', function() {
     describe('deleteAndHandleCard', function() {
-      // it will be removed when the firebase listener sends a child_removed event
-      it('does not remove the card from state', function() {
+      let card
+      beforeEach(function() {
         store.dispatch(authUser('myUid'))
         store.dispatch(settingCardValueListenerSuccess('myCardId', {
           cardId: 'myCardId',
@@ -313,10 +288,23 @@ describe('cards redux module', function() {
         }))
         store.dispatch(deleteAndHandleCard('myDeckId', 'myCardId'))
 
-        const card = store.getState().cards.getIn(['cards', 'myCardId'])
+        card = store.getState().cards.getIn(['cards', 'myCardId'])
+      })
+
+      // It will be removed when the firebase listener receives a child_removed event.
+      // If we ever decide to optimistically update, this test should be reversed.
+      it('should not remove the card from state', function() {
         expect(card).to.exist
-        expect(card.get('deletingError')).to.equal('')
+      })
+
+      // Keep isDeleting true, so that the UI can continue to show progress until
+      // we receive the child_removed event from firebase.
+      it('should not reset isDeleting', function() {
         expect(card.get('isDeleting')).to.be.true
+      })
+
+      it('should reset deletingError', function() {
+        expect(card.get('deletingError')).to.equal('')
       })
     })
 

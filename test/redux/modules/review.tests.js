@@ -2,46 +2,23 @@ import 'babel-polyfill'
 import chai, { expect } from 'chai'
 import sinonChai from 'sinon-chai'
 import sinon from 'sinon'
-import { createStore, applyMiddleware, combineReducers } from 'redux'
-import thunk from 'redux-thunk'
 import { updateDeck } from 'redux/modules/decks'
 import { updateCard } from 'redux/modules/cards'
+import reviewReducer from 'redux/modules/review'
 import { setCurrentCard, toggleAnswerVisible } from 'redux/modules/review'
-import * as reducers from 'redux/modules'
+import createStoreMock from '../../testUtils/createStoreMock'
 
 chai.use(sinonChai)
 
-describe('review redux module', function() {
+describe('redux review module', function() {
   let store
 
   beforeEach(function() {
-    const setStub = sinon.stub()
-    const removeStub = sinon.stub()
-    const onStub = sinon.stub()
-    const offStub = sinon.stub()
-    const pushStub = sinon.stub().returns({
-      key: 'myKey',
-      set: setStub,
-    })
-    const childStub = sinon.stub().returns({
-      set: setStub,
-      remove: removeStub,
-      on: onStub,
-      off: offStub,
-    })
-    const firebaseContext = {
-      ref: {
-        child: childStub
-      }
-    }
-    store = createStore(
-      combineReducers(reducers),
-      applyMiddleware(thunk.withExtraArgument(firebaseContext))
-    )
+    store = createStoreMock()
   })
 
   it('should exist', function() {
-    expect(reducers.review).to.exist
+    expect(reviewReducer).to.exist
   })
 
   it('should initialize all properties', function() {
