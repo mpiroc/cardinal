@@ -3,7 +3,7 @@ import Delay from 'react-delay'
 import Dialog from 'react-toolbox/lib/dialog'
 import Input from 'react-toolbox/lib/input'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
-import { Card, CardMedia, CardTitle, CardText, CardActions } from 'react-toolbox/lib/card'
+import { Card, CardText } from 'react-toolbox/lib/card'
 import WarningSnackbar from 'components/WarningSnackbar/WarningSnackbar'
 import MarkdownViewer from 'components/MarkdownViewer/MarkdownViewer'
 
