@@ -41,19 +41,17 @@ export function fetchAndHandleDeckHistory(uid, deckId) {
   return async (dispatch, getState, firebaseContext) => {
     dispatch(fetchingDeckHistory(deckId))
 
-    await fetchDeckHistory(firebaseContext, uid, deckId,
-      cardHistories => {
-        for (cardHistory in cardHistories) {
-          updateCardHistory(cardHistory.cardId, cardHistory)
-          // TODO: Set card history value listener
-        }
-
-        // TODO: Set deck history collection listeners
-      },
-      error => {
-        dispatch(fetchingDeckHistoryFailure(deckId, `Error fetching deck history: ${error.message}`))
+    try {
+      const cardHistories = await fetchDeckHistory(firebaseContext, uid, deckId)
+      for (cardHistory in cardHistories) {
+        updateCardHistory(cardHistory.cardId, cardHistory)
+        // TODO: Set card history value listener
       }
-    )
+      // TODO: Set deck history collection listeners
+    }
+    catch (error) {
+      dispatch(fetchingDeckHistoryFailure(deckId, `Error fetching deck history: ${error.message}`))
+    }
   }
 }
 

@@ -512,7 +512,7 @@ describe('firebase helpers', function() {
         child: childStub
       }
 
-      fetchDeckHistory({ ref: refMock }, 'myUid', 'myDeckId', val => {}, error => {})
+      fetchDeckHistory({ ref: refMock }, 'myUid', 'myDeckId')
       expect(childStub).to.have.been.calledOnce
       expect(childStub).to.have.been.calledWith('cardHistory/myUid/myDeckId')
     })
@@ -526,7 +526,7 @@ describe('firebase helpers', function() {
         child: childStub
       }
 
-      fetchDeckHistory({ ref: refMock }, 'myUid', 'myDeckId', val => {}, error => {})
+      fetchDeckHistory({ ref: refMock }, 'myUid', 'myDeckId')
       expect(onceStub).to.have.been.calledOnce
       expect(onceStub).to.have.been.calledWith('value')
     })
