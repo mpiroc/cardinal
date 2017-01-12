@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { fetchAndHandleDeckHistory } from 'redux/modules/decks'
 import { showNextCard } from 'redux/modules/review'
+import Review from 'components/Review/Review'
 
 class ReviewContainer extends React.Component {
   async componentDidMount() {
@@ -18,11 +19,18 @@ class ReviewContainer extends React.Component {
     await showNextCard(deckId)
   }
   render() {
-    return <div />
+    const {
+      side1,
+      side2,
+    } = this.props
+    
+    return <Review side1={side1} side2={side2} />
   }
 }
 
 ReviewContainer.propTypes = {
+  side1: PropTypes.string.isRequired,
+  side2: PropTypes.string.isRequired,
   authedUid: PropTypes.string.isRequired,
   deckId: PropTypes.string.isRequired,
   fetchAndHandleDeckHistory: PropTypes.func.isRequired,
@@ -30,9 +38,15 @@ ReviewContainer.propTypes = {
 }
 
 function mapStateToProps (state, ownProps) {
+  const { cards, review } = state
+  const cardId = review.get('currentCardId')
+  const card = cards.getIn(['cards', cardId])
+
   return {
     authedUid: state.auth.get('authedUid'),
     deckId: ownProps.params.deckId,
+    side1: card ? card.get('side1') : '',
+    side2: card ? card.get('side2') : '',
   }
 }
 
