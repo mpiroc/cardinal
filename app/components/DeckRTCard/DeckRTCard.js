@@ -10,6 +10,7 @@ export default function DeckRTCard({
     isDeleting,
     name,
     description,
+    onReview,
     onView,
     onEdit,
     onDelete,
@@ -33,6 +34,7 @@ export default function DeckRTCard({
         }
       </CardText>
       <CardActions>
+        <Button label={'Review'} onClick={onReview}/>
         <Button label={'View'} onClick={onView}/>
 
         <Button label={'Edit'} onClick={onEdit} />
@@ -49,6 +51,7 @@ DeckRTCard.propTypes = {
   isDeleting: PropTypes.bool.isRequired,
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
+  onReview: PropTypes.func.isRequired,
   onView: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
