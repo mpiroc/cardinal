@@ -74,11 +74,11 @@ export function saveNewCard({ ref }, uid, deckId, { side1, side2 }) {
       side2,
     }),
     saveCardHistory({ ref }, uid, deckId, deckCardRef.key, {
-      grade: -1,
+      grade: 0,
       difficulty: 2.5,
       repetitionCount: 0,
-      previousReviewMoment: -1,
-      nextReviewMoment: -1,
+      previousReviewMoment: 0,
+      nextReviewMoment: 0,
     })
   ])
 }

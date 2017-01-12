@@ -26,12 +26,12 @@ export default function Review (props) {
           <MarkdownViewer markdown={props.side2} />
         </CardText>
         <CardActions>
-          <Button label={'0'} />
-          <Button label={'1'} />
-          <Button label={'2'} />
-          <Button label={'3'} />
-          <Button label={'4'} />
-          <Button label={'5'} />
+          <Button label={'0'} style={{ width: '3em' }} />
+          <Button label={'1'} style={{ width: '3em' }} />
+          <Button label={'2'} style={{ width: '3em' }} />
+          <Button label={'3'} style={{ width: '3em' }} />
+          <Button label={'4'} style={{ width: '3em' }} />
+          <Button label={'5'} style={{ width: '3em' }} />
         </CardActions>
       </Card>
     </div>

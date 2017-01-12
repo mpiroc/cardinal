@@ -1,8 +1,16 @@
 import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { fetchAndHandleDeckHistory } from 'redux/modules/decks'
-import { showNextCard, toggleAnswerVisible } from 'redux/modules/review'
+import {
+  fetchAndHandleDeckHistory,
+  setDeckValueListener,
+  setDeckCardCollectionListeners,
+} from 'redux/modules/decks'
+import {
+  showNextCard,
+  setCurrentCard,
+  toggleAnswerVisible,
+} from 'redux/modules/review'
 import Review from 'components/Review/Review'
 
 class ReviewContainer extends React.Component {
@@ -11,8 +19,15 @@ class ReviewContainer extends React.Component {
       authedUid,
       deckId,
       fetchAndHandleDeckHistory,
-      showNextCard
+      showNextCard,
+      setCurrentCard,
+      setDeckValueListener,
+      setDeckCardCollectionListeners,
     } = this.props
+
+    setCurrentCard('')
+    setDeckValueListener(authedUid, deckId)
+    setDeckCardCollectionListeners(deckId)
 
     await fetchAndHandleDeckHistory(authedUid, deckId)
 
@@ -39,7 +54,10 @@ ReviewContainer.propTypes = {
   deckId: PropTypes.string.isRequired,
   fetchAndHandleDeckHistory: PropTypes.func.isRequired,
   showNextCard: PropTypes.func.isRequired,
+  setCurrentCard: PropTypes.func.isRequired,
   toggleAnswerVisible: PropTypes.func.isRequired,
+  setDeckValueListener: PropTypes.func.isRequired,
+  setDeckCardCollectionListeners: PropTypes.func.isRequired,
 }
 
 function mapStateToProps (state, ownProps) {
@@ -60,7 +78,10 @@ function mapDispatchToProps (dispatch, ownProps) {
   return bindActionCreators({
     fetchAndHandleDeckHistory,
     showNextCard,
+    setCurrentCard,
     toggleAnswerVisible,
+    setDeckValueListener,
+    setDeckCardCollectionListeners,
   }, dispatch)
 }
 
