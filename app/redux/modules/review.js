@@ -8,7 +8,7 @@ const TOGGLE_ANSWER_VISIBLE = 'TOGGLE_ANSWER_VISIBLE'
 
 // thunks
 export function showNextCard(deckId) {
-  return (dispatch, getState) => {
+  return (dispatch, getState, firebaseContext) => {
     const { cards, decks, review } = getState()
 
     const now = moment()

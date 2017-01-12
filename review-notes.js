@@ -78,7 +78,7 @@ export default function review(state = initialState, action) {
 import { computeNewDifficulty, computeNewRepetitionCount, computeNextReviewMoment } from 'helpers/superMemo2'
 import { saveCardHistory } from 'helpers/firebase'
 showNextCard(deckId) {
-  return (dispatch, getState) => {
+  return (dispatch, getState, firebaseContext) => {
     const { cards, decks, review } = getState()
 
     const now = moment()
@@ -109,7 +109,7 @@ showNextCard(deckId) {
 }
 
 async function gradeCard(uid, deckId, cardId, grade) {
-  return (dispatch, getState) => {
+  return (dispatch, getState, firebaseContext) => {
     dispatch(gradingCard())
 
     try {
@@ -124,7 +124,7 @@ async function gradeCard(uid, deckId, cardId, grade) {
       const previousReviewMoment = moment()
       const nextReviewMoment = computeNextReviewMoment(previousReviewMoment, repetitionCount, difficulty, oldPreviousReviewMoment)
 
-      await saveCardHistory(uid, deckId, cardId, {
+      await saveCardHistory(firebaseContext, uid, deckId, cardId, {
         grade,
         difficulty,
         repetitionCount,

@@ -13,7 +13,6 @@ firebase.initializeApp(config);
 const firebaseContext = {
   ref: firebase.database().ref(),
   auth: firebase.auth,
-  all: firebase.Promise.all,
 }
 
 export default firebaseContext

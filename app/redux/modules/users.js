@@ -68,7 +68,6 @@ export function setUserDeckCollectionListeners(uid) {
         uid,
         deck => {
           dispatch(userDeckRemovedReceived(uid, deck.deckId))
-          // TODO: Also remove cards?
           dispatch(removeDeck(deck.deckId))
         },
         error => dispatch(settingAddOrRemoveUserDeckListenerFailure(uid, error)),

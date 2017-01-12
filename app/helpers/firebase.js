@@ -27,12 +27,11 @@ export function saveUser({ ref }, { uid, name }) {
 }
 
 // deck create/update/delete helpers
-export function deleteDeck({ ref, all }, uid, deckId) {
-  const deckCardRef = ref.child(`deckCards/${deckId}`)
+export function deleteDeck({ ref }, uid, deckId) {
+  const deckCardRef = ref.child(`deckCards/${uid}/${deckId}`)
   const userDeckRef = ref.child(`userDecks/${uid}/${deckId}`)
 
-  return all([
-    // TODO: Does this also trigger child_removed events on the deckCard's children?
+  return Promise.all([
     deckCardRef.remove(),
     userDeckRef.remove(),
   ])
@@ -56,19 +55,19 @@ export function saveExistingDeck({ ref }, uid, { deckId, name, description }) {
 }
 
 // card create/update/delete helpers
-export function deleteCard({ ref, all }, uid, deckId, cardId) {
+export function deleteCard({ ref }, uid, deckId, cardId) {
   const deckCardRef = ref.child(`deckCards/${uid}/${deckId}/${cardId}`)
 
-  return all([
+  return Promise.all([
     deckCardRef.remove(),
     deleteCardHistory({ ref }, uid, deckId, cardId)
   ])
 }
 
-export function saveNewCard({ ref, all }, uid, deckId, { side1, side2 }) {
+export function saveNewCard({ ref }, uid, deckId, { side1, side2 }) {
   const deckCardRef = ref.child(`deckCards/${uid}/${deckId}`).push()
 
-  return all([
+  return Promise.all([
     deckCardRef.set({
       cardId: deckCardRef.key,
       side1,

@@ -13,7 +13,7 @@ const DISMISS_EDIT_DECK_SNACKBAR = 'DISMISS_EDIT_DECK_SNACKBAR'
 
 // thunks
 export function saveAndHandleEditDeck() {
-  return async (dispatch, getState) => {
+  return async (dispatch, getState, firebaseContext) => {
     dispatch(savingEditDeck())
 
     try {
@@ -23,7 +23,7 @@ export function saveAndHandleEditDeck() {
       const name = editDeckDialog.get('name')
       const description = editDeckDialog.get('description')
 
-      await saveExistingDeck(uid, {
+      await saveExistingDeck(firebaseContext, uid, {
         deckId,
         name,
         description,

@@ -16,8 +16,7 @@ export default function createStoreMock() {
           val: sinon.stub.returns({})
         }))
       })
-    },
-    all: sinon.stub().returns(Promise.resolve()),
+    }
   }
 
   const store = createStore(

@@ -40,7 +40,7 @@ import {
 
 chai.use(sinonChai)
 
-describe('firebase helpers', function() {
+describe('firebase helper', function() {
   describe('signInWithPopup', function() {
     let signInWithPopupStub
     let authStub
@@ -154,13 +154,11 @@ describe('firebase helpers', function() {
   })
 
   describe('deleteDeck', function() {
-    let allStub
     let refMock
     let childStub
     let removeStub
 
     beforeEach(function() {
-      allStub = sinon.stub().returns(Promise.resolve())
       removeStub = sinon.stub()
       childStub = sinon.stub().returns({
         remove: removeStub
@@ -175,10 +173,10 @@ describe('firebase helpers', function() {
     })
 
     it('should delete the correct records', function() {
-      deleteDeck({ ref: refMock, all: allStub }, 'myUid', 'myDeckId')
+      deleteDeck({ ref: refMock }, 'myUid', 'myDeckId')
 
       expect(childStub).to.have.been.calledTwice
-      expect(childStub).to.have.been.calledWith('deckCards/myDeckId')
+      expect(childStub).to.have.been.calledWith('deckCards/myUid/myDeckId')
       expect(childStub).to.have.been.calledWith('userDecks/myUid/myDeckId')
       expect(removeStub).to.have.been.calledTwice
     })
@@ -280,15 +278,12 @@ describe('firebase helpers', function() {
   })
 
   describe('deleteCard', function() {
-    let allStub
     let refMock
     let childStub
     let removeDeckCardStub
     let removeCardHistoryStub
 
     beforeEach(function() {
-      allStub = sinon.stub().returns(Promise.resolve())
-
       removeDeckCardStub = sinon.stub()
       removeCardHistoryStub = sinon.stub()
       
@@ -311,7 +306,7 @@ describe('firebase helpers', function() {
     })
 
     it('should delete correct path', function() {
-      deleteCard({ ref: refMock, all: allStub }, 'myUid', 'myDeckId', 'myCardId')
+      deleteCard({ ref: refMock }, 'myUid', 'myDeckId', 'myCardId')
 
       expect(childStub.withArgs('deckCards/myUid/myDeckId/myCardId')).to.have.been.calledOnce
       expect(childStub.withArgs('cardHistory/myUid/myDeckId/myCardId')).to.have.been.calledOnce
@@ -321,7 +316,6 @@ describe('firebase helpers', function() {
   })
 
   describe('saveNewCard', function() {
-    let allStub
     let refMock
     let childStub
     let pushStub
@@ -329,7 +323,6 @@ describe('firebase helpers', function() {
     let cardHistorySetStub
 
     beforeEach(function() {
-      allStub = sinon.stub().returns(Promise.resolve())
       deckCardSetStub = sinon.stub()
       cardHistorySetStub = sinon.stub()
       pushStub = sinon.stub().returns({
@@ -354,7 +347,7 @@ describe('firebase helpers', function() {
     })
 
     it('should save to correct paths', function() {
-      saveNewCard({ ref: refMock, all: allStub }, 'myUid', 'myDeckId', {
+      saveNewCard({ ref: refMock }, 'myUid', 'myDeckId', {
         side1: 'mySide1',
         side2: 'mySide2',
       })
@@ -364,7 +357,7 @@ describe('firebase helpers', function() {
     })
 
     it('should generate new cardId', function() {
-      saveNewCard({ ref: refMock, all: allStub }, 'myUid', 'myDeckId', {
+      saveNewCard({ ref: refMock }, 'myUid', 'myDeckId', {
         side1: 'mySide1',
         side2: 'mySide2',
       })
@@ -373,7 +366,7 @@ describe('firebase helpers', function() {
     })
 
     it('should save correct data', function() {
-      saveNewCard({ ref: refMock, all: allStub }, 'myUid', 'myDeckId', {
+      saveNewCard({ ref: refMock }, 'myUid', 'myDeckId', {
         side1: 'mySide1',
         side2: 'mySide2',
       })
