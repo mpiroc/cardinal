@@ -20,8 +20,12 @@ export default function createStoreMock() {
     all: sinon.stub().returns(Promise.resolve()),
   }
 
-  return createStore(
+  const store = createStore(
     combineReducers(reducers),
     applyMiddleware(thunk.withExtraArgument(firebaseContext))
   )
+
+  store.firebaseContext = firebaseContext
+
+  return store
 }

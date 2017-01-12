@@ -8,13 +8,13 @@ import Review from 'components/Review/Review'
 class ReviewContainer extends React.Component {
   async componentDidMount() {
     const {
-      uid,
+      authedUid,
       deckId,
       fetchAndHandleDeckHistory,
       showNextCard
     } = this.props
 
-    await fetchAndHandleDeckHistory(uid, deckId)
+    await fetchAndHandleDeckHistory(authedUid, deckId)
 
     await showNextCard(deckId)
   }

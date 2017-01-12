@@ -5,6 +5,7 @@ import { mount, render, shallow } from 'enzyme'
 import React from 'react'
 import { Provider } from 'react-redux'
 import jsdomGlobal from 'jsdom-global'
+import sinon from 'sinon'
 import moment from 'moment'
 import createStoreMock from '../testUtils/createStoreMock'
 import ReviewContainer from '../../app/containers/Review/ReviewContainer'
@@ -103,6 +104,23 @@ describe('Review container', function() {
     setTimeout(() => {
       const review = store.getState().review
       expect(review.get('currentCardId')).to.equal('')
+
+      done()
+    }, 10)
+  })
+
+  // Bugfix regression test
+  it('should fetch from the correct uid and deckId', function(done) {
+    const wrapper = mount(
+      <Provider store={store}>
+        <ReviewContainer params={{ deckId: 'myDeckId' }} />
+      </Provider>
+    )
+
+    setTimeout(() => {
+      //console.log(store.firebaseContext.ref.child.args[0][0])
+      expect(store.firebaseContext.ref.child).to.have.been.calledOnce
+      expect(store.firebaseContext.ref.child.args[0][0]).to.equal('cardHistory/myUid/myDeckId')
 
       done()
     }, 10)
