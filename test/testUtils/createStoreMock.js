@@ -5,28 +5,19 @@ import thunk from 'redux-thunk'
 import * as reducers from 'redux/modules'
 
 export default function createStoreMock() {
-  const setStub = sinon.stub()
-  const removeStub = sinon.stub()
-  const onStub = sinon.stub()
-  const offStub = sinon.stub()
-  const pushStub = sinon.stub().returns({
-    key: 'myKey',
-    set: setStub,
-  })
-  const childStub = sinon.stub().returns({
-    set: setStub,
-    remove: removeStub,
-    on: onStub,
-    off: offStub,
-  })
-
-  const allStub = sinon.stub().returns(Promise.resolve())
-  
   const firebaseContext = {
     ref: {
-      child: childStub
+      child: sinon.stub().returns({
+        set: sinon.stub(),
+        remove: sinon.stub(),
+        on: sinon.stub(),
+        off: sinon.stub(),
+        once: sinon.stub().returns(Promise.resolve({
+          val: sinon.stub.returns({})
+        }))
+      })
     },
-    all: allStub,
+    all: sinon.stub().returns(Promise.resolve()),
   }
 
   return createStore(

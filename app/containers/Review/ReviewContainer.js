@@ -29,16 +29,14 @@ ReviewContainer.propTypes = {
   showNextCard: PropTypes.func.isRequired,
 }
 
-function mapStateToProps (state, props) {
-  const { auth } = state
-
+function mapStateToProps (state, ownProps) {
   return {
-    uid: auth.get('authedUid'),
-    deckId: params.deckId,
+    authedUid: state.auth.get('authedUid'),
+    deckId: ownProps.params.deckId,
   }
 }
 
-function mapDispatchToProps (dispatch, props) {
+function mapDispatchToProps (dispatch, ownProps) {
   return bindActionCreators({
     fetchAndHandleDeckHistory,
     showNextCard,

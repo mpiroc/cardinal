@@ -12,6 +12,7 @@ export function showNextCard(deckId) {
     const { cards, decks, review } = getState()
 
     const now = moment()
+
     const currentCardId = review.get('currentCardId')
     const cardIds = decks
       .getIn(['decks', deckId, 'cards'])
@@ -25,12 +26,13 @@ export function showNextCard(deckId) {
           ).isBefore(now)
         )
       )
+
     const randomCardId = cardIds
       .skip(getRandomInt(0, cardIds.size))
       .take(1)
       .first()
 
-    dispatch(setCurrentCard(randomCardId))
+    dispatch(setCurrentCard(randomCardId ? randomCardId : ''))
   }
 }
 

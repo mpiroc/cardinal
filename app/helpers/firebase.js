@@ -119,7 +119,7 @@ export function saveCardHistory({ ref }, uid, deckId, cardId, {
 
 // One-time fetch of history for all cards in a deck
 export async function fetchDeckHistory({ ref }, uid, deckId) {
-  snapshot = await ref.child(`cardHistory/${uid}/${deckId}`).once('value')
+  const snapshot = await ref.child(`cardHistory/${uid}/${deckId}`).once('value')
 
   return snapshot.val()
 }
