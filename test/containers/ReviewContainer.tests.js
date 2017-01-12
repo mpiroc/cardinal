@@ -118,7 +118,6 @@ describe('Review container', function() {
     )
 
     setTimeout(() => {
-      //console.log(store.firebaseContext.ref.child.args[0][0])
       expect(store.firebaseContext.ref.child).to.have.been.calledOnce
       expect(store.firebaseContext.ref.child.args[0][0]).to.equal('cardHistory/myUid/myDeckId')
 

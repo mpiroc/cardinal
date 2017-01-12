@@ -22,6 +22,7 @@ const SETTING_ADD_OR_REMOVE_USER_DECK_LISTENER_FAILURE = 'SETTING_ADD_OR_REMOVE_
 const SETTING_USER_VALUE_LISTENER = 'SETTING_USER_VALUE_LISTENER'
 const SETTING_USER_VALUE_LISTENER_SUCCESS = 'SETTING_USER_VALUE_LISTENER_SUCCESS'
 const SETTING_USER_VALUE_LISTENER_FAILURE = 'SETTING_USER_VALUE_LISTENER_FAILURE'
+const UPDATE_USER = 'UPDATE_USER'
 const USERS_LOGOUT = 'USERS_LOGOUT'
 
 // thunks
@@ -52,7 +53,7 @@ export function setUserDeckCollectionListeners(uid) {
         firebaseContext,
         uid,
         deck => {
-          dispatch(userDeckAddedReceived(uid, deck))
+          dispatch(userDeckAddedReceived(uid, deck.deckId))
           dispatch(updateDeck(deck.deckId, deck))
           dispatch(setDeckValueListener(uid, deck.deckId))
         },
@@ -66,7 +67,7 @@ export function setUserDeckCollectionListeners(uid) {
         firebaseContext,
         uid,
         deck => {
-          dispatch(userDeckRemovedReceived(uid, deck))
+          dispatch(userDeckRemovedReceived(uid, deck.deckId))
           // TODO: Also remove cards?
           dispatch(removeDeck(deck.deckId))
         },
@@ -77,19 +78,19 @@ export function setUserDeckCollectionListeners(uid) {
 }
 
 // action creators
-function userDeckAddedReceived(uid, deck) {
+export function userDeckAddedReceived(uid, deckId) {
   return {
     type: USER_DECK_ADDED_RECEIVED,
     uid,
-    deck,
+    deckId,
   }
 }
 
-function userDeckRemovedReceived(uid, deck) {
+function userDeckRemovedReceived(uid, deckId) {
   return {
     type: USER_DECK_REMOVED_RECEIVED,
     uid,
-    deck,
+    deckId,
   }
 }
 
@@ -124,6 +125,14 @@ function settingUserValueListenerFailure(uid, error) {
   }
 }
 
+export function updateUser(uid, user) {
+  return {
+    type: UPDATE_USER,
+    uid,
+    user,
+  }
+}
+
 export function usersLogout(uid) {
   return {
     type: USERS_LOGOUT,
@@ -144,14 +153,15 @@ const initialUserState = Map({
 function user(state = initialUserState, action) {
   switch(action.type) {
     case USER_DECK_ADDED_RECEIVED:
-      return state.setIn(['decks', action.deck.deckId], true)
+      return state.setIn(['decks', action.deckId], true)
     case USER_DECK_REMOVED_RECEIVED:
-      return state.deleteIn(['decks', action.deck.deckId])
+      return state.deleteIn(['decks', action.deckId])
     case SETTING_ADD_OR_REMOVE_USER_DECK_LISTENER_FAILURE:
       return state.set('addOrRemoveError', action.error)
     case SETTING_USER_VALUE_LISTENER:
       return state.set('loadingError', '')
     case SETTING_USER_VALUE_LISTENER_SUCCESS:
+    case UPDATE_USER:
       // TODO: Can action.user be null?
       return state
         .set('loadingError', '')
@@ -176,6 +186,7 @@ export default function users(state = initialState, action) {
     case SETTING_USER_VALUE_LISTENER:
     case SETTING_USER_VALUE_LISTENER_SUCCESS:
     case SETTING_USER_VALUE_LISTENER_FAILURE:
+    case UPDATE_USER:
       const path = ['users', action.uid]
       return state.setIn(path, user(state.getIn(path), action))
     case USERS_LOGOUT:

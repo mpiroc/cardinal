@@ -38,7 +38,7 @@ export function authAndSaveUser() {
 
 export function signOutAndUnauth() {
   return async (dispatch, getState, firebaseContext) => {
-    disableAndRemoveAllListeners()
+    dispatch(disableAndRemoveAllListeners())
     await signOut(firebaseContext)
 
     dispatch(unauthUser())

@@ -80,7 +80,7 @@ export function setDeckValueListener(uid, deckId) {
         firebaseContext,
         uid, deckId,
         deck => dispatch(settingDeckValueListenerSuccess(deckId, deck)),
-        error => dispatch(settingDeckValueListenerFailure(deckId, error)),
+        error => dispatch(settingDeckValueListenerFailure(deckId, error.message)),
       )
     }
   }
@@ -102,7 +102,7 @@ export function setDeckCardCollectionListeners(deckId) {
           dispatch(updateCard(card.cardId, card))
           dispatch(setCardValueListener(deckId, card.cardId))
         },
-        error => dispatch(settingAddOrRemoveDeckCardListenerFailure(deckId, error)),
+        error => dispatch(settingAddOrRemoveDeckCardListenerFailure(deckId, error.message)),
       )
     }
 
@@ -116,7 +116,7 @@ export function setDeckCardCollectionListeners(deckId) {
           dispatch(deckCardRemovedReceived(deckId, card.cardId))
           dispatch(removeCard(card.cardId))
         },
-        error => dispatch(settingAddOrRemoveDeckCardListenerFailure(deckId, error)))
+        error => dispatch(settingAddOrRemoveDeckCardListenerFailure(deckId, error.message)))
     }
   }
 }

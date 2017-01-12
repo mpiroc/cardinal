@@ -31,7 +31,7 @@ function mergeProps (
     deckId,
     isDeleting,
     name,
-    description,
+    description: description ? description : '',
     onReview: () => router.replace(`review/${deckId}`),
     onView: () => router.replace(`deck/${deckId}`),
     onEdit: () => openEditDeckDialog(deckId, name, description),
