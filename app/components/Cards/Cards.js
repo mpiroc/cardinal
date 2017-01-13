@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import CardRTCardContainer from 'containers/CardRTCard/CardRTCardContainer'
 import NewCardRTCardContainer from 'containers/NewCardRTCard/NewCardRTCardContainer'
-import CardsSnackbarContainer from 'containers/CardsSnackbar/CardsSnackbarContainer'
+import CardsSnackbarContainer from 'containers/Cards/CardsSnackbarContainer'
 
 export default function Cards ({ deckId, cards }) {
   return (

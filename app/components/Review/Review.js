@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 import { Card, CardText, CardActions } from 'react-toolbox/lib/card'
 import { Button } from 'react-toolbox/lib/Button'
 import MarkdownViewer from 'components/MarkdownViewer/MarkdownViewer'
-import ReviewSnackbarContainer from 'containers/ReviewSnackbar/ReviewSnackbarContainer'
+import ReviewSnackbarContainer from 'containers/Review/ReviewSnackbarContainer'
 
 export default function Review (props) {
   const {
