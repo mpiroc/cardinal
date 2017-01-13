@@ -138,8 +138,8 @@ const initialHistoryState = Map({
   grade: 0,
   difficulty: 2.5,
   repetitionCount : 0,
-  previousReviewMoment: undefined,
-  nextReviewMoment: undefined,
+  previousReviewMs: undefined,
+  nextReviewMs: undefined,
 })
 
 function history(state = initialHistoryState, action) {

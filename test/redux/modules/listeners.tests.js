@@ -2,7 +2,6 @@ import 'babel-polyfill'
 import chai, { expect } from 'chai'
 import sinonChai from 'sinon-chai'
 import sinon from 'sinon'
-import moment from 'moment'
 import { authUser } from 'redux/modules/auth'
 import createStoreMock from '../../testUtils/createStoreMock'
 import listenersReducer, {

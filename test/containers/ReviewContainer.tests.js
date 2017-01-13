@@ -16,7 +16,7 @@ import { updateDeck, deckCardAddedReceived } from 'redux/modules/decks'
 jsdomGlobal()
 chai.use(chaiEnzyme())
 
-describe('Review container', function() {
+describe.only('ReviewContainer', function() {
   let store
   beforeEach(function() {
     store = createStoreMock()
@@ -34,7 +34,7 @@ describe('Review container', function() {
     }))
   })
 
-  it('exists', function() {
+  it('should exist', function() {
     const wrapper = shallow(
       <Provider store={store}>
         <ReviewContainer params={{ deckId: 'myDeckId' }} />
@@ -43,7 +43,7 @@ describe('Review container', function() {
     expect(wrapper).to.exist
   })
 
-  it('selects correct card on mount', function(done) {
+  it('should select correct card on mount', function(done) {
     const wrapper = mount(
       <Provider store={store}>
         <ReviewContainer params={{ deckId: 'myDeckId' }} />
@@ -61,10 +61,10 @@ describe('Review container', function() {
 
   })
 
-  it('does not select a card on mount if none are due', function(done) {
+  it('should not select a card on mount if none are due', function(done) {
     store.dispatch(updateCardHistory('myCardId', {
       grade: 5,
-      nextReviewMoment: moment([1980, 0, 1, 0, 0, 0, 0]).valueOf()
+      nextReviewMs: moment([1980, 0, 1, 0, 0, 0, 0]).valueOf()
     }))
 
     const wrapper = mount(
@@ -83,10 +83,10 @@ describe('Review container', function() {
     }, 10)
   })
 
-  it('does not select a card on mount if due cards exist, but are not in deck', function(done) {
+  it('should not select a card on mount if due cards exist, but are not in deck', function(done) {
     store.dispatch(updateCardHistory('myCardId', {
       grade: 5,
-      nextReviewMoment: moment([1980, 0, 1, 0, 0, 0, 0]).valueOf()
+      nextReviewMs: moment([1980, 0, 1, 0, 0, 0, 0]).valueOf()
     }))
     store.dispatch(updateDeck('myDeckId2', {
       deckId: 'myDeckId2',
@@ -118,8 +118,7 @@ describe('Review container', function() {
     )
 
     setTimeout(() => {
-      expect(store.firebaseContext.ref.child).to.have.been.calledOnce
-      expect(store.firebaseContext.ref.child.args[0][0]).to.equal('cardHistory/myUid/myDeckId')
+      expect(store.firebaseContext.ref.child).to.have.been.calledWith('cardHistory/myUid/myDeckId')
 
       done()
     }, 10)

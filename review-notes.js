@@ -45,8 +45,8 @@ mapStateToProps(state, ownProps) {
         grade: num,
         difficulty: num,
         repetitionCount : num,
-        previousReviewMoment: moment,
-        nextReviewMoment: moment,
+        previousReviewMs: num,
+        nextReviewMs: num,
       }
     }
   },
@@ -75,7 +75,7 @@ export default function review(state = initialState, action) {
 }
 
 // Redux action creators/thunks
-import { computeNewDifficulty, computeNewRepetitionCount, computeNextReviewMoment } from 'helpers/superMemo2'
+import { computeNewDifficulty, computeNewRepetitionCount, computeNextReviewMs } from 'helpers/superMemo2'
 import { saveCardHistory } from 'helpers/firebase'
 showNextCard(deckId) {
   return (dispatch, getState, firebaseContext) => {
@@ -90,7 +90,7 @@ showNextCard(deckId) {
         cardId !== currentCardId && (
           cards.getIn(['cards', cardId, 'history', 'grade']) <= 2 ||
           moment(
-            cards.getIn(['cards', cardId, 'history', 'nextReviewMoment']),
+            cards.getIn(['cards', cardId, 'history', 'nextReviewMs']),
             'milliseconds'
           ).isBefore(now)
         )
@@ -117,19 +117,19 @@ function gradeCard(uid, deckId, cardId, grade) {
       const history = cards.getIn(['cards', cardId, 'history'])
       const oldDifficulty = history.get('difficulty')
       const oldRepetitionCount = history.get('repetitionCount')
-      const oldPreviousReviewMoment = history.get('previousReviewMoment')
+      const oldPreviousReviewMs = history.get('previousReviewMs')
 
       const difficulty = computeNewDifficulty(oldDifficulty, grade)
       const repetitionCount = computeNewRepetitionCount(oldRepetitionCount, grade)
-      const previousReviewMoment = moment()
-      const nextReviewMoment = computeNextReviewMoment(previousReviewMoment, repetitionCount, difficulty, oldPreviousReviewMoment)
+      const previousReviewMs = moment()
+      const nextReviewMs = computeNextReviewMs(previousReviewMs, repetitionCount, difficulty, oldPreviousReviewMs)
 
       await saveCardHistory(firebaseContext, uid, deckId, cardId, {
         grade,
         difficulty,
         repetitionCount,
-        previousReviewMoment,
-        nextReviewMoment,
+        previousReviewMs,
+        nextReviewMs,
       })
 
       dispatch(gradingCardSuccess())
@@ -150,8 +150,8 @@ function gradeCard(uid, deckId, cardId, grade) {
           grade: num
           difficulty: num,
           repetitionCount : num,
-          previousReviewMoment: moment
-          nextReviewMoment: moment,
+          previousReviewMs: num
+          nextReviewMs: num,
         }
       }
     }
@@ -163,8 +163,8 @@ function saveCardHistory(uid, deckId, cardId, {
     grade,
     difficulty,
     repetitionCount,
-    previousReviewMoment,
-    nextReviewMoment,
+    previousReviewMs,
+    nextReviewMs,
   }) {
   
   return ref
@@ -173,8 +173,8 @@ function saveCardHistory(uid, deckId, cardId, {
       grade,
       difficulty,
       repetitionCount,
-      previousReviewMoment,
-      nextReviewMoment,
+      previousReviewMs,
+      nextReviewMs,
     })
 }
 
@@ -212,8 +212,8 @@ export function computeNewRepetitionCount(previousRepetitionCount, grade) {
   return previousRepetitionCount + 1
 }
 
-export function computeNextReviewMoment(now, previousReviewMoment, repetitionCount, difficulty) {
-  const interval = computeNewInterval(repetitionCount, difficulty, now.diff(previousReviewMoment))
+export function computeNextReviewMs(now, previousReviewMs, repetitionCount, difficulty) {
+  const interval = computeNewInterval(repetitionCount, difficulty, now.diff(previousReviewMs))
 
   return now.add(interval)
 }

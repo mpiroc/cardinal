@@ -37,7 +37,7 @@ function mapStateToProps ({ cards }, { cardId }) {
     isDeleting: card.get('isDeleting'),
     side1: card.get('side1'),
     side2: card.get('side2'),
-    nextReview: formatNextReview(card.getIn(['history', 'nextReviewMoment'])),
+    nextReview: formatNextReview(card.getIn(['history', 'nextReviewMs'])),
   }
 }
 

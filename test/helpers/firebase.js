@@ -437,8 +437,8 @@ describe('firebase helper', function() {
     let refMock
     let childStub
     let setStub
-    let previousReviewMoment
-    let nextReviewMoment
+    let previousReviewMs
+    let nextReviewMs
 
     beforeEach(function() {
       setStub = sinon.stub()
@@ -448,8 +448,8 @@ describe('firebase helper', function() {
       refMock = {
         child: childStub
       }
-      previousReviewMoment = moment([2017, 0, 5, 0, 0, 0, 0])
-      nextReviewMoment = moment([2017, 0, 8, 0, 0, 0, 0])
+      previousReviewMs = moment([2017, 0, 5, 0, 0, 0, 0]).valueOf()
+      nextReviewMs = moment([2017, 0, 8, 0, 0, 0, 0]).valueOf()
     })
 
     it('exists', function() {
@@ -461,8 +461,8 @@ describe('firebase helper', function() {
         grade: 3,
         difficulty: 2.2,
         repetitionCount: 3,
-        previousReviewMoment: previousReviewMoment.valueOf(),
-        nextReviewMoment: nextReviewMoment.valueOf(),
+        previousReviewMs,
+        nextReviewMs,
       })
 
       expect(childStub).to.have.been.calledOnce
@@ -474,8 +474,8 @@ describe('firebase helper', function() {
         grade: 3,
         difficulty: 2.2,
         repetitionCount: 3,
-        previousReviewMoment: previousReviewMoment.valueOf(),
-        nextReviewMoment: nextReviewMoment.valueOf(),
+        previousReviewMs,
+        nextReviewMs,
       })
 
       expect(setStub).to.have.been.calledOnce
@@ -483,8 +483,8 @@ describe('firebase helper', function() {
         grade: 3,
         difficulty: 2.2,
         repetitionCount: 3,
-        previousReviewMoment: previousReviewMoment.valueOf(),
-        nextReviewMoment: nextReviewMoment.valueOf(),
+        previousReviewMs,
+        nextReviewMs,
       })
     })
   })

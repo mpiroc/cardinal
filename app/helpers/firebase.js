@@ -77,8 +77,6 @@ export function saveNewCard({ ref }, uid, deckId, { side1, side2 }) {
       grade: 0,
       difficulty: 2.5,
       repetitionCount: 0,
-      previousReviewMoment: 0,
-      nextReviewMoment: 0,
     })
   ])
 }
@@ -102,8 +100,8 @@ export function saveCardHistory({ ref }, uid, deckId, cardId, {
   grade,
   difficulty,
   repetitionCount,
-  previousReviewMoment,
-  nextReviewMoment,
+  previousReviewMs,
+  nextReviewMs,
 }) {
   const cardHistoryRef = ref.child(`cardHistory/${uid}/${deckId}/${cardId}`)
 
@@ -111,8 +109,8 @@ export function saveCardHistory({ ref }, uid, deckId, cardId, {
     grade,
     difficulty,
     repetitionCount,
-    previousReviewMoment,
-    nextReviewMoment,
+    previousReviewMs,
+    nextReviewMs,
   })
 }
 

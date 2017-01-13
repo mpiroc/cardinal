@@ -223,8 +223,8 @@ describe('redux cards module', function() {
           grade: 4,
           difficulty: 3.5,
           repetitionCount : 3,
-          previousReviewMoment: moment([2017, 0, 1, 0, 0, 0, 0]).valueOf(),
-          nextReviewMoment: moment([2017, 0, 5, 0, 0, 0, 0]).valueOf(),
+          previousReviewMs: moment([2017, 0, 1, 0, 0, 0, 0]).valueOf(),
+          nextReviewMs: moment([2017, 0, 5, 0, 0, 0, 0]).valueOf(),
         }))
       })
 
@@ -234,8 +234,8 @@ describe('redux cards module', function() {
         expect(history.get('grade')).to.equal(4)
         expect(history.get('difficulty')).to.equal(3.5)
         expect(history.get('repetitionCount')).to.equal(3)
-        expect(history.get('previousReviewMoment')).to.equal(moment([2017, 0, 1, 0, 0, 0, 0]).valueOf())
-        expect(history.get('nextReviewMoment')).to.equal(moment([2017, 0, 5, 0, 0, 0, 0]).valueOf())
+        expect(history.get('previousReviewMs')).to.equal(moment([2017, 0, 1, 0, 0, 0, 0]).valueOf())
+        expect(history.get('nextReviewMs')).to.equal(moment([2017, 0, 5, 0, 0, 0, 0]).valueOf())
       })
 
       it('should retain old values not specified in new history', function() {

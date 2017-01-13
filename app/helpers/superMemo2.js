@@ -43,6 +43,15 @@ export function computeNextReviewMs(nowMs, previousReviewMs, newRepetitionCount,
   return nowMs + intervalMs
 }
 
+export function isDue(nowMs, nextReviewMs, grade) {
+  validateGrade(grade)
+
+  return
+    grade < minimumCorrectGrade ||
+    nextReviewMs === undefined ||
+    nowMs >= nextReviewMs 
+}
+
 function computeNewIntervalMs(newRepetitionCount, newDifficulty, nowMs, previousReviewMs) {
   if (newRepetitionCount === 0) {
     return moment.duration(0, 'days').valueOf()

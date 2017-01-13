@@ -13,7 +13,7 @@ export default function createStoreMock() {
         on: sinon.stub(),
         off: sinon.stub(),
         once: sinon.stub().returns(Promise.resolve({
-          val: sinon.stub.returns({})
+          val: sinon.stub().returns({})
         }))
       })
     }

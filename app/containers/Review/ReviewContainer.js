@@ -12,6 +12,7 @@ import {
   toggleAnswerVisible,
 } from 'redux/modules/review'
 import Review from 'components/Review/Review'
+import moment from 'moment'
 
 class ReviewContainer extends React.Component {
   async componentDidMount() {
@@ -31,7 +32,7 @@ class ReviewContainer extends React.Component {
 
     await fetchAndHandleDeckHistory(authedUid, deckId)
 
-    await showNextCard(deckId)
+    await showNextCard(moment().valueOf(), deckId)
   }
   render() {
     const {
