@@ -16,7 +16,7 @@ import { updateDeck, deckCardAddedReceived } from 'redux/modules/decks'
 jsdomGlobal()
 chai.use(chaiEnzyme())
 
-describe.only('ReviewContainer', function() {
+describe('ReviewContainer', function() {
   let store
   beforeEach(function() {
     store = createStoreMock()
@@ -64,7 +64,7 @@ describe.only('ReviewContainer', function() {
   it('should not select a card on mount if none are due', function(done) {
     store.dispatch(updateCardHistory('myCardId', {
       grade: 5,
-      nextReviewMs: moment([1980, 0, 1, 0, 0, 0, 0]).valueOf()
+      nextReviewMs: moment([2020, 0, 1, 0, 0, 0, 0]).valueOf()
     }))
 
     const wrapper = mount(
@@ -86,7 +86,7 @@ describe.only('ReviewContainer', function() {
   it('should not select a card on mount if due cards exist, but are not in deck', function(done) {
     store.dispatch(updateCardHistory('myCardId', {
       grade: 5,
-      nextReviewMs: moment([1980, 0, 1, 0, 0, 0, 0]).valueOf()
+      nextReviewMs: moment([2020, 0, 1, 0, 0, 0, 0]).valueOf()
     }))
     store.dispatch(updateDeck('myDeckId2', {
       deckId: 'myDeckId2',

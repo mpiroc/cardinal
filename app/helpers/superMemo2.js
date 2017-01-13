@@ -46,10 +46,11 @@ export function computeNextReviewMs(nowMs, previousReviewMs, newRepetitionCount,
 export function isDue(nowMs, nextReviewMs, grade) {
   validateGrade(grade)
 
-  return
+  return (
     grade < minimumCorrectGrade ||
     nextReviewMs === undefined ||
     nowMs >= nextReviewMs 
+  )
 }
 
 function computeNewIntervalMs(newRepetitionCount, newDifficulty, nowMs, previousReviewMs) {
