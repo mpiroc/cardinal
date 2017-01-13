@@ -23,3 +23,7 @@ Then navigate to `http://localhost:8080` in your browser.
 ## Deploying
 
 All of Cardinal's logic is in the client, and it uses Google Firebase for the backend, so all you need is a static web server. Just upload the contents of `/my/repos/cardinal/production` to your favorite static web server.
+
+## Demo
+
+You can see a live demo of Cardinal at [cardinal.mpiroc.com](http://cardinal.mpiroc.com/). Note that I have not yet set up continuous deployment, so the demo might be running old code.
