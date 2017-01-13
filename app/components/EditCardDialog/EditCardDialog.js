@@ -6,6 +6,7 @@ import ProgressBar from 'react-toolbox/lib/progress_bar'
 import { Card, CardText } from 'react-toolbox/lib/card'
 import WarningSnackbar from 'components/WarningSnackbar/WarningSnackbar'
 import MarkdownViewer from 'components/MarkdownViewer/MarkdownViewer'
+import dialogTheme from 'theme/dialog.css'
 
 export default function EditCardDialog ({
     isActive,
@@ -34,9 +35,14 @@ export default function EditCardDialog ({
       onOverlayClick={onCancel}
       actions={actions}
       title={title}
+      theme={dialogTheme}
       >
       <section>
-        <div style={{display: 'flex', flexDirection: 'column', margin: '0 0 1.8em 0'}}>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          margin: '0 0 1.8em 0',
+        }}>
           <Input
             type='text' multiline
             label={'Side one'}
@@ -52,7 +58,10 @@ export default function EditCardDialog ({
             </CardText>
           </Card>
         </div>
-        <div style={{display: 'flex', flexDirection: 'column'}}>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+        }}>
           <Input
             type='text' multiline
             label={'Side two'}

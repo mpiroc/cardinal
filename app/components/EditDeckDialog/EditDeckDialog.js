@@ -4,6 +4,7 @@ import Input from 'react-toolbox/lib/input'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 import WarningSnackbar from 'components/WarningSnackbar/WarningSnackbar'
 import Delay from 'react-delay'
+import dialogTheme from 'theme/dialog.css'
 
 export default function EditDeckDialog ({
     isActive,
@@ -32,6 +33,7 @@ export default function EditDeckDialog ({
       onOverlayClick={onCancel}
       actions={actions}
       title={title}
+      theme={dialogTheme}
       >
       <section>
         <Input
