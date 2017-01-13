@@ -7,6 +7,9 @@ import {
   computeNextReviewMs,
   isDue,
 } from 'helpers/superMemo2'
+import {
+  saveCardHistory
+} from 'helpers/firebase'
 
 // Actions
 const SET_CURRENT_CARD = 'SET_CURRENT_CARD'
@@ -16,27 +19,50 @@ const GRADING_CARD_SUCCESS = 'GRADING_CARD_SUCCESS'
 const GRADING_CARD_FAILURE = 'GRADING_CARD_FAILURE'
 
 // thunks
-export function gradeCard(grade) {
+function getNewCardHistory(oldHistory, nowMs, newGrade) {
+  const oldDifficulty = history.get('difficulty')
+  const oldGrade = history.get('oldGrade')
+  const oldRepetitionCount = history.get('repetitionCount')
+  const oldPreviousReviewMs = history.get('previousReviewMs')
+
+  const newDifficulty = computeNewDifficulty(oldDifficulty, oldGrade, newGrade)
+  const newRepetitionCount = computeNewRepetitionCount(oldRepetitionCount, newGrade)
+  const newPreviousReviewMs = nowMs
+  const newNextReviewMs = computeNextReviewMs(nowMs, oldPreviousReviewMs, newRepetitionCount, newDifficulty)
+
+  return {
+    grade: newGrade,
+    difficulty: newDifficulty,
+    repetitionCount: newRepetitionCount,
+    previousReviewMs: newPreviousReviewMs,
+    nextReviewMs: newNextReviewMs,
+  }
+}
+
+export function gradeAndShowNextCard(nowMs, newGrade, deckId) {
   return async (dispatch, getState, firebaseContext) => {
     // TODO
     dispatch(gradingCard())
 
     try {
-      const { cards, review } = getState()
+      const { auth, cards, review } = getState()
+      const authedUid = auth.get('authedUid')
+
       const cardId = review.get('currentCardId')
       if (!cardId) {
         throw new Error('Cannot grade card when there is no current card.')
       }
 
-      const history = cards.getIn(['cards', cardId, 'history'])
-      const oldDifficulty = history.get('difficulty')
-      const oldRepetitionCount = history.get('repetitionCount')
-      const oldPreviousReviewMs = history.get('previousReviewMs')
+      const oldHistory = cards.getIn(['cards', cardId, 'history'])
+      const newHistory = getNewCardHistory(oldHistory, nowMs, newGrade)
 
+      await saveCardHistory(firebaseContext, authedUid, deckId, cardId, newHistory)
 
+      dispatch(showNextCard(nowMs, deckId))
+      dispatch(gradingCardSuccess())
     }
     catch (error) {
-      dispatch(gradingCardFailure(error.message))
+      dispatch(gradingCardFailure(`Error grading card: ${error.message}`))
     }
   }
 }

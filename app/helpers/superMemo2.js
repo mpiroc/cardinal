@@ -30,7 +30,7 @@ export function computeNewRepetitionCount(oldRepetitionCount, newGrade) {
   return oldRepetitionCount + 1
 }
 
-export function computeNextReviewMs(nowMs, previousReviewMs, newRepetitionCount, newDifficulty) {
+export function computeNextReviewMs(nowMs, oldPreviousReviewMs, newRepetitionCount, newDifficulty) {
   validateRepetitionCount(newRepetitionCount)
   validateDifficulty(newDifficulty)
 
@@ -38,7 +38,7 @@ export function computeNextReviewMs(nowMs, previousReviewMs, newRepetitionCount,
     throw new Error(`nowMs must have a failure (received ${nowMs})`)
   }
 
-  const intervalMs = computeNewIntervalMs(newRepetitionCount, newDifficulty, nowMs, previousReviewMs)
+  const intervalMs = computeNewIntervalMs(newRepetitionCount, newDifficulty, nowMs, oldPreviousReviewMs)
 
   return nowMs + intervalMs
 }
@@ -53,7 +53,7 @@ export function isDue(nowMs, nextReviewMs, grade) {
   )
 }
 
-function computeNewIntervalMs(newRepetitionCount, newDifficulty, nowMs, previousReviewMs) {
+function computeNewIntervalMs(newRepetitionCount, newDifficulty, nowMs, oldPreviousReviewMs) {
   if (newRepetitionCount === 0) {
     return moment.duration(0, 'days').valueOf()
   }
@@ -66,14 +66,14 @@ function computeNewIntervalMs(newRepetitionCount, newDifficulty, nowMs, previous
     return moment.duration(6, 'days').valueOf()
   }
 
-  if (previousReviewMs === undefined) {
+  if (oldPreviousReviewMs === undefined) {
     throw Error('Card was reviewed at least three times, but has no recorded previous review time.')
   }
 
-  const intervalMs = nowMs - previousReviewMs
+  const intervalMs = nowMs - oldPreviousReviewMs
 
   if (intervalMs < 0) {
-    throw Error(`The last recorded review occurred in the future (received ${moment(previousReviewMs).format()}, but now is ${moment(nowMs).format()}`)
+    throw Error(`The last recorded review occurred in the future (received ${moment(oldPreviousReviewMs).format()}, but now is ${moment(nowMs).format()}`)
   }
 
   return intervalMs * newDifficulty
