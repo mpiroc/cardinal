@@ -3,7 +3,11 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Map } from 'immutable'
 import Cards from 'components/Cards/Cards'
-import * as deckActionCreators from 'redux/modules/decks'
+import {
+  setDeckValueListener,
+  setDeckCardCollectionListeners,
+  setCardHistoryCollectionListeners,
+} from 'redux/modules/decks'
 
 class CardsContainer extends React.Component {
   componentDidMount() {
@@ -12,9 +16,11 @@ class CardsContainer extends React.Component {
       authedUid,
       setDeckValueListener,
       setDeckCardCollectionListeners,
+      setCardHistoryCollectionListeners,
     } = this.props
     setDeckValueListener(authedUid, deckId)
     setDeckCardCollectionListeners(deckId)
+    setCardHistoryCollectionListeners(deckId)
   }
   render () {
     const { deckId, cards } = this.props
@@ -26,6 +32,7 @@ CardsContainer.propTypes = {
   authedUid: PropTypes.string.isRequired,
   setDeckValueListener: PropTypes.func.isRequired,
   setDeckCardCollectionListeners: PropTypes.func.isRequired,
+  setCardHistoryCollectionListeners: PropTypes.func.isRequired,
   params: PropTypes.shape({
     deckId: PropTypes.string.isRequired
   })
@@ -44,7 +51,11 @@ function mapStateToProps ({ auth, decks, cards }, { params }) {
 }
 
 function mapDispatchToProps (dispatch, ownProps) {
-  return bindActionCreators(deckActionCreators, dispatch)
+  return bindActionCreators({
+    setDeckValueListener,
+    setDeckCardCollectionListeners,
+    setCardHistoryCollectionListeners,
+  }, dispatch)
 }
 
 export default connect(

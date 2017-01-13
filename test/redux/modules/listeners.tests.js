@@ -14,7 +14,6 @@ import listenersReducer, {
   addDeckCardRemovedListener,
   addDeckCardValueListener,
   addCardHistoryAddedListener,
-  addCardHistoryRemovedListener,
   addCardHistoryValueListener,
   addAuthStateChangedListener,
   removeUserValueListener,
@@ -25,7 +24,6 @@ import listenersReducer, {
   removeDeckCardRemovedListener,
   removeDeckCardValueListener,
   removeCardHistoryAddedListener,
-  removeCardHistoryRemovedListener,
   removeCardHistoryValueListener,
 } from 'redux/modules/listeners'
 import {
@@ -86,7 +84,6 @@ describe('listeners', function() {
 
         listeners.get('cardHistories').forEach(cardHistory => {
           expect(cardHistory.get('added')).to.be.false
-          expect(cardHistory.get('removed')).to.be.false
           expect(cardHistory.get('cardHistories').size).to.equal(0)
         })
       })
@@ -187,18 +184,6 @@ describe('listeners', function() {
         store.dispatch(addCardHistoryAddedListener('myDeckId'))
 
         expect(store.getState().listeners.getIn(['cardHistories', 'myDeckId', 'added'])).to.be.true
-      })
-    })
-    
-    describe('addCardHistoryRemovedListener', function() {
-      it('should exist', function() {
-        expect(addCardHistoryRemovedListener).to.exist
-      })
-
-      it('should set the correct listener flag', function() {
-        store.dispatch(addCardHistoryRemovedListener('myDeckId'))
-
-        expect(store.getState().listeners.getIn(['cardHistories', 'myDeckId', 'removed'])).to.be.true
       })
     })
     
@@ -321,19 +306,6 @@ describe('listeners', function() {
         store.dispatch(removeCardHistoryAddedListener('myDeckId'))
 
         expect(store.getState().listeners.getIn(['cardHistories', 'myDeckId', 'added'])).to.be.false
-      })
-    })
-    
-    describe('removeCardHistoryRemovedListener', function() {
-      it('should exist', function() {
-        expect(removeCardHistoryRemovedListener).to.exist
-      })
-
-      it('should set the correct listener flag', function() {
-        store.dispatch(addCardHistoryRemovedListener('myDeckId'))
-        store.dispatch(removeCardHistoryRemovedListener('myDeckId'))
-
-        expect(store.getState().listeners.getIn(['cardHistories', 'myDeckId', 'removed'])).to.be.false
       })
     })
     

@@ -1,14 +1,21 @@
 import { Map } from 'immutable'
-import { addDeckCardValueListener } from './listeners'
 import {
-  setDeckCardValueListener,
-  deleteCard,
+  addDeckCardValueListener,
+  addCardHistoryValueListener,
+} from './listeners'
+import {
+  setDeckCardValueListener as fbSetDeckCardValueListener,
+  setCardHistoryValueListener as fbSetCardHistoryValueListener,
+  deleteCard as fbDeleteCard,
 } from 'helpers/firebase'
 
 // actions
 const SETTING_CARD_VALUE_LISTENER = 'SETTING_CARD_VALUE_LISTENER'
 const SETTING_CARD_VALUE_LISTENER_SUCCESS = 'SETTING_CARD_VALUE_LISTENER_SUCCESS'
 const SETTING_CARD_VALUE_LISTENER_FAILURE = 'SETTING_CARD_VALUE_LISTENER_FAILURE'
+const SETTING_CARD_HISTORY_VALUE_LISTENER = 'SETTING_CARD_HISTORY_VALUE_LISTENER'
+const SETTING_CARD_HISTORY_VALUE_LISTENER_SUCCESS = 'SETTING_CARD_HISTORY_VALUE_LISTENER_SUCCESS'
+const SETTING_CARD_HISTORY_VALUE_LISTENER_FAILURE = 'SETTING_CARD_HISTORY_VALUE_LISTENER_FAILURE'
 const DELETING_CARD = 'DELETING_CARD'
 const DELETING_CARD_SUCCESS = 'DELETING_CARD_SUCCESS'
 const DELETING_CARD_FAILURE = 'DELETING_CARD_FAILURE'
@@ -26,7 +33,7 @@ export function deleteAndHandleCard(deckId, cardId) {
     dispatch(deletingCard(cardId))
 
     try {
-      await deleteCard(firebaseContext, uid, deckId, cardId)
+      await fbDeleteCard(firebaseContext, uid, deckId, cardId)
       dispatch(deletingCardSuccess(cardId))
     }
     catch (error) {
@@ -43,11 +50,29 @@ export function setCardValueListener(deckId, cardId) {
     if (listeners.getIn(['deckCards', deckId, 'cards', cardId]) !== true) {
       dispatch(addDeckCardValueListener(deckId, cardId))
       dispatch(settingCardValueListener(cardId))
-      setDeckCardValueListener(
+      fbSetDeckCardValueListener(
         firebaseContext,
         uid, deckId, cardId,
         card => dispatch(settingCardValueListenerSuccess(cardId, card)),
         error => dispatch(settingCardValueListenerFailure(cardId, error)),
+      )
+    }
+  }
+}
+
+export function setCardHistoryValueListener(deckId, cardId) {
+  return (dispatch, getState, firebaseContext) => {
+    const { auth, listeners } = getState()
+    const uid = auth.get('authedUid')
+
+    if (listeners.getIn(['cardHistories', deckId, 'histories', cardId]) !== true) {
+      dispatch(addCardHistoryValueListener(deckId, cardId))
+      dispatch(settingCardHistoryValueListener(cardId))
+      fbSetCardHistoryValueListener(
+        firebaseContext,
+        uid, deckId, cardId,
+        card => dispatch(settingCardHistoryValueListenerSuccess(cardId, card)),
+        error => dispatch(settingCardHistoryValueListenerFailure(cardId, error)),
       )
     }
   }
@@ -72,6 +97,29 @@ export function settingCardValueListenerSuccess(cardId, card) {
 export function settingCardValueListenerFailure(cardId, error) {
   return {
     type: SETTING_CARD_VALUE_LISTENER_FAILURE,
+    cardId,
+    error,
+  }
+}
+
+export function settingCardHistoryValueListener(cardId) {
+  return {
+    type: SETTING_CARD_HISTORY_VALUE_LISTENER,
+    cardId,
+  }
+}
+
+export function settingCardHistoryValueListenerSuccess(cardId, history) {
+  return {
+    type: SETTING_CARD_HISTORY_VALUE_LISTENER_SUCCESS,
+    cardId,
+    history,
+  }
+}
+
+export function settingCardHistoryValueListenerFailure(cardId, error) {
+  return {
+    type: SETTING_CARD_HISTORY_VALUE_LISTENER_FAILURE,
     cardId,
     error,
   }
@@ -135,6 +183,8 @@ export function cardsLogout() {
 }
 
 const initialHistoryState = Map({
+  loadingError: '',
+
   grade: 0,
   difficulty: 2.5,
   repetitionCount : 0,
@@ -144,6 +194,12 @@ const initialHistoryState = Map({
 
 function history(state = initialHistoryState, action) {
   switch(action.type) {
+    case SETTING_CARD_HISTORY_VALUE_LISTENER_SUCCESS:
+      return state
+        .set('loadingError', '')
+        .merge(action.history)
+    case SETTING_CARD_HISTORY_VALUE_LISTENER_FAILURE:
+      return state.set('loadingError', action.error)
     case UPDATE_CARD_HISTORY:
       return state.merge(action.history)
     default:
@@ -182,6 +238,9 @@ function card(state = initialCardState, action) {
         .set('deletingError', action.error)
     case UPDATE_CARD:
       return state.merge(action.card)
+    case SETTING_CARD_HISTORY_VALUE_LISTENER:
+    case SETTING_CARD_HISTORY_VALUE_LISTENER_SUCCESS:
+    case SETTING_CARD_HISTORY_VALUE_LISTENER_FAILURE:
     case UPDATE_CARD_HISTORY:
       return state.set('history', history(state.get('history'), action))
     default:
@@ -230,6 +289,9 @@ export default function cards(state = initialState, action) {
     case SETTING_CARD_VALUE_LISTENER_SUCCESS:
     case SETTING_CARD_VALUE_LISTENER_FAILURE:
     case UPDATE_CARD:
+    case SETTING_CARD_HISTORY_VALUE_LISTENER:
+    case SETTING_CARD_HISTORY_VALUE_LISTENER_SUCCESS:
+    case SETTING_CARD_HISTORY_VALUE_LISTENER_FAILURE:
     case UPDATE_CARD_HISTORY:
       path = ['cards', action.cardId]
       return state.setIn(path, card(state.getIn(path), action))

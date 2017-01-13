@@ -3,16 +3,19 @@ import {
   addUserDeckValueListener,
   addDeckCardAddedListener,
   addDeckCardRemovedListener,
+  addCardHistoryAddedListener,
 } from './listeners'
 import {
   setUserDeckValueListener,
   setDeckCardAddedListener,
   setDeckCardRemovedListener,
+  setCardHistoryAddedListener,
   deleteDeck,
   fetchDeckHistory,
 } from 'helpers/firebase'
 import {
   setCardValueListener,
+  setCardHistoryValueListener,
   updateCard,
   removeCard,
   updateCardHistory,
@@ -22,6 +25,7 @@ import {
 const DECK_CARD_ADDED_RECEIVED = 'DECK_CARD_ADDED_RECEIVED'
 const DECK_CARD_REMOVED_RECEIVED = 'DECK_CARD_REMOVED_RECEIVED'
 const SETTING_ADD_OR_REMOVE_DECK_CARD_LISTENER_FAILURE = 'SETTING_ADD_OR_REMOVE_DECK_CARD_LISTENER_FAILURE'
+const SETTING_ADD_CARD_HISTORY_LISTENER_FAILURE = 'SETTING_REMOVE_CARD_HISTORY_LISTENER_FAILURE'
 const SETTING_DECK_VALUE_LISTENER = 'SETTING_DECK_VALUE_LISTENER'
 const SETTING_DECK_VALUE_LISTENER_SUCCESS = 'SETTING_DECK_VALUE_LISTENER_SUCCESS'
 const SETTING_DECK_VALUE_LISTENER_FAILURE = 'SETTING_DECK_VALUE_LISTENER_FAILURE'
@@ -118,6 +122,27 @@ export function setDeckCardCollectionListeners(deckId) {
           dispatch(removeCard(card.cardId))
         },
         error => dispatch(settingAddOrRemoveDeckCardListenerFailure(deckId, error.message)))
+    }
+  }
+}
+
+export function setCardHistoryCollectionListeners(deckId) {
+  return (dispatch, getState, firebaseContext) => {
+    const { auth, listeners } = getState()
+    const uid = auth.get('authedUid')
+
+    if (listeners.getIn(['cardHistories', deckId, 'added']) !== true) {
+      dispatch(addCardHistoryAddedListener(deckId))
+      setCardHistoryAddedListener(
+        firebaseContext,
+        uid,
+        deckId,
+        (cardId, history) => {
+          dispatch(updateCardHistory(cardId, history))
+          dispatch(setCardHistoryValueListener(deckId, cardId))
+        },
+        error => dispatch(settingAddCardHistoryListenerFailure(deckId, error.message)),
+      )
     }
   }
 }

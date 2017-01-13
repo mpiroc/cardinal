@@ -8,7 +8,7 @@ import * as editCardDialogActionCreators from 'redux/modules/editCardDialog'
 
 function formatNextReview(nextReviewMs) {
   if (nextReviewMs === undefined) {
-    return ''
+    return 'Now'
   }
 
   const nowMoment = moment()

@@ -5,6 +5,7 @@ import {
   fetchAndHandleDeckHistory,
   setDeckValueListener,
   setDeckCardCollectionListeners,
+  setCardHistoryCollectionListeners,
 } from 'redux/modules/decks'
 import {
   gradeAndShowNextCard,
@@ -25,13 +26,20 @@ class ReviewContainer extends React.Component {
       setCurrentCard,
       setDeckValueListener,
       setDeckCardCollectionListeners,
+      setCardHistoryCollectionListeners
     } = this.props
 
     setCurrentCard('')
     setDeckValueListener(authedUid, deckId)
     setDeckCardCollectionListeners(deckId)
 
+    // Even though we are about to get the history through setCardHistoryCollectionListeners,
+    // we need to be sure that we have loaded all history before selecting the first card to
+    // review. So we do a one-time fetch of *all* history for the deck when the component
+    // first loads.
     await fetchAndHandleDeckHistory(authedUid, deckId)
+    
+    setCardHistoryCollectionListeners(deckId)
 
     await showNextCard(moment().valueOf(), deckId)
   }
@@ -72,6 +80,7 @@ ReviewContainer.propTypes = {
   toggleAnswerVisible: PropTypes.func.isRequired,
   setDeckValueListener: PropTypes.func.isRequired,
   setDeckCardCollectionListeners: PropTypes.func.isRequired,
+  setCardHistoryCollectionListeners: PropTypes.func.isRequired,
 }
 
 function mapStateToProps (state, ownProps) {
@@ -98,6 +107,7 @@ function mapDispatchToProps (dispatch, ownProps) {
     toggleAnswerVisible,
     setDeckValueListener,
     setDeckCardCollectionListeners,
+    setCardHistoryCollectionListeners,
   }, dispatch)
 }
 

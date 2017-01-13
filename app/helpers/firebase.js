@@ -90,7 +90,7 @@ export function saveExistingCard({ ref }, uid, deckId, { cardId, side1, side2 })
 }
 
 // cardHistory create/update/delete helpers
-function deleteCardHistory({ ref }, uid, deckId, cardId) {
+export function deleteCardHistory({ ref }, uid, deckId, cardId) {
   const cardHistoryRef = ref.child(`cardHistory/${uid}/${deckId}/${cardId}`)
 
   return cardHistoryRef.remove()
@@ -147,13 +147,7 @@ export function setDeckCardValueListener({ ref }, uid, deckId, cardId, onSuccess
 
 export function setCardHistoryAddedListener({ ref }, uid, deckId, onSuccess, onFailure) {
   ref.child(`cardHistory/${uid}/${deckId}`)
-    .on('child_added', snapshot => onSuccess(snapshot.val()), onFailure)
-}
-
-export function setCardHistoryRemovedListener({ ref }, uid, deckId, onSuccess, onFailure) {
-  ref
-    .child(`cardHistory/${uid}/${deckId}`)
-    .on('child_removed', snapshot => onSuccess(snapshot.val()), onFailure)
+    .on('child_added', snapshot => onSuccess(snapshot.key, snapshot.val()), onFailure)
 }
 
 export function setCardHistoryValueListener({ ref }, uid, deckId, cardId, onSuccess, onFailure) {
@@ -192,10 +186,6 @@ export function removeDeckCardValueListener({ ref }, uid, deckId, cardId, onSucc
 
 export function removeCardHistoryAddedListener({ ref }, uid, deckId, onSuccess, onFailure) {
   return ref.child(`cardHistory/${uid}/${deckId}`).off('child_added')
-}
-
-export function removeCardHistoryRemovedListener({ ref }, uid, deckId, onSuccess, onFailure) {
-  return ref.child(`cardHistory/${uid}/${deckId}`).off('child_removed')
 }
 
 export function removeCardHistoryValueListener({ ref }, uid, deckId, cardId, onSuccess, onFailure) {

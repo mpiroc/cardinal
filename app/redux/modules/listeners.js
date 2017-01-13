@@ -10,7 +10,6 @@ const ADD_DECK_CARD_ADDED_LISTENER = 'ADD_DECK_CARD_ADDED_LISTENER'
 const ADD_DECK_CARD_REMOVED_LISTENER = 'ADD_DECK_CARD_REMOVED_LISTENER'
 const ADD_DECK_CARD_VALUE_LISTENER = 'ADD_DECK_CARD_VALUE_LISTENER'
 const ADD_CARD_HISTORY_ADDED_LISTENER = 'ADD_CARD_HISTORY_ADDED_LISTENER'
-const ADD_CARD_HISTORY_REMOVED_LISTENER = 'ADD_CARD_HISTORY_REMOVED_LISTENER'
 const ADD_CARD_HISTORY_VALUE_LISTENER = 'ADD_CARD_HISTORY_VALUE_LISTENER'
 const ADD_AUTH_STATE_CHANGED_LISTENER = 'ADD_AUTH_STATE_CHANGED_LISTENER'
 const REMOVE_USER_VALUE_LISTENER = 'REMOVE_USER_LISTENER'
@@ -21,7 +20,6 @@ const REMOVE_DECK_CARD_ADDED_LISTENER = 'REMOVE_DECK_CARD_ADDED_LISTENER'
 const REMOVE_DECK_CARD_REMOVED_LISTENER = 'REMOVE_DECK_CARD_REMOVED_LISTENER'
 const REMOVE_DECK_CARD_VALUE_LISTENER = 'REMOVE_DECK_CARD_VALUE_LISTENER'
 const REMOVE_CARD_HISTORY_ADDED_LISTENER = 'REMOVE_CARD_HISTORY_ADDED_LISTENER'
-const REMOVE_CARD_HISTORY_REMOVED_LISTENER = 'REMOVE_CARD_HISTORY_REMOVED_LISTENER'
 const REMOVE_CARD_HISTORY_VALUE_LISTENER = 'REMOVE_CARD_HISTORY_VALUE_LISTENER'
 
 // thunks
@@ -118,13 +116,6 @@ export function addCardHistoryAddedListener(deckId) {
   }
 }
 
-export function addCardHistoryRemovedListener(deckId) {
-  return {
-    type: ADD_CARD_HISTORY_REMOVED_LISTENER,
-    deckId,
-  }
-}
-
 export function addCardHistoryValueListener(deckId, cardId) {
   return {
     type: ADD_CARD_HISTORY_VALUE_LISTENER,
@@ -197,13 +188,6 @@ export function removeCardHistoryAddedListener(deckId) {
   }
 }
 
-export function removeCardHistoryRemovedListener(deckId) {
-  return {
-    type: REMOVE_CARD_HISTORY_REMOVED_LISTENER,
-    deckId,
-  }
-}
-
 export function removeCardHistoryValueListener(deckId, cardId) {
   return {
     type: REMOVE_CARD_HISTORY_VALUE_LISTENER,
@@ -267,7 +251,6 @@ function deckCards(state = initialDeckCardsState, action) {
 // cardHistories reducer
 const initialCardHistoriesState = Map({
   added: false,
-  removed: false,
   histories: Map(),
 })
 
@@ -275,14 +258,10 @@ function cardHistories(state = initialCardHistoriesState, action) {
   switch(action.type) {
     case ADD_CARD_HISTORY_ADDED_LISTENER:
       return state.set('added', true)
-    case ADD_CARD_HISTORY_REMOVED_LISTENER:
-      return state.set('removed', true)
     case ADD_CARD_HISTORY_VALUE_LISTENER:
       return state.setIn(['histories', action.cardId], true)
     case REMOVE_CARD_HISTORY_ADDED_LISTENER:
       return state.set('added', false)
-    case REMOVE_CARD_HISTORY_REMOVED_LISTENER:
-      return state.set('removed', false)
     case REMOVE_CARD_HISTORY_VALUE_LISTENER:
       return state.deleteIn(['histories', action.cardId])
     default:
@@ -315,7 +294,6 @@ export default function listeners (state = initialState, action) {
       path = ['deckCards', action.deckId]
       return state.setIn(path, deckCards(state.getIn(path), action))
     case ADD_CARD_HISTORY_ADDED_LISTENER:
-    case ADD_CARD_HISTORY_REMOVED_LISTENER:
     case ADD_CARD_HISTORY_VALUE_LISTENER:
       path = ['cardHistories', action.deckId]
       return state.setIn(path, cardHistories(state.getIn(path), action))
@@ -334,7 +312,6 @@ export default function listeners (state = initialState, action) {
       path = ['deckCards', action.deckId]
       return state.setIn(path, deckCards(state.getIn(path), action))
     case REMOVE_CARD_HISTORY_ADDED_LISTENER:
-    case REMOVE_CARD_HISTORY_REMOVED_LISTENER:
     case REMOVE_CARD_HISTORY_VALUE_LISTENER:
       path = ['cardHistories', action.deckId]
       return state.setIn(path, cardHistories(state.getIn(path), action))
