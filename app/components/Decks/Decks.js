@@ -5,8 +5,13 @@ import DecksSnackbarContainer from 'containers/Decks/DecksSnackbarContainer'
 
 export default function Decks ({ decks }) {
   return (
-    <div>
-      <div style={{display: 'flex', flexDirection: 'row', flexWrap: 'wrap'}}>{
+    <div style={{ margin: '1.8rem' }}>
+      <div style={{
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        margin: '-0.9rem'
+      }}>{
         decks.keySeq().map(
           deckId => <DeckRTCardContainer key={deckId} deckId={deckId} />
         )

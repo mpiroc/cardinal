@@ -15,7 +15,7 @@ export default function Review (props) {
   } = props
 
   return isCurrentCardSet ? (
-    <div style={{ width: '50%', margin: '0 auto' }}>
+    <div style={{ width: '50%', margin: '1.8rem auto' }}>
       <Card style={{ margin: '1.8em 0 0 0', color: 'black' }}>
         <CardText>
           <MarkdownViewer markdown={props.side1} />
@@ -40,7 +40,7 @@ export default function Review (props) {
       <ReviewSnackbarContainer />
     </div>
   ) : (
-    <div style={{ width: '50%', margin: '0 auto' }}>
+    <div style={{ width: '50%', margin: '1.8em auto' }}>
       <span>{'All done! You have no more cards to review right now.'}</span>
     </div>
   )

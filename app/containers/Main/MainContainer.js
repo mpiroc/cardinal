@@ -19,7 +19,6 @@ class MainContainer extends React.Component {
           <Panel>
             <MainAppBarContainer />
             <div style={{
-              padding: '1.8rem',
               height: '100%',
               overflow: 'auto',
             }}>

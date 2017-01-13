@@ -29,10 +29,12 @@ export function saveUser({ ref }, { uid, name }) {
 // deck create/update/delete helpers
 export function deleteDeck({ ref }, uid, deckId) {
   const deckCardRef = ref.child(`deckCards/${uid}/${deckId}`)
+  const cardHistoryRef = ref.child(`cardHistory/${uid}/${deckId}`)
   const userDeckRef = ref.child(`userDecks/${uid}/${deckId}`)
 
   return Promise.all([
     deckCardRef.remove(),
+    cardHistoryRef.remove(),
     userDeckRef.remove(),
   ])
 }

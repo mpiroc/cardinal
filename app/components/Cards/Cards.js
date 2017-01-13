@@ -5,7 +5,7 @@ import CardsSnackbarContainer from 'containers/Cards/CardsSnackbarContainer'
 
 export default function Cards ({ deckId, cards }) {
   return (
-    <div>
+    <div style={{ margin: '1.8rem' }}>
       <div>{
         cards.keySeq().map(
           cardId => <CardRTCardContainer key={cardId} deckId={deckId} cardId={cardId} />

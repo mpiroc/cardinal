@@ -16,7 +16,7 @@ export default function DeckRTCard({
     onDelete,
   }) {
   return (
-    <Card style={{ width: '350px', margin: '0 1.8rem 1.8rem 0' }}>
+    <Card style={{ width: '350px', margin: '0.9rem' }}>
       <CardTitle title={name} subtitle={'Placeholder count'} />
       <CardText>
         <span>{description}</span>
