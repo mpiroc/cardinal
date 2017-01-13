@@ -6,7 +6,7 @@ import MarkdownViewer from '../../app/components/MarkdownViewer/MarkdownViewer'
 
 chai.use(chaiEnzyme())
 
-describe('MarkdownViewer component', function() {
+describe('MarkdownViewer', function() {
   it('should return exist', function() {
     const wrapper = shallow(<MarkdownViewer markdown={'text'} />)
     expect(wrapper).to.exist

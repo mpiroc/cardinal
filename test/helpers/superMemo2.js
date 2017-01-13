@@ -7,7 +7,7 @@ import {
   computeNextReviewMs,
 } from 'helpers/superMemo2'
 
-describe('SuperMemo 2 helpers', function() {
+describe('SuperMemo 2 helper', function() {
   describe('computeNewDifficulty', function() {
     const minimumDifficulty = 1.3
 

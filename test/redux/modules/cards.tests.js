@@ -23,7 +23,7 @@ import createStoreMock from '../../testUtils/createStoreMock'
 
 chai.use(sinonChai)
 
-describe('redux cards module', function() {
+describe('cards', function() {
   let store
 
   beforeEach(function() {
@@ -45,7 +45,7 @@ describe('redux cards module', function() {
     expect(snackbar.get('error')).to.equal('')
   })
 
-  describe('action creators', function() {
+  describe('action creator', function() {
     let card
     beforeEach(function() {
       store.dispatch(settingCardValueListener('myCardId'))
@@ -168,8 +168,8 @@ describe('redux cards module', function() {
         expect(snackbar.get('isActive')).to.be.false
       })
 
-      it('should not reset the error message', function() {
-        expect(snackbar.get('error')).to.equal('myErrorMessage')
+      it('should reset the error message', function() {
+        expect(snackbar.get('error')).to.equal('')
       })
     })
 
@@ -275,7 +275,7 @@ describe('redux cards module', function() {
     })
   })
 
-  describe('thunks', function() {
+  describe('thunk', function() {
     describe('deleteAndHandleCard', function() {
       let card
       beforeEach(function() {

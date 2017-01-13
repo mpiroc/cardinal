@@ -9,7 +9,7 @@ import MarkdownViewer from '../../app/components/MarkdownViewer/MarkdownViewer'
 
 chai.use(chaiEnzyme())
 
-describe('CardRTCard component', function() {
+describe('CardRTCard', function() {
   let editSpy
   let deleteSpy
 

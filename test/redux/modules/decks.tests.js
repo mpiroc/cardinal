@@ -29,7 +29,7 @@ import createStoreMock from '../../testUtils/createStoreMock'
 
 chai.use(sinonChai)
 
-describe('redux decks module', function() {
+describe('decks', function() {
   let store
   beforeEach(function() {
     store = createStoreMock()
@@ -290,12 +290,12 @@ describe('redux decks module', function() {
         expect(snackbar.get('isActive')).to.be.false
       })
 
-      it('should not clear the error message from the snackbar', function() {
+      it('should clear the error message from the snackbar', function() {
         store.dispatch(deletingDeckFailure('myDeckId', 'myErrorMessage'))
         store.dispatch(dismissDecksSnackbar())
 
         const snackbar = store.getState().decks.get('snackbar')
-        expect(snackbar.get('error')).to.equal('myErrorMessage')
+        expect(snackbar.get('error')).to.equal('')
       })
     })
     

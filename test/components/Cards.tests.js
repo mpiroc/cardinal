@@ -9,7 +9,7 @@ import { Map } from 'immutable'
 
 chai.use(chaiEnzyme())
 
-describe('Cards component', function() {
+describe('Cards', function() {
   const cards = Map({
     "cardId1": {},
     "cardId2": {},
