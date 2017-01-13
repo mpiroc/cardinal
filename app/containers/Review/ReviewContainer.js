@@ -7,6 +7,7 @@ import {
   setDeckCardCollectionListeners,
 } from 'redux/modules/decks'
 import {
+  gradeAndShowNextCard,
   showNextCard,
   setCurrentCard,
   toggleAnswerVisible,
@@ -36,14 +37,25 @@ class ReviewContainer extends React.Component {
   }
   render() {
     const {
+      deckId,
       side1,
       side2,
       isAnswerVisible,
+      isCurrentCardSet,
+      gradeAndShowNextCard,
       toggleAnswerVisible,
     } = this.props
     
-    return <Review side1={side1} side2={side2} isAnswerVisible={isAnswerVisible}
-      onToggleAnswerVisible={() => toggleAnswerVisible()} />
+    return (
+      <Review
+        side1={side1}
+        side2={side2}
+        isAnswerVisible={isAnswerVisible}
+        isCurrentCardSet={isCurrentCardSet}
+        onToggleAnswerVisible={() => toggleAnswerVisible()}
+        onGrade={grade => gradeAndShowNextCard(moment().valueOf(), deckId, grade)}
+      />
+    )
   }
 }
 
@@ -54,6 +66,7 @@ ReviewContainer.propTypes = {
   authedUid: PropTypes.string.isRequired,
   deckId: PropTypes.string.isRequired,
   fetchAndHandleDeckHistory: PropTypes.func.isRequired,
+  gradeAndShowNextCard: PropTypes.func.isRequired,
   showNextCard: PropTypes.func.isRequired,
   setCurrentCard: PropTypes.func.isRequired,
   toggleAnswerVisible: PropTypes.func.isRequired,
@@ -72,12 +85,14 @@ function mapStateToProps (state, ownProps) {
     side1: card ? card.get('side1') : '',
     side2: card ? card.get('side2') : '',
     isAnswerVisible: review.get('isAnswerVisible'),
+    isCurrentCardSet: card !== undefined,
   }
 }
 
 function mapDispatchToProps (dispatch, ownProps) {
   return bindActionCreators({
     fetchAndHandleDeckHistory,
+    gradeAndShowNextCard,
     showNextCard,
     setCurrentCard,
     toggleAnswerVisible,

@@ -21,10 +21,10 @@ const DISMISS_REVIEW_SNACKBAR = 'DISMISS_REVIEW_SNACKBAR'
 
 // thunks
 function getNewCardHistory(oldHistory, nowMs, newGrade) {
-  const oldDifficulty = history.get('difficulty')
-  const oldGrade = history.get('oldGrade')
-  const oldRepetitionCount = history.get('repetitionCount')
-  const oldPreviousReviewMs = history.get('previousReviewMs')
+  const oldDifficulty = oldHistory.get('difficulty')
+  const oldGrade = oldHistory.get('grade')
+  const oldRepetitionCount = oldHistory.get('repetitionCount')
+  const oldPreviousReviewMs = oldHistory.get('previousReviewMs')
 
   const newDifficulty = computeNewDifficulty(oldDifficulty, oldGrade, newGrade)
   const newRepetitionCount = computeNewRepetitionCount(oldRepetitionCount, newGrade)
@@ -40,7 +40,7 @@ function getNewCardHistory(oldHistory, nowMs, newGrade) {
   }
 }
 
-export function gradeAndShowNextCard(nowMs, newGrade, deckId) {
+export function gradeAndShowNextCard(nowMs, deckId, newGrade) {
   return async (dispatch, getState, firebaseContext) => {
     // TODO
     dispatch(gradingCard())
@@ -73,13 +73,18 @@ export function showNextCard(nowMs, deckId) {
     const { cards, decks, review } = getState()
 
     const currentCardId = review.get('currentCardId')
-    const cardIds = decks
+    let cardIds = decks
       .getIn(['decks', deckId, 'cards'])
       .keySeq()
       .filter(cardId => {
         const history = cards.getIn(['cards', cardId, 'history'])
-        return cardId !== currentCardId && isDue(nowMs, history.get('nextReviewMs'), history.get('grade'))
+        return isDue(nowMs, history.get('nextReviewMs'), history.get('grade'))
       })
+
+    // We want to avoid repeating the same card twice, but only if there are other due cards.
+    if (cardIds.size > 1) {
+      cardIds = cardIds.filter(cardId => cardId != currentCardId)
+    }
 
     const randomCardId = cardIds
       .skip(getRandomInt(0, cardIds.size))

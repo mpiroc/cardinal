@@ -96,22 +96,10 @@ function deleteCardHistory({ ref }, uid, deckId, cardId) {
   return cardHistoryRef.remove()
 }
 
-export function saveCardHistory({ ref }, uid, deckId, cardId, {
-  grade,
-  difficulty,
-  repetitionCount,
-  previousReviewMs,
-  nextReviewMs,
-}) {
+export function saveCardHistory({ ref }, uid, deckId, cardId, history) {
   const cardHistoryRef = ref.child(`cardHistory/${uid}/${deckId}/${cardId}`)
 
-  return cardHistoryRef.set({
-    grade,
-    difficulty,
-    repetitionCount,
-    previousReviewMs,
-    nextReviewMs,
-  })
+  return cardHistoryRef.set(history)
 }
 
 // One-time fetch of history for all cards in a deck

@@ -9,10 +9,12 @@ export default function Review (props) {
     side1,
     side2,
     isAnswerVisible,
+    isCurrentCardSet,
     onToggleAnswerVisible,
+    onGrade,
   } = props
 
-  return (
+  return isCurrentCardSet ? (
     <div style={{ width: '50%', margin: '0 auto' }}>
       <Card style={{ margin: '1.8em 0 0 0', color: 'black' }}>
         <CardText>
@@ -27,15 +29,19 @@ export default function Review (props) {
           <MarkdownViewer markdown={props.side2} />
         </CardText>
         <CardActions>
-          <Button label={'0'} style={{ width: '3em' }} />
-          <Button label={'1'} style={{ width: '3em' }} />
-          <Button label={'2'} style={{ width: '3em' }} />
-          <Button label={'3'} style={{ width: '3em' }} />
-          <Button label={'4'} style={{ width: '3em' }} />
-          <Button label={'5'} style={{ width: '3em' }} />
+          <Button label={'0'} onClick={() => onGrade(0)} style={{ width: '3em' }} />
+          <Button label={'1'} onClick={() => onGrade(1)} style={{ width: '3em' }} />
+          <Button label={'2'} onClick={() => onGrade(2)} style={{ width: '3em' }} />
+          <Button label={'3'} onClick={() => onGrade(3)} style={{ width: '3em' }} />
+          <Button label={'4'} onClick={() => onGrade(4)} style={{ width: '3em' }} />
+          <Button label={'5'} onClick={() => onGrade(5)} style={{ width: '3em' }} />
         </CardActions>
       </Card>
       <ReviewSnackbarContainer />
+    </div>
+  ) : (
+    <div style={{ width: '50%', margin: '0 auto' }}>
+      <span>{'All done! You have no more cards to review right now.'}</span>
     </div>
   )
 }
@@ -44,5 +50,7 @@ Review.propTypes = {
   side1: PropTypes.string.isRequired,
   side2: PropTypes.string.isRequired,
   isAnswerVisible: PropTypes.bool.isRequired,
+  isCurrentCardSet: PropTypes.bool.isRequired,
   onToggleAnswerVisible: PropTypes.func.isRequired,
+  onGrade: PropTypes.func.isRequired,
 }
