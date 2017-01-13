@@ -1,10 +1,12 @@
 ## Dependencies
 
-* [node.js](https://nodejs.org/en/). You can download it from nodejs.com, or install it through your favorite package manager (i.e. `apt-get install node`).
-* Once node.js is installed, navigate to the root of this repository and run `npm install` to install remaining dependencies.
+ * [node.js](https://nodejs.org/en/). You can download it from nodejs.com, or install it through your favorite package manager (i.e. `apt-get install node`).
+ * Once node.js is installed, navigate to the root of this repository and run `npm install` to install remaining dependencies.
 
+    ```
     cd /my/repos/cardinal
     npm install
+    ```
 
 ## Running in development mode
 
