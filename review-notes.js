@@ -108,8 +108,8 @@ showNextCard(deckId) {
   }
 }
 
-async function gradeCard(uid, deckId, cardId, grade) {
-  return (dispatch, getState, firebaseContext) => {
+function gradeCard(uid, deckId, cardId, grade) {
+  return async (dispatch, getState, firebaseContext) => {
     dispatch(gradingCard())
 
     try {

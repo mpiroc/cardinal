@@ -24,35 +24,43 @@ export function computeNewRepetitionCount(previousRepetitionCount, grade) {
   return previousRepetitionCount + 1
 }
 
-export function computeNextReviewMoment(now, previousReviewMoment, repetitionCount, difficulty) {
+export function computeNextReviewMs(nowMs, previousReviewMs, repetitionCount, difficulty) {
   validateRepetitionCount(repetitionCount)
   validateDifficulty(difficulty)
-  validateMoment(now)
-  validateMoment(previousReviewMoment)
 
-  if (!previousReviewMoment.isBefore(now)) {
-    throw Error(`The last recorded review occurred in the future (received ${previousReviewMoment.format()}, but now is ${now.format()}`)
+  if (nowMs === undefined || nowMs === null) {
+    throw new Error(`nowMs must have a failure (received ${nowMs})`)
   }
 
-  const interval = computeNewInterval(repetitionCount, difficulty, now.diff(previousReviewMoment))
+  const intervalMs = computeNewIntervalMs(repetitionCount, difficulty, nowMs, previousReviewMs)
 
-  return now.add(interval)
+  return nowMs + intervalMs
 }
 
-function computeNewInterval(repetitionCount, difficulty, previousIntervalMs) {
+function computeNewIntervalMs(repetitionCount, difficulty, nowMs, previousReviewMs) {
   if (repetitionCount === 0) {
-    return moment.duration(0, 'days')
+    return moment.duration(0, 'days').valueOf()
   }
 
   if (repetitionCount === 1) {
-    return moment.duration(1, 'days')
+    return moment.duration(1, 'days').valueOf()
   }
 
   if (repetitionCount === 2) {
-    return moment.duration(6, 'days')
+    return moment.duration(6, 'days').valueOf()
   }
 
-  return moment.duration(previousIntervalMs * difficulty)
+  if (previousReviewMs === undefined) {
+    throw Error('Card was reviewed at least three times, but has no recorded previous review time.')
+  }
+
+  const intervalMs = nowMs - previousReviewMs
+
+  if (intervalMs < 0) {
+    throw Error(`The last recorded review occurred in the future (received ${moment(previousReviewMs).format()}, but now is ${moment(nowMs).format()}`)
+  }
+
+  return intervalMs * difficulty
 }
 
 function validateDifficulty(difficulty) {
@@ -81,11 +89,5 @@ function validateRepetitionCount(repetitionCount) {
 
   if (repetitionCount < 0) {
     throw Error(`repetitionCount must not be negative (received ${repetitionCount})`)
-  }
-}
-
-function validateMoment(moment) {
-  if (!moment) {
-    throw Error(`moment must have a value (received ${moment})`)
   }
 }

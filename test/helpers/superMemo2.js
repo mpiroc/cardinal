@@ -1,7 +1,11 @@
 import 'babel-polyfill'
 import chai, { expect } from 'chai'
 import moment from 'moment'
-import { computeNewDifficulty, computeNewRepetitionCount, computeNextReviewMoment } from 'helpers/superMemo2'
+import {
+  computeNewDifficulty,
+  computeNewRepetitionCount,
+  computeNextReviewMs,
+} from 'helpers/superMemo2'
 
 describe('SuperMemo 2 helpers', function() {
   describe('computeNewDifficulty', function() {
@@ -73,103 +77,64 @@ describe('SuperMemo 2 helpers', function() {
     })
   })
 
-  describe('computeNextReviewMoment', function() {
-    const previousReviewMoment = moment([2017, 0, 1, 0, 0, 0, 0])
-    const now = moment([2017, 0, 5, 0, 0, 0, 0])
+  describe('computeNextReviewMs', function() {
+    const previousReviewMs = moment([2017, 0, 1, 0, 0, 0, 0]).valueOf()
+    const nowMs = moment([2017, 0, 5, 0, 0, 0, 0]).valueOf()
 
     it('should exist', function() {
-      expect(computeNextReviewMoment).to.exist
+      expect(computeNextReviewMs).to.exist
     })
 
     it('should throw if \'now\' does not have a value', function() {
-      expect(() => computeNextReviewMoment(null, previousReviewMoment.clone(), 2, 1.5)).to.throw(Error)
-      expect(() => computeNextReviewMoment(undefined, previousReviewMoment.clone(), 8, 5.6)).to.throw(Error)
+      expect(() => computeNextReviewMs(null, previousReviewMs, 2, 1.5)).to.throw(Error)
+      expect(() => computeNextReviewMs(undefined, previousReviewMs, 8, 5.6)).to.throw(Error)
     })
     
-    it('should throw if \'previousReviewMoment\' does not have a value', function() {
-      expect(() => computeNextReviewMoment(now.clone(), null, 2, 1.5)).to.throw(Error)
-      expect(() => computeNextReviewMoment(now.clone(), undefined, 8, 5.6)).to.throw(Error)
-    })
-
     it('should throw on negative repetition count', function() {
-      expect(() => computeNextReviewMoment(now.clone(), previousReviewMoment.clone(), -1, 2.5)).to.throw(Error)
+      expect(() => computeNextReviewMs(nowMs, previousReviewMs, -1, 2.5)).to.throw(Error)
     })
 
     it('should throw on non-integer repetition count', function() {
-      expect(() => computeNextReviewMoment(now.clone(), previousReviewMoment.clone(), 1.5, 2.5)).to.throw(Error)
+      expect(() => computeNextReviewMs(nowMs, previousReviewMs, 1.5, 2.5)).to.throw(Error)
     })
 
     it('should throw if difficulty is below minimum', function() {
-      expect(() => computeNextReviewMoment(now.clone(), previousReviewMoment.clone(), 2, 1.2)).to.throw(Error)
+      expect(() => computeNextReviewMs(nowMs, previousReviewMs, 2, 1.2)).to.throw(Error)
     })
 
-    it('should throw if previousReviewMoment is not before now', function() {
-      const badPreviousReviewMoment = now.clone().add(1, 'days')
-      expect(() => computeNextReviewMoment(now.clone(), badPreviousReviewMoment.clone(), 2, 2.5)).to.throw(Error)
+    it('should throw if previousReviewMs is not before nowMs', function() {
+      const badPreviousReviewMs = moment(nowMs).add(1, 'days').valueOf()
+      expect(() => computeNextReviewMs(nowMs, badPreviousReviewMs, 3, 2.5)).to.throw(Error)
     })
     
     it('should reschedule for today on memory lapse', function() {
-      expect(
-        computeNextReviewMoment(
-          now.clone(),
-          previousReviewMoment.clone(),
-          0,
-          1.5
-        ).valueOf()
-      ).to.equal(now.clone().valueOf())
+      expect(computeNextReviewMs(nowMs, previousReviewMs, 0, 1.5)).to.equal(nowMs)
     })
 
     it('should schedule for tomorrow on first correct answer', function() {
-      expect(
-        computeNextReviewMoment(
-          now.clone(),
-          previousReviewMoment.clone(),
-          1,
-          2
-        ).valueOf()
-      ).to.equal(now.clone().add(1, 'days').valueOf())
+      const tomorrowMs = moment(nowMs).add(1, 'days').valueOf()
+      expect(computeNextReviewMs(nowMs, previousReviewMs, 1, 2)).to.equal(tomorrowMs)
     })
 
     it('should schedule for six days from now on second correct answer', function() {
-      expect(
-        computeNextReviewMoment(
-          now.clone(),
-          previousReviewMoment.clone(),
-          2,
-          2.5
-        ).valueOf()
-      ).to.equal(now.clone().add(6, 'days').valueOf())
+      const sixDaysFromNowMs = moment(nowMs).add(6, 'days').valueOf()
+      expect(computeNextReviewMs(nowMs, previousReviewMs, 2, 2.5)).to.equal(sixDaysFromNowMs)
     })
 
     it('should schedule for $previousInterval * $difficulty on three or more correct answers', function() {
-      const difficulty = 2.5
+      let resultMs
 
-      expect(
-        computeNextReviewMoment(
-          now.clone(),
-          previousReviewMoment.clone(),
-          3,
-          2.5
-        ).valueOf()
-      ).to.equal(now.clone().add(10, 'days').valueOf())
+      const tenDaysFromNowMs = moment(nowMs).add(10, 'days').valueOf()
+      resultMs = computeNextReviewMs(nowMs, previousReviewMs, 3, 2.5)
+      expect(resultMs).to.equal(tenDaysFromNowMs)
       
-      expect(
-        computeNextReviewMoment(
-          now.clone(),
-          previousReviewMoment.clone(),
-          5,
-          3
-        ).valueOf()
-      ).to.equal(now.clone().add(12, 'days').valueOf())
+      const twelveDaysFromNowMs = moment(nowMs).add(12, 'days').valueOf()
+      resultMs = computeNextReviewMs(nowMs, previousReviewMs, 5, 3)
+      expect(resultMs).to.equal(twelveDaysFromNowMs)
       
-      expect(
-        computeNextReviewMoment(
-          now.clone(),
-          previousReviewMoment.clone(),
-          9,
-          2
-        ).valueOf()
-      ).to.equal(now.clone().add(8, 'days').valueOf())
+      const eightDaysFromNowMs = moment(nowMs).add(8, 'days').valueOf()
+      resultMs = computeNextReviewMs(nowMs, previousReviewMs, 9, 2)
+      expect(resultMs).to.equal(eightDaysFromNowMs)
     })
   })
 })

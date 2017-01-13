@@ -8,7 +8,7 @@ const TOGGLE_ANSWER_VISIBLE = 'TOGGLE_ANSWER_VISIBLE'
 
 // thunks
 export function gradeCard(grade) {
-  return (dispatch, getState, firebaseContext) => {
+  return async (dispatch, getState, firebaseContext) => {
     // TODO
   }
 }
