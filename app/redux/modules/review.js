@@ -17,6 +17,7 @@ const TOGGLE_ANSWER_VISIBLE = 'TOGGLE_ANSWER_VISIBLE'
 const GRADING_CARD = 'GRADING_CARD'
 const GRADING_CARD_SUCCESS = 'GRADING_CARD_SUCCESS'
 const GRADING_CARD_FAILURE = 'GRADING_CARD_FAILURE'
+const DISMISS_REVIEW_SNACKBAR = 'DISMISS_REVIEW_SNACKBAR'
 
 // thunks
 function getNewCardHistory(oldHistory, nowMs, newGrade) {
@@ -122,12 +123,39 @@ function gradingCardFailure(error) {
   }
 }
 
+export function dismissReviewSnackbar() {
+  return {
+    type: DISMISS_REVIEW_SNACKBAR,
+  }
+}
+
+const initialSnackbarState = Map({
+  isActive: false,
+  error: '',
+})
+
+function snackbar(state = initialSnackbarState, action) {
+  switch(action.type) {
+    case GRADING_CARD_FAILURE:
+      return state
+        .set('isActive', true)
+        .set('error', action.error)
+    case DISMISS_REVIEW_SNACKBAR:
+      return state
+        .set('isActive', false)
+        .set('error', '')
+    default:
+      return state
+  }
+}
+
 // Reducers
 const initialState = Map({
   currentCardId: '',
   isAnswerVisible: false,
   isGradingCard: false,
   gradingError: '',
+  snackbar: snackbar(undefined, { type: undefined }),
 })
 
 export default function review(state = initialState, action) {
@@ -148,6 +176,9 @@ export default function review(state = initialState, action) {
       return state
         .set('isGradingCard', false)
         .set('gradingError', action.error)
+        .set('snackbar', snackbar(state.get('snackbar'), action))
+    case DISMISS_REVIEW_SNACKBAR:
+      return state.set('snackbar', snackbar(state.get('snackbar'), action))
     default:
       return state
   }
