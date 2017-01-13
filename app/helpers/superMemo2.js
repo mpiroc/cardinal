@@ -2,51 +2,57 @@
 import moment from 'moment'
 
 const minimumDifficulty = 1.3
+const minimumCorrectGrade = 3
 
-export function computeNewDifficulty(previousDifficulty, grade) {
-  validateDifficulty(previousDifficulty)
-  validateGrade(grade)
+export function computeNewDifficulty(oldDifficulty, oldGrade, newGrade) {
+  validateDifficulty(oldDifficulty)
+  validateGrade(oldGrade)
+  validateGrade(newGrade)
 
-  let result = previousDifficulty - 0.8 + 0.28 * grade - 0.02 * grade * grade
+  if (oldGrade < minimumCorrectGrade) {
+    return oldDifficulty
+  }
+
+  let result = oldDifficulty - 0.8 + 0.28 * newGrade - 0.02 * newGrade * newGrade
   result = result.toFixed(2)
 
   return Math.max(result, minimumDifficulty)
 }
 
-export function computeNewRepetitionCount(previousRepetitionCount, grade) {
-  validateRepetitionCount(previousRepetitionCount)
-  validateGrade(grade)
+export function computeNewRepetitionCount(oldRepetitionCount, newGrade) {
+  validateRepetitionCount(oldRepetitionCount)
+  validateGrade(newGrade)
 
-  if (grade < 3) {
+  if (newGrade < minimumCorrectGrade) {
     return 0
   }
 
-  return previousRepetitionCount + 1
+  return oldRepetitionCount + 1
 }
 
-export function computeNextReviewMs(nowMs, previousReviewMs, repetitionCount, difficulty) {
-  validateRepetitionCount(repetitionCount)
-  validateDifficulty(difficulty)
+export function computeNextReviewMs(nowMs, previousReviewMs, newRepetitionCount, newDifficulty) {
+  validateRepetitionCount(newRepetitionCount)
+  validateDifficulty(newDifficulty)
 
   if (nowMs === undefined || nowMs === null) {
     throw new Error(`nowMs must have a failure (received ${nowMs})`)
   }
 
-  const intervalMs = computeNewIntervalMs(repetitionCount, difficulty, nowMs, previousReviewMs)
+  const intervalMs = computeNewIntervalMs(newRepetitionCount, newDifficulty, nowMs, previousReviewMs)
 
   return nowMs + intervalMs
 }
 
-function computeNewIntervalMs(repetitionCount, difficulty, nowMs, previousReviewMs) {
-  if (repetitionCount === 0) {
+function computeNewIntervalMs(newRepetitionCount, newDifficulty, nowMs, previousReviewMs) {
+  if (newRepetitionCount === 0) {
     return moment.duration(0, 'days').valueOf()
   }
 
-  if (repetitionCount === 1) {
+  if (newRepetitionCount === 1) {
     return moment.duration(1, 'days').valueOf()
   }
 
-  if (repetitionCount === 2) {
+  if (newRepetitionCount === 2) {
     return moment.duration(6, 'days').valueOf()
   }
 
@@ -60,7 +66,7 @@ function computeNewIntervalMs(repetitionCount, difficulty, nowMs, previousReview
     throw Error(`The last recorded review occurred in the future (received ${moment(previousReviewMs).format()}, but now is ${moment(nowMs).format()}`)
   }
 
-  return intervalMs * difficulty
+  return intervalMs * newDifficulty
 }
 
 function validateDifficulty(difficulty) {
