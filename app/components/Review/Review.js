@@ -12,7 +12,7 @@ export default function Review (props) {
   } = props
 
   return (
-    <div>
+    <div style={{ width: '50%', margin: '0 auto' }}>
       <Card style={{ margin: '1.8em 0 0 0', color: 'black' }}>
         <CardText>
           <MarkdownViewer markdown={props.side1} />

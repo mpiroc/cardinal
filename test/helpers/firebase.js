@@ -380,11 +380,9 @@ describe('firebase helper', function() {
 
       expect(cardHistorySetStub).to.have.been.calledOnce
       expect(cardHistorySetStub).to.have.been.calledWith(sinon.match({
-        grade: -1,
+        grade: 0,
         difficulty: 2.5,
         repetitionCount: 0,
-        previousReviewMoment: -1,
-        nextReviewMoment: -1,
       }))
     })
   })

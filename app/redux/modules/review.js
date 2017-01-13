@@ -7,6 +7,12 @@ const SET_CURRENT_CARD = 'SET_CURRENT_CARD'
 const TOGGLE_ANSWER_VISIBLE = 'TOGGLE_ANSWER_VISIBLE'
 
 // thunks
+export function gradeCard(grade) {
+  return (dispatch, getState, firebaseContext) => {
+    // TODO
+  }
+}
+
 export function showNextCard(deckId) {
   return (dispatch, getState, firebaseContext) => {
     const { cards, decks, review } = getState()

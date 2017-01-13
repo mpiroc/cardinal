@@ -10,12 +10,14 @@ export default function CardRTCard ({
   isDeleting,
   side1,
   side2,
+  nextReview,
   onEdit,
   onDelete,
 }) {
   return (
     <div style={{display: 'flex', flexDirection: 'row', margin: '0 auto 1.8rem auto' }}>
       <Card style={{ width: '50%', justifyContent: 'space-between' }}>
+        { nextReview ? <CardTitle subtitle={`Next due: ${nextReview}`} /> : null }
         <CardText>
           <MarkdownViewer data-test-id='side1MarkdownViewer' markdown={side1} />
           {
@@ -51,6 +53,7 @@ CardRTCard.propTypes = {
   isDeleting: PropTypes.bool.isRequired,
   side1: PropTypes.string.isRequired,
   side2: PropTypes.string.isRequired,
+  nextReview: PropTypes.string.isRequired,
   onEdit: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
 }
