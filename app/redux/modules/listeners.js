@@ -273,6 +273,18 @@ const initialCardHistoriesState = Map({
 
 function cardHistories(state = initialCardHistoriesState, action) {
   switch(action.type) {
+    case ADD_CARD_HISTORY_ADDED_LISTENER:
+      return state.set('added', true)
+    case ADD_CARD_HISTORY_REMOVED_LISTENER:
+      return state.set('removed', true)
+    case ADD_CARD_HISTORY_VALUE_LISTENER:
+      return state.setIn(['histories', action.cardId], true)
+    case REMOVE_CARD_HISTORY_ADDED_LISTENER:
+      return state.set('added', false)
+    case REMOVE_CARD_HISTORY_REMOVED_LISTENER:
+      return state.set('removed', false)
+    case REMOVE_CARD_HISTORY_VALUE_LISTENER:
+      return state.deleteIn(['histories', action.cardId])
     default:
       return state
   }
@@ -302,6 +314,11 @@ export default function listeners (state = initialState, action) {
     case ADD_DECK_CARD_VALUE_LISTENER:
       path = ['deckCards', action.deckId]
       return state.setIn(path, deckCards(state.getIn(path), action))
+    case ADD_CARD_HISTORY_ADDED_LISTENER:
+    case ADD_CARD_HISTORY_REMOVED_LISTENER:
+    case ADD_CARD_HISTORY_VALUE_LISTENER:
+      path = ['cardHistories', action.deckId]
+      return state.setIn(path, cardHistories(state.getIn(path), action))
     case ADD_AUTH_STATE_CHANGED_LISTENER:
       return state.set('authStateChanged', true)
     case REMOVE_USER_VALUE_LISTENER:
@@ -316,6 +333,11 @@ export default function listeners (state = initialState, action) {
     case REMOVE_DECK_CARD_VALUE_LISTENER:
       path = ['deckCards', action.deckId]
       return state.setIn(path, deckCards(state.getIn(path), action))
+    case REMOVE_CARD_HISTORY_ADDED_LISTENER:
+    case REMOVE_CARD_HISTORY_REMOVED_LISTENER:
+    case REMOVE_CARD_HISTORY_VALUE_LISTENER:
+      path = ['cardHistories', action.deckId]
+      return state.setIn(path, cardHistories(state.getIn(path), action))
     default:
       return state
   }
