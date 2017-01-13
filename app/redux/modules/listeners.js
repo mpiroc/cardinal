@@ -9,6 +9,9 @@ const ADD_USER_DECK_VALUE_LISTENER = 'ADD_USER_DECK_VALUE_LISTENER'
 const ADD_DECK_CARD_ADDED_LISTENER = 'ADD_DECK_CARD_ADDED_LISTENER'
 const ADD_DECK_CARD_REMOVED_LISTENER = 'ADD_DECK_CARD_REMOVED_LISTENER'
 const ADD_DECK_CARD_VALUE_LISTENER = 'ADD_DECK_CARD_VALUE_LISTENER'
+const ADD_CARD_HISTORY_ADDED_LISTENER = 'ADD_CARD_HISTORY_ADDED_LISTENER'
+const ADD_CARD_HISTORY_REMOVED_LISTENER = 'ADD_CARD_HISTORY_REMOVED_LISTENER'
+const ADD_CARD_HISTORY_VALUE_LISTENER = 'ADD_CARD_HISTORY_VALUE_LISTENER'
 const ADD_AUTH_STATE_CHANGED_LISTENER = 'ADD_AUTH_STATE_CHANGED_LISTENER'
 const REMOVE_USER_VALUE_LISTENER = 'REMOVE_USER_LISTENER'
 const REMOVE_USER_DECK_ADDED_LISTENER = 'REMOVE_USER_DECK_ADDED_LISTENER'
@@ -17,6 +20,9 @@ const REMOVE_USER_DECK_VALUE_LISTENER = 'REMOVE_USER_DECK_VALUE_LISTENER'
 const REMOVE_DECK_CARD_ADDED_LISTENER = 'REMOVE_DECK_CARD_ADDED_LISTENER'
 const REMOVE_DECK_CARD_REMOVED_LISTENER = 'REMOVE_DECK_CARD_REMOVED_LISTENER'
 const REMOVE_DECK_CARD_VALUE_LISTENER = 'REMOVE_DECK_CARD_VALUE_LISTENER'
+const REMOVE_CARD_HISTORY_ADDED_LISTENER = 'REMOVE_CARD_HISTORY_ADDED_LISTENER'
+const REMOVE_CARD_HISTORY_REMOVED_LISTENER = 'REMOVE_CARD_HISTORY_REMOVED_LISTENER'
+const REMOVE_CARD_HISTORY_VALUE_LISTENER = 'REMOVE_CARD_HISTORY_VALUE_LISTENER'
 
 // thunks
 // Note: Should not disable auth state changed listener
@@ -105,6 +111,28 @@ export function addDeckCardValueListener(deckId, cardId) {
   }
 }
 
+export function addCardHistoryAddedListener(deckId) {
+  return {
+    type: ADD_CARD_HISTORY_ADDED_LISTENER,
+    deckId,
+  }
+}
+
+export function addCardHistoryRemovedListener(deckId) {
+  return {
+    type: ADD_CARD_HISTORY_REMOVED_LISTENER,
+    deckId,
+  }
+}
+
+export function addCardHistoryValueListener(deckId, cardId) {
+  return {
+    type: ADD_CARD_HISTORY_VALUE_LISTENER,
+    deckId,
+    cardId,
+  }
+}
+
 export function addAuthStateChangedListener() {
   return {
     type: ADD_AUTH_STATE_CHANGED_LISTENER
@@ -162,6 +190,28 @@ export function removeDeckCardValueListener(deckId, cardId) {
   }
 }
 
+export function removeCardHistoryAddedListener(deckId) {
+  return {
+    type: REMOVE_CARD_HISTORY_ADDED_LISTENER,
+    deckId,
+  }
+}
+
+export function removeCardHistoryRemovedListener(deckId) {
+  return {
+    type: REMOVE_CARD_HISTORY_REMOVED_LISTENER,
+    deckId,
+  }
+}
+
+export function removeCardHistoryValueListener(deckId, cardId) {
+  return {
+    type: REMOVE_CARD_HISTORY_VALUE_LISTENER,
+    deckId,
+    cardId,
+  }
+}
+
 // userDecks reducer
 const initialUserDecksState = Map({
   added: false,
@@ -214,11 +264,26 @@ function deckCards(state = initialDeckCardsState, action) {
   }
 }
 
+// cardHistories reducer
+const initialCardHistoriesState = Map({
+  added: false,
+  removed: false,
+  histories: Map(),
+})
+
+function cardHistories(state = initialCardHistoriesState, action) {
+  switch(action.type) {
+    default:
+      return state
+  }
+}
+
 // listeners reducer
 const initialState = Map({
   users: Map(),
   userDecks: Map(),
   deckCards: Map(),
+  cardHistories: Map(),
   authStateChanged: false,
 })
 

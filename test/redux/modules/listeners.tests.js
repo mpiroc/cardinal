@@ -13,6 +13,9 @@ import listenersReducer, {
   addDeckCardAddedListener,
   addDeckCardRemovedListener,
   addDeckCardValueListener,
+  addCardHistoryAddedListener,
+  addCardHistoryRemovedListener,
+  addCardHistoryValueListener,
   addAuthStateChangedListener,
   removeUserValueListener,
   removeUserDeckAddedListener,
@@ -21,6 +24,9 @@ import listenersReducer, {
   removeDeckCardAddedListener,
   removeDeckCardRemovedListener,
   removeDeckCardValueListener,
+  removeCardHistoryAddedListener,
+  removeCardHistoryRemovedListener,
+  removeCardHistoryValueListener,
 } from 'redux/modules/listeners'
 import {
   updateUser,
@@ -66,16 +72,22 @@ describe('listeners', function() {
 
         expect(listeners.get('users').size).to.equal(0)
 
-        listeners.get('userDecks').forEach((userDeck, uid) => {
+        listeners.get('userDecks').forEach(userDeck => {
           expect(userDeck.get('added')).to.be.false
           expect(userDeck.get('removed')).to.be.false
           expect(userDeck.get('decks').size).to.equal(0)
         })
 
-        listeners.get('deckCards').forEach((deckCard, deckId) => {
+        listeners.get('deckCards').forEach(deckCard => {
           expect(deckCard.get('added')).to.be.false
           expect(deckCard.get('removed')).to.be.false
           expect(deckCard.get('cards').size).to.equal(0)
+        })
+
+        listeners.get('cardHistories').forEach(cardHistory => {
+          expect(cardHistory.get('added')).to.be.false
+          expect(cardHistory.get('removed')).to.be.false
+          expect(cardHistory.get('cardHistories').size).to.equal(0)
         })
       })
     })
@@ -163,6 +175,42 @@ describe('listeners', function() {
         store.dispatch(addDeckCardValueListener('myDeckId', 'myCardId'))
 
         expect(store.getState().listeners.getIn(['deckCards', 'myDeckId', 'cards', 'myCardId'])).to.be.true
+      })
+    })
+
+    describe('addCardHistoryAddedListener', function() {
+      it('should exist', function() {
+        expect(addCardHistoryAddedListener).to.exist
+      })
+
+      it('should set the correct listener flag', function() {
+        store.dispatch(addCardHistoryAddedListener('myDeckId'))
+
+        expect(store.getState().listeners.getIn(['cardHistories', 'myDeckId', 'added'])).to.be.true
+      })
+    })
+    
+    describe('addCardHistoryRemovedListener', function() {
+      it('should exist', function() {
+        expect(addCardHistoryRemovedListener).to.exist
+      })
+
+      it('should set the correct listener flag', function() {
+        store.dispatch(addCardHistoryRemovedListener('myDeckId'))
+
+        expect(store.getState().listeners.getIn(['cardHistories', 'myDeckId', 'removed'])).to.be.true
+      })
+    })
+    
+    describe('addCardHistoryValueListener', function() {
+      it('should exist', function() {
+        expect(addCardHistoryValueListener).to.exist
+      })
+
+      it('should set the correct listener flag', function() {
+        store.dispatch(addCardHistoryValueListener('myDeckId', 'myCardId'))
+
+        expect(store.getState().listeners.getIn(['cardHistories', 'myDeckId', 'histories', 'myCardId'])).to.be.true
       })
     })
     
@@ -260,6 +308,45 @@ describe('listeners', function() {
         store.dispatch(removeDeckCardValueListener('myDeckId', 'myCardId'))
 
         expect(store.getState().listeners.getIn(['deckCards', 'myDeckId', 'cards', 'myCardId'])).to.not.exist
+      })
+    })
+
+    describe('removeCardHistoryAddedListener', function() {
+      it('should exist', function() {
+        expect(removeCardHistoryAddedListener).to.exist
+      })
+
+      it('should set the correct listener flag', function() {
+        store.dispatch(addCardHistoryAddedListener('myDeckId'))
+        store.dispatch(removeCardHistoryAddedListener('myDeckId'))
+
+        expect(store.getState().listeners.getIn(['cardHistories', 'myDeckId', 'added'])).to.be.false
+      })
+    })
+    
+    describe('removeCardHistoryRemovedListener', function() {
+      it('should exist', function() {
+        expect(removeCardHistoryRemovedListener).to.exist
+      })
+
+      it('should set the correct listener flag', function() {
+        store.dispatch(addCardHistoryRemovedListener('myDeckId'))
+        store.dispatch(removeCardHistoryRemovedListener('myDeckId'))
+
+        expect(store.getState().listeners.getIn(['cardHistories', 'myDeckId', 'removed'])).to.be.false
+      })
+    })
+    
+    describe('removeCardHistoryValueListener', function() {
+      it('should exist', function() {
+        expect(removeCardHistoryValueListener).to.exist
+      })
+
+      it('should set the correct listener flag', function() {
+        store.dispatch(addCardHistoryValueListener('myDeckId', 'myCardId'))
+        store.dispatch(removeCardHistoryValueListener('myDeckId', 'myCardId'))
+
+        expect(store.getState().listeners.getIn(['cardHistories', 'myDeckId', 'cards', 'myCardId'])).to.not.exist
       })
     })
   })
