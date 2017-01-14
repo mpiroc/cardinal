@@ -1,3 +1,4 @@
+// Attribution: Algorithm SM-2, © Copyright SuperMemo World, 1991.  www.supermemo.com, www.supermemo.eu
 // Implementation of the SuperMemo 2 algorithm as specified here: https://www.supermemo.com/english/ol/sm2.htm
 import moment from 'moment'
 
