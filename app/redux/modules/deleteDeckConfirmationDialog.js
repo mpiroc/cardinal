@@ -53,7 +53,11 @@ export default function deleteDeckConfirmationDialog(state = initialState, actio
         .set('name', action.name)
         .set('cardCount', action.cardCount)
     case CLOSE_DELETE_DECK_CONFIRMATION_DIALOG:
-      return initialState
+      // Don't reset name or cardCount, because the dialog message will remain
+      // visible briefly while the dialog is fading out of view.
+      return state
+        .set('isActive', false)
+        .set('deckId', '')
     default:
       return state
   }
