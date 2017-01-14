@@ -3,8 +3,8 @@ import { withRouter } from 'react-router'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import DeckRTCard from 'components/DeckRTCard/DeckRTCard'
-import * as deckActionCreators from 'redux/modules/decks'
-import * as editDeckDialogActionCreators from 'redux/modules/editDeckDialog'
+import { openDeleteDeckConfirmationDialog } from 'redux/modules/deleteDeckConfirmationDialog'
+import { openEditDeckDialog } from 'redux/modules/editDeckDialog'
 
 function mapStateToProps ({ auth, decks }, { deckId }) {
   const deck = decks.getIn(['decks', deckId])
@@ -19,14 +19,14 @@ function mapStateToProps ({ auth, decks }, { deckId }) {
 
 function mapDispatchToProps (dispatch, ownProps) {
   return bindActionCreators({
-    ...deckActionCreators,
-    ...editDeckDialogActionCreators
+    openDeleteDeckConfirmationDialog,
+    openEditDeckDialog,
   }, dispatch)
 }
 
 function mergeProps (
     { uid, isDeleting, name, description, cardCount },
-    { openEditDeckDialog, deleteAndHandleDeck },
+    { openDeleteDeckConfirmationDialog, openEditDeckDialog },
     { deckId, router }) {
   return {
     deckId,
@@ -37,7 +37,7 @@ function mergeProps (
     onReview: () => router.replace(`review/${deckId}`),
     onView: () => router.replace(`deck/${deckId}`),
     onEdit: () => openEditDeckDialog(deckId, name, description),
-    onDelete: () => deleteAndHandleDeck(uid, deckId),
+    onDelete: () => openDeleteDeckConfirmationDialog(deckId, name, cardCount),
   }
 }
 
