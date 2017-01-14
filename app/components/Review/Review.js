@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 import { Card, CardText, CardActions } from 'react-toolbox/lib/card'
-import { Button } from 'react-toolbox/lib/Button'
+import { Button } from 'react-toolbox/lib/button'
 import MarkdownViewer from 'components/MarkdownViewer/MarkdownViewer'
 import ReviewSnackbarContainer from 'containers/Review/ReviewSnackbarContainer'
 
