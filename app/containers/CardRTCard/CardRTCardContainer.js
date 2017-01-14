@@ -3,8 +3,8 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import moment from 'moment'
 import CardRTCard from 'components/CardRTCard/CardRTCard'
-import * as cardActionCreators from 'redux/modules/cards'
-import * as editCardDialogActionCreators from 'redux/modules/editCardDialog'
+import { openDeleteCardConfirmationDialog } from 'redux/modules/deleteCardConfirmationDialog'
+import { openEditCardDialog } from 'redux/modules/editCardDialog'
 
 function formatNextReview(nextReviewMs) {
   if (nextReviewMs === undefined) {
@@ -43,14 +43,14 @@ function mapStateToProps ({ cards }, { cardId }) {
 
 function mapDispatchToProps (dispatch, ownProps) {
   return bindActionCreators({
-    ...cardActionCreators,
-    ...editCardDialogActionCreators,
+    openDeleteCardConfirmationDialog,
+    openEditCardDialog,
   }, dispatch)
 }
 
 function mergeProps (
     { isLoading, isDeleting, side1, side2, nextReview, },
-    { openEditCardDialog, deleteAndHandleCard },
+    { openEditCardDialog, openDeleteCardConfirmationDialog },
     { deckId, cardId }) {
   return {
     isLoading,
@@ -65,7 +65,7 @@ function mergeProps (
       side1,
       side2,
     ),
-    onDelete: () => deleteAndHandleCard(
+    onDelete: () => openDeleteCardConfirmationDialog(
       deckId,
       cardId,
     ),

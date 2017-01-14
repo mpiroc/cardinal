@@ -4,7 +4,6 @@ import { Button } from 'react-toolbox/lib/button'
 import ProgressBar from 'react-toolbox/lib/progress_bar'
 import Delay from 'react-delay'
 import MarkdownViewer from 'components/MarkdownViewer/MarkdownViewer'
-import EditCardDialogContainer from 'containers/EditCardDialog/EditCardDialogContainer'
 
 export default function CardRTCard ({
   isDeleting,
@@ -35,8 +34,6 @@ export default function CardRTCard ({
         </CardText>
         <CardActions>
           <Button data-test-id='editButton' label={'Edit'} onClick={onEdit} />
-          <EditCardDialogContainer />
-
           <Button data-test-id='deleteButton' label={'Delete'} onClick={onDelete} />
         </CardActions>
       </Card>
