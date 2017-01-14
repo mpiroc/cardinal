@@ -17,6 +17,7 @@ export default function ConfirmationDialog ({
 
   return (
     <Dialog
+      data-test-id='dialog'
       active={isActive}
       onEscKeyDown={onCancel}
       onOverlayClick={onCancel}
