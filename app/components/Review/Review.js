@@ -38,9 +38,9 @@ export default function Review (props) {
         </CardActions>
       </Card>
       <ReviewSnackbarContainer />
-    </div>
+    </div>  
   ) : (
-    <div style={{ width: '50%', margin: '1.8em auto' }}>
+    <div style={{ textAlign: 'center', margin: '1.8em auto' }}>
       <span>{'All done! You have no more cards to review right now.'}</span>
     </div>
   )
