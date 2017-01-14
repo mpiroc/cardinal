@@ -26,7 +26,7 @@ DecksContainer.propTypes = {
 function mapStateToProps ({decks, auth}, ownProps) {
   return {
     decks: decks.get('decks'),
-    authedUid: auth.get('authedUid')
+    authedUid: auth.get('authedUid'),
   }
 }
 

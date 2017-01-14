@@ -173,10 +173,11 @@ describe('firebase helper', function() {
     it('should delete the correct records', function() {
       deleteDeck({ ref: refMock }, 'myUid', 'myDeckId')
 
-      expect(childStub).to.have.been.calledTwice
+      expect(childStub).to.have.been.calledThrice
       expect(childStub).to.have.been.calledWith('deckCards/myUid/myDeckId')
+      expect(childStub).to.have.been.calledWith('cardHistory/myUid/myDeckId')
       expect(childStub).to.have.been.calledWith('userDecks/myUid/myDeckId')
-      expect(removeStub).to.have.been.calledTwice
+      expect(removeStub).to.have.been.calledThrice
     })
   })
 

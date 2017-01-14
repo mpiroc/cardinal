@@ -13,6 +13,7 @@ function mapStateToProps ({ auth, decks }, { deckId }) {
     isDeleting: deck.get('isDeleting'),
     name: deck.get('name'),
     description: deck.get('description'),
+    cardCount: deck.get('cards').size,
   }
 }
 
@@ -24,13 +25,14 @@ function mapDispatchToProps (dispatch, ownProps) {
 }
 
 function mergeProps (
-    { uid, isDeleting, name, description },
+    { uid, isDeleting, name, description, cardCount },
     { openEditDeckDialog, deleteAndHandleDeck },
     { deckId, router }) {
   return {
     deckId,
     isDeleting,
     name,
+    cardCount,
     description: description ? description : '',
     onReview: () => router.replace(`review/${deckId}`),
     onView: () => router.replace(`deck/${deckId}`),

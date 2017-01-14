@@ -55,9 +55,9 @@ export default function EditDeckDialog ({
       </section>
       {
         // If save completes quickly, we don't want to briefly flash the progress bar. So we
-        // wait 250 milliseconds before showing it.
+        // wait briefly before showing it.
         isSaving === true ? (
-            <Delay wait={250}>
+            <Delay wait={1000}>
               <div style={{margin: '1.8rem 0 0 0'}}>
                 <ProgressBar type='linear' mode='indeterminate' />
               </div>

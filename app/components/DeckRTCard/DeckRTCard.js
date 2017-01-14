@@ -10,6 +10,7 @@ export default function DeckRTCard({
     isDeleting,
     name,
     description,
+    cardCount,
     onReview,
     onView,
     onEdit,
@@ -17,14 +18,14 @@ export default function DeckRTCard({
   }) {
   return (
     <Card style={{ width: '350px', margin: '0.9rem' }}>
-      <CardTitle title={name} subtitle={'Placeholder count'} />
+      <CardTitle title={name} subtitle={`${cardCount} ${cardCount === 1 ? 'card' : 'cards'}`} />
       <CardText>
         <span>{description}</span>
         {
           // If save completes quickly, we don't want to briefly flash the progress bar. So we
-          // wait 250 milliseconds before showing it.
+          // wait briefly before showing it.
           isDeleting === true ? (
-              <Delay wait={250}>
+              <Delay wait={1000}>
                 <div style={{margin: '1.8rem 0 0 0'}}>
                   <ProgressBar type='linear' mode='indeterminate' />
                 </div>
@@ -51,6 +52,7 @@ DeckRTCard.propTypes = {
   isDeleting: PropTypes.bool.isRequired,
   name: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
+  cardCount: PropTypes.number.isRequired,
   onReview: PropTypes.func.isRequired,
   onView: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,

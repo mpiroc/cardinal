@@ -22,9 +22,9 @@ export default function CardRTCard ({
           <MarkdownViewer data-test-id='side1MarkdownViewer' markdown={side1} />
           {
             // If save completes quickly, we don't want to briefly flash the progress bar. So we
-            // wait 250 milliseconds before showing it.
+            // wait briefly before showing it.
             isDeleting === true ? (
-                <Delay data-test-id='progressBarDelay' wait={250}>
+                <Delay data-test-id='progressBarDelay' wait={1000}>
                   <div style={{margin: '1.8rem 0 0 0'}}>
                     <ProgressBar data-test-id='progressBar' type='linear' mode='indeterminate' />
                   </div>
