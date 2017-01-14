@@ -10,3 +10,4 @@ deploy:
   acl: public_read
   on:
     repo: mpiroc/cardinal
+    branch: staging
