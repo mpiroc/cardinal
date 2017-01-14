@@ -3,7 +3,7 @@ import chai, { expect } from 'chai'
 import sinonChai from 'sinon-chai'
 import sinon from 'sinon'
 import { authUser } from 'redux/modules/auth'
-import { updateDeck, deckCardAddedReceived } from 'redux/modules/decks'
+import { updateDeck } from 'redux/modules/decks'
 import deleteDeckConfirmationDialogReducer, {
   openDeleteDeckConfirmationDialog,
   closeDeleteDeckConfirmationDialog,

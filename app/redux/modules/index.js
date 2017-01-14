@@ -1,6 +1,7 @@
 export auth from './auth'
 export cards from './cards'
 export decks from './decks'
+export deleteCardConfirmationDialog from './deleteCardConfirmationDialog'
 export deleteDeckConfirmationDialog from './deleteDeckConfirmationDialog'
 export editCardDialog from './editCardDialog'
 export editDeckDialog from './editDeckDialog'
