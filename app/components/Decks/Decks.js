@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react'
 import DeckRTCardContainer from 'containers/DeckRTCard/DeckRTCardContainer'
 import NewDeckRTCardContainer from 'containers/NewDeckRTCard/NewDeckRTCardContainer'
+import EditDeckDialogContainer from 'containers/EditDeckDialog/EditDeckDialogContainer'
 import DecksSnackbarContainer from 'containers/Decks/DecksSnackbarContainer'
 
 export default function Decks ({ decks }) {
@@ -17,6 +18,7 @@ export default function Decks ({ decks }) {
         )
       }</div>
       <NewDeckRTCardContainer />
+      <EditDeckDialogContainer />
       <DecksSnackbarContainer />
     </div>
   )
