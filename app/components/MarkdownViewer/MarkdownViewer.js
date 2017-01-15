@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 import marked from 'marked'
-import { markdownViewer } from './styles.css'
+import gfmCss from 'gfm.scss'
 
 export default function MarkdownViewer (props) {
   marked.setOptions({
@@ -16,7 +16,7 @@ export default function MarkdownViewer (props) {
   const innerHTML = marked(props.markdown)
 
   return (
-    <div className={markdownViewer} dangerouslySetInnerHTML={{ __html: innerHTML }} />
+    <div className={gfmCss['markdown-body']} dangerouslySetInnerHTML={{ __html: innerHTML }} />
   )
 }
 

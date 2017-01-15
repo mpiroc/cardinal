@@ -1,0 +1,31 @@
+// defaults
+
+$gfm-body-font-size:      16px !default;
+$gfm-code-font-size:      12px !default;
+$gfm-body-color:          #333;
+$gfm-link-color:          #4183c4;
+$gfm-body-font-family:    'Roboto',
+                          'Helvetica Neue',
+                          Helvetica,
+                          'Segoe UI',
+                          Arial,
+                          freesans,
+                          sans-serif !default;
+$gfm-code-font-family:    'Roboto Mono',
+                          Consolas,
+                          'Liberation Mono',
+                          Menlo,
+                          Courier,
+                          monospace !default;
+$gfm-input-font-family:   'Roboto',
+                          Helvetica,
+                          Arial,
+                          freesans,
+                          clean,
+                          sans-serif,
+                          'Segoe UI Emoji',
+                          'Segoe UI Symbol' !default;
+$gfm-header-font-family:  $gfm-body-font-family !default;
+$gfm-header-border:       'true' !default;
+
+@import 'node_modules/gfm.css/source/gfm.scss'
