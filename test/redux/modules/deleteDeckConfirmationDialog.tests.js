@@ -84,15 +84,15 @@ describe('deleteDeckConfirmationDialog', function() {
         expect(closeDeleteDeckConfirmationDialog).to.exist
       })
 
-      it('should reset all properties', function() {
+      it('should only reset non-visible properties', function() {
         store.dispatch(openDeleteDeckConfirmationDialog('myDeckId', 'myDeckName', 2))
         store.dispatch(closeDeleteDeckConfirmationDialog())
 
         const { deleteDeckConfirmationDialog } = store.getState()
         expect(deleteDeckConfirmationDialog.get('isActive')).to.be.false
         expect(deleteDeckConfirmationDialog.get('deckId')).to.equal('')
-        expect(deleteDeckConfirmationDialog.get('name')).to.equal('')
-        expect(deleteDeckConfirmationDialog.get('cardCount')).to.not.exist
+        expect(deleteDeckConfirmationDialog.get('name')).to.equal('myDeckName')
+        expect(deleteDeckConfirmationDialog.get('cardCount')).to.equal(2)
       })
     })
   })
