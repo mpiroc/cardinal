@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react'
 import marked from 'marked'
+import { highlightAuto } from 'highlightjs'
 import gfmCss from 'gfm.scss'
 
 export default function MarkdownViewer (props) {
@@ -11,6 +12,7 @@ export default function MarkdownViewer (props) {
     sanitize: true,
     smartLists: true,
     smartypants: true,
+    highlight: code => highlightAuto(code).value,
   })
 
   const innerHTML = marked(props.markdown)

@@ -22,6 +22,7 @@
   "dependencies": {
     "firebase": "^3.6.4",
     "gfm.css": "^1.1.1",
+    "highlightjs": "^9.8.0",
     "immutability-helper": "^2.0.0",
     "immutable": "^3.8.1",
     "marked": "^0.3.6",
