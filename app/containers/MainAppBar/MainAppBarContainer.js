@@ -1,18 +1,33 @@
 import React from 'react'
-import { withRouter } from 'react-router'
+import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import { replace } from 'react-router-redux'
 import MainAppBar from 'components/MainAppBar/MainAppBar'
 
-function mapStateToProps ({ auth }, { router }) {
+function mapStateToProps ({ auth }, ownProps) {
   return {
     isAuthed: auth.get('isAuthed'),
-    onNavigateToHome: () => router.replace('/'),
   }
 }
 
-export default withRouter(connect(
+function mapDispatchToProps (dispatch, ownProps) {
+  return bindActionCreators({
+    replace,
+  }, dispatch)
+}
+
+function mergeProps (stateProps, dispatchProps, ownProps) {
+  return {
+    isAuthed: stateProps.isAuthed,
+    onNavigateToHome: () => dispatchProps.replace('/'),
+  }
+}
+
+export default connect(
   mapStateToProps,
-)(MainAppBar))
+  mapDispatchToProps,
+  mergeProps,
+)(MainAppBar)
 
 
 

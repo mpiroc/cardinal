@@ -5,42 +5,48 @@ import { hashHistory } from 'react-router'
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
 import { Provider } from 'react-redux'
 import thunk from 'redux-thunk'
-import { routerReducer, syncHistoryWithStore } from 'react-router-redux'
+import { routerReducer, syncHistoryWithStore, routerMiddleware, replace } from 'react-router-redux'
 import * as reducers from 'redux/modules'
 import { setLoginRedirect } from 'redux/modules/loginRedirect'
 import getRoutes from 'config/routes'
 import 'react-toolbox/lib/commons.scss'
 import firebaseContext from 'config/firebase'
 
-const store = createStore(combineReducers({...reducers, routing: routerReducer}), compose(
-  applyMiddleware(thunk.withExtraArgument(firebaseContext)),
-  window.devToolsExtension ? window.devToolsExtension() : (f) => f
-))
+let history = hashHistory
 
-const history = syncHistoryWithStore(hashHistory, store)
+const store = createStore(
+  combineReducers({...reducers, routing: routerReducer}),
+  compose(
+    applyMiddleware(
+      thunk.withExtraArgument(firebaseContext),
+      routerMiddleware(history),
+    ),
+    window.devToolsExtension ? window.devToolsExtension() : (f) => f
+  )
+)
 
-function requireAuth(nextState, replace) {
+history = syncHistoryWithStore(history, store)
+
+function handleEnter(nextState) {
+  const destinationPath = nextState.location.pathname
   const isAuthed = store.getState().auth.get('isAuthed')
 
-  if (isAuthed !== true) {
-    store.dispatch(setLoginRedirect(nextState.location.pathname))
-    replace('/login')
+  if (isAuthed == true && (destinationPath === '/' || destinationPath === '/login')) {
+    store.dispatch(replace('/decks'))
+  }
+
+  if (isAuthed === false) {
+    if (destinationPath === '/') {
+      store.dispatch(replace('/login'))
+    }
+    else if (destinationPath !== '/login') {
+      store.dispatch(setLoginRedirect(destinationPath))
+      store.dispatch(replace('/login'))
+    }
   }
 }
 
-function redirectFromHome(nextState, replace) {
-  const isAuthed = store.getState().auth.get('isAuthed')
-
-  if (isAuthed === true) {
-    replace('/decks')
-  }
-  else {
-    store.dispatch(setLoginRedirect(nextState.location.pathname))
-    replace('/login')
-  }
-}
-
-const routes = getRoutes(history, requireAuth, redirectFromHome)
+const routes = getRoutes(history, handleEnter)
 
 ReactDOM.render(
   <Provider store={store}>

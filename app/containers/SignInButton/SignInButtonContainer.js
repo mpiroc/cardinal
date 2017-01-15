@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react'
-import { withRouter } from 'react-router'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Button } from 'react-toolbox'
@@ -21,22 +20,18 @@ function mapDispatchToProps (dispatch, ownProps) {
 
 function mergeProps (
     { authedUid },
-    { authAndSaveUser, setAndHandleUserValueListener },
-    { router }) {
+    dispatchProps,
+    ownProps
+  ) {
   return {
     style: {color: 'white'},
     label: 'Sign In',
-    onClick: async () => {
-      await authAndSaveUser()
-      setAndHandleUserValueListener(authedUid)
-      
-      router.replace('/decks')
-    },
+    onClick: dispatchProps.authAndSaveUser,
   }
 }
 
-export default withRouter(connect(
+export default connect(
   mapStateToProps,
   mapDispatchToProps,
   mergeProps,
-)(Button))
+)(Button)

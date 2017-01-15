@@ -1,4 +1,5 @@
 import { Map } from 'immutable'
+import { replace } from 'react-router-redux'
 import {
   signInWithPopup,
   signOut,
@@ -9,7 +10,7 @@ import { addAuthStateChangedListener, disableAndRemoveAllListeners } from 'redux
 import { usersLogout, saveAndHandleUser, setAndHandleUserValueListener } from 'redux/modules/users'
 import { decksLogout } from 'redux/modules/decks'
 import { cardsLogout } from 'redux/modules/cards'
-import { clearLoginRedirect } from 'redux/modules/loginRedirect'
+import { setLoginRedirect, clearLoginRedirect } from 'redux/modules/loginRedirect'
 
 // actions
 const AUTHING_USER = 'AUTHING_USER'
@@ -29,6 +30,7 @@ export function authAndSaveUser() {
 
       dispatch(setAndHandleUserValueListener(user.uid))
       dispatch(authingUserSuccess(user.uid))
+      dispatch(replace('/decks'))
     }
     catch (error) {
       dispatch(authingUserFailure(error))
@@ -45,10 +47,12 @@ export function signOutAndUnauth() {
     dispatch(usersLogout())
     dispatch(decksLogout())
     dispatch(cardsLogout())
+
+    dispatch(replace('/'))
   }
 }
 
-export function setAuthStateChangedListener(replace) {
+export function setAuthStateChangedListener() {
   return (dispatch, getState, firebaseContext) => {
     if (getState().listeners.get('authStateChanged') === true) {
       return
@@ -67,17 +71,39 @@ export function setAuthStateChangedListener(replace) {
         dispatch(authUser(user.uid))
         dispatch(setAndHandleUserValueListener(user.uid))
 
-        const loginRedirect = getState().loginRedirect.get('redirect')
-
-        if (loginRedirect) {
-          dispatch(clearLoginRedirect())
-          replace(loginRedirect)
-        }
-        else {
-          replace('/')
-        }
+        dispatch(redirectFromAuthResult(true))
+      }
+      else {
+        dispatch(unauthUser())
+        dispatch(redirectFromAuthResult(false))
       }
     })
+  }
+}
+
+function redirectFromAuthResult(authResult) {
+  return (dispatch, getState, firebaseContext) => {
+    const { loginRedirect, routing } = getState()
+    const loginRedirectPath = loginRedirect.get('redirect')
+    const currentPath = routing.locationBeforeTransitions.pathname
+
+    if (authResult === true && (currentPath === '/login' || currentPath === '/')) {
+      if (loginRedirectPath !== undefined) {
+        dispatch(replace(loginRedirectPath))
+        dispatch(clearLoginRedirect())
+      }
+      else {
+        dispatch(replace('/decks'))
+      }
+    }
+
+    if (authResult === false && currentPath !== '/login') {
+      if (loginRedirectPath === undefined) {
+        dispatch(setLoginRedirect(currentPath))
+      }
+
+      dispatch(replace('/login'))
+    }
   }
 }
 
@@ -119,7 +145,6 @@ export function unauthUser() {
 // auth reducer
 const initialState = Map({
   isAuthing: true,
-  isAuthed: false,
   authedUid: '',
   authError: '',
 })
@@ -129,7 +154,6 @@ export default function auth(state = initialState, action) {
     case AUTHING_USER:
       return state
         .set('isAuthing', true)
-        .set('isAuthed', false)
         .set('authedUid', '')
         .set('authError', '')
     case AUTHING_USER_SUCCESS:

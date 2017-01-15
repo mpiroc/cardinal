@@ -20,7 +20,7 @@ export function clearLoginRedirect() {
 
 // Reducers
 const initialState = Map({
-  redirect: null
+  redirect: undefined
 })
 
 export default function loginRedirect(state = initialState, action) {
@@ -28,7 +28,7 @@ export default function loginRedirect(state = initialState, action) {
     case SET_LOGIN_REDIRECT:
       return state.set('redirect', action.redirect)
     case CLEAR_LOGIN_REDIRECT:
-      return state.set('redirect', null)
+      return state.set('redirect', undefined)
     default:
       return state
   }

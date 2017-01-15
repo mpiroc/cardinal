@@ -13,7 +13,7 @@ export default function MainAppBar ({ isAuthed, onNavigateToHome }) {
       <Navigation type='horizontal'>
         <Button style={{color: 'white'}} label={'Home'} onClick={onNavigateToHome} />
         {
-          isAuthed ?
+          isAuthed === true ?
             <SignOutButtonContainer /> :
             <SignInButtonContainer />
         }
@@ -23,6 +23,6 @@ export default function MainAppBar ({ isAuthed, onNavigateToHome }) {
 }
 
 MainAppBar.propTypes = {
-  isAuthed: PropTypes.bool.isRequired,
+  isAuthed: PropTypes.bool,
   onNavigateToHome: PropTypes.func.isRequired,
 }

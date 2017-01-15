@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react'
-import { withRouter } from 'react-router'
+import { replace } from 'react-router-redux'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import DeckRTCard from 'components/DeckRTCard/DeckRTCard'
@@ -21,28 +21,29 @@ function mapDispatchToProps (dispatch, ownProps) {
   return bindActionCreators({
     openDeleteDeckConfirmationDialog,
     openEditDeckDialog,
+    replace,
   }, dispatch)
 }
 
 function mergeProps (
     { uid, isDeleting, name, description, cardCount },
-    { openDeleteDeckConfirmationDialog, openEditDeckDialog },
-    { deckId, router }) {
+    dispatchProps,
+    { deckId }) {
   return {
     deckId,
     isDeleting,
     name,
     cardCount,
     description: description ? description : '',
-    onReview: () => router.replace(`review/${deckId}`),
-    onView: () => router.replace(`deck/${deckId}`),
-    onEdit: () => openEditDeckDialog(deckId, name, description),
-    onDelete: () => openDeleteDeckConfirmationDialog(deckId, name, cardCount),
+    onReview: () => dispatchProps.replace(`review/${deckId}`),
+    onView: () => dispatchProps.replace(`deck/${deckId}`),
+    onEdit: () => dispatchProps.openEditDeckDialog(deckId, name, description),
+    onDelete: () => dispatchProps.openDeleteDeckConfirmationDialog(deckId, name, cardCount),
   }
 }
 
-export default withRouter(connect(
+export default connect(
   mapStateToProps,
   mapDispatchToProps,
   mergeProps,
-)(DeckRTCard))
+)(DeckRTCard)
