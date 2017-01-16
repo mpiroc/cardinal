@@ -13,7 +13,7 @@ class MainContainer extends React.Component {
   render () {
     const { isAuthed, children } = this.props
     return (
-      <div style={{height: '100vh'}}>
+      <div style={{height: '100vh', background:'#EEEEEE'}}>
         <Layout>
           <Panel>
             <MainAppBarContainer />
