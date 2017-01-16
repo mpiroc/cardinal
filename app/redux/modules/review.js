@@ -82,12 +82,12 @@ export function showNextCard(nowMs, deckId) {
       })
 
     // We want to avoid repeating the same card twice, but only if there are other due cards.
-    if (cardIds.size > 1) {
+    if (cardIds.count() > 1) {
       cardIds = cardIds.filter(cardId => cardId != currentCardId)
     }
 
     const randomCardId = cardIds
-      .skip(getRandomInt(0, cardIds.size))
+      .skip(getRandomInt(0, cardIds.count()))
       .take(1)
       .first()
 
