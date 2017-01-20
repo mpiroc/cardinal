@@ -20,7 +20,7 @@ export function setAuthStateChangedListener({ auth }, onAuthStateChanged) {
 
 // user create/update/delete helpers
 export function saveUser({ ref }, { uid, name }) {
-  return ref.child(`users/${uid}`).set({
+  return ref.child(getUserPath(uid)).set({
     uid,
     name,
   })
@@ -28,9 +28,9 @@ export function saveUser({ ref }, { uid, name }) {
 
 // deck create/update/delete helpers
 export function deleteDeck({ ref }, uid, deckId) {
-  const deckCardRef = ref.child(`deckCards/${uid}/${deckId}`)
-  const cardHistoryRef = ref.child(`cardHistory/${uid}/${deckId}`)
-  const userDeckRef = ref.child(`userDecks/${uid}/${deckId}`)
+  const deckCardRef = ref.child(getDeckCardCollectionPath(uid, deckId))
+  const cardHistoryRef = ref.child(getCardHistoryCollectionPath(uid, deckId))
+  const userDeckRef = ref.child(getUserDeckPath(uid, deckId))
 
   return Promise.all([
     deckCardRef.remove(),
@@ -40,7 +40,7 @@ export function deleteDeck({ ref }, uid, deckId) {
 }
 
 export function saveNewDeck({ ref }, uid, { name, description }) {
-  const userDeckRef = ref.child(`userDecks/${uid}`).push()
+  const userDeckRef = ref.child(getUserDeckCollectionPath(uid)).push()
   return userDeckRef.set({
     deckId: userDeckRef.key,
     name,
@@ -49,7 +49,7 @@ export function saveNewDeck({ ref }, uid, { name, description }) {
 }
 
 export function saveExistingDeck({ ref }, uid, { deckId, name, description }) {
-  return ref.child(`userDecks/${uid}/${deckId}`).set({
+  return ref.child(getUserDeckPath(uid, deckId)).set({
     deckId,
     name,
     description,
@@ -58,7 +58,7 @@ export function saveExistingDeck({ ref }, uid, { deckId, name, description }) {
 
 // card create/update/delete helpers
 export function deleteCard({ ref }, uid, deckId, cardId) {
-  const deckCardRef = ref.child(`deckCards/${uid}/${deckId}/${cardId}`)
+  const deckCardRef = ref.child(getDeckCardPath(uid, deckId, cardId))
 
   return Promise.all([
     deckCardRef.remove(),
@@ -67,7 +67,7 @@ export function deleteCard({ ref }, uid, deckId, cardId) {
 }
 
 export function saveNewCard({ ref }, uid, deckId, { side1, side2 }) {
-  const deckCardRef = ref.child(`deckCards/${uid}/${deckId}`).push()
+  const deckCardRef = ref.child(getDeckCardCollectionPath(uid, deckId)).push()
 
   return Promise.all([
     deckCardRef.set({
@@ -84,7 +84,7 @@ export function saveNewCard({ ref }, uid, deckId, { side1, side2 }) {
 }
 
 export function saveExistingCard({ ref }, uid, deckId, { cardId, side1, side2 }) {
-  return ref.child(`deckCards/${uid}/${deckId}/${cardId}`).set({
+  return ref.child(getDeckCardPath(uid, deckId, cardId)).set({
     cardId,
     side1,
     side2,
@@ -93,20 +93,20 @@ export function saveExistingCard({ ref }, uid, deckId, { cardId, side1, side2 })
 
 // cardHistory create/update/delete helpers
 export function deleteCardHistory({ ref }, uid, deckId, cardId) {
-  const cardHistoryRef = ref.child(`cardHistory/${uid}/${deckId}/${cardId}`)
+  const cardHistoryRef = ref.child(getCardHistoryPath(uid, deckId, cardId))
 
   return cardHistoryRef.remove()
 }
 
 export function saveCardHistory({ ref }, uid, deckId, cardId, history) {
-  const cardHistoryRef = ref.child(`cardHistory/${uid}/${deckId}/${cardId}`)
+  const cardHistoryRef = ref.child(getCardHistoryPath(uid, deckId, cardId))
 
   return cardHistoryRef.set(history)
 }
 
 // One-time fetch of history for all cards in a deck
 export async function fetchDeckHistory({ ref }, uid, deckId) {
-  const snapshot = await ref.child(`cardHistory/${uid}/${deckId}`).once('value')
+  const snapshot = await ref.child(getCardHistoryCollectionPath(uid, deckId)).once('value')
 
   return snapshot.val()
 }
