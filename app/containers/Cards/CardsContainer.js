@@ -7,7 +7,7 @@ import {
   setAndHandleUserDeckValueListener,
   setAndHandleDeckCardCollectionListeners,
   setAndHandleCardHistoryCollectionListeners,
-} from 'redux/modules/listeners'
+} from 'redux/modules/firebase'
 
 class CardsContainer extends React.Component {
   componentDidMount() {

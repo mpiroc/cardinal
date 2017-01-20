@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import Decks from 'components/Decks/Decks'
-import { setAndHandleUserDeckCollectionListeners } from 'redux/modules/listeners'
+import { setAndHandleUserDeckCollectionListeners } from 'redux/modules/firebase'
 
 class DecksContainer extends React.Component {
   componentDidMount() {

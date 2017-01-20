@@ -8,7 +8,7 @@ import {
   setAndHandleUserDeckValueListener,
   setAndHandleDeckCardCollectionListeners,
   setAndHandleCardHistoryCollectionListeners,
-} from 'redux/modules/listeners'
+} from 'redux/modules/firebase'
 import {
   gradeAndShowNextCard,
   showNextCard,
