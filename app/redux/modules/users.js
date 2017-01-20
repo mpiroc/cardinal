@@ -1,13 +1,9 @@
 import { Map } from 'immutable'
 import {
   setUserValueListenerAndFlag,
-  addUserDeckAddedListenerFlag,
-  addUserDeckRemovedListenerFlag,
+  setUserDeckAddedListenerAndFlag,
+  setUserDeckRemovedListenerAndFlag,
 } from './listeners'
-import {
-  setUserDeckAddedListener,
-  setUserDeckRemovedListener,
-} from 'helpers/firebase'
 import {
   setDeckValueListener,
   setDeckCardCollectionListeners,
@@ -46,9 +42,7 @@ export function setUserDeckCollectionListeners(uid) {
     const state = getState().listeners
 
     if (state.getIn(['userDecks', uid, 'added']) !== true) {
-      dispatch(addUserDeckAddedListenerFlag(uid))
-      setUserDeckAddedListener(
-        firebaseContext,
+      dispatch(setUserDeckAddedListenerAndFlag(
         uid,
         deck => {
           dispatch(userDeckAddedReceived(uid, deck.deckId))
@@ -57,20 +51,18 @@ export function setUserDeckCollectionListeners(uid) {
           dispatch(setDeckCardCollectionListeners(deck.deckId))
         },
         error => dispatch(settingAddOrRemoveUserDeckListenerFailure(uid, error)),
-      )
+      ))
     }
 
     if (state.getIn(['userDecks', uid, 'removed']) !== true) {
-      dispatch(addUserDeckRemovedListenerFlag(uid))
-      setUserDeckRemovedListener(
-        firebaseContext,
+      dispatch(setUserDeckRemovedListenerAndFlag(
         uid,
         deck => {
           dispatch(userDeckRemovedReceived(uid, deck.deckId))
           dispatch(removeDeck(deck.deckId))
         },
         error => dispatch(settingAddOrRemoveUserDeckListenerFailure(uid, error)),
-      )
+      ))
     }
   }
 }

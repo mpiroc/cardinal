@@ -1,15 +1,11 @@
 import { Map } from 'immutable'
 import {
-  addUserDeckValueListenerFlag,
-  addDeckCardAddedListenerFlag,
-  addDeckCardRemovedListenerFlag,
-  addCardHistoryAddedListenerFlag,
+  setUserDeckValueListenerAndFlag,
+  setDeckCardAddedListenerAndFlag,
+  setDeckCardRemovedListenerAndFlag,
+  setCardHistoryAddedListenerAndFlag,
 } from './listeners'
 import {
-  setUserDeckValueListener,
-  setDeckCardAddedListener,
-  setDeckCardRemovedListener,
-  setCardHistoryAddedListener,
   deleteDeck,
   fetchDeckHistory,
 } from 'helpers/firebase'
@@ -77,14 +73,12 @@ export function setDeckValueListener(uid, deckId) {
     const listeners = getState().listeners
 
     if (listeners.getIn(['userDecks', uid, 'decks', deckId]) !== true) {
-      dispatch(addUserDeckValueListenerFlag(uid, deckId))
       dispatch(settingDeckValueListener(deckId))
-      setUserDeckValueListener(
-        firebaseContext,
+      dispatch(setUserDeckValueListenerAndFlag(
         uid, deckId,
         deck => dispatch(settingDeckValueListenerSuccess(deckId, deck)),
         error => dispatch(settingDeckValueListenerFailure(deckId, error.message)),
-      )
+      ))
     }
   }
 }
@@ -95,9 +89,7 @@ export function setDeckCardCollectionListeners(deckId) {
     const uid = auth.get('authedUid')
 
     if (listeners.getIn(['deckCards', deckId, 'added']) !== true) {
-      dispatch(addDeckCardAddedListenerFlag(deckId))
-      setDeckCardAddedListener(
-        firebaseContext,
+      dispatch(setDeckCardAddedListenerAndFlag(
         uid,
         deckId,
         card => {
@@ -106,20 +98,19 @@ export function setDeckCardCollectionListeners(deckId) {
           dispatch(setCardValueListener(deckId, card.cardId))
         },
         error => dispatch(settingAddOrRemoveDeckCardListenerFailure(deckId, error.message)),
-      )
+      ))
     }
 
     if (listeners.getIn(['deckCards', deckId, 'removed']) !== true) {
-      dispatch(addDeckCardRemovedListenerFlag(deckId))
-      setDeckCardRemovedListener(
-        firebaseContext,
+      dispatch(setDeckCardRemovedListenerAndFlag(
         uid,
         deckId,
         card => {
           dispatch(deckCardRemovedReceived(deckId, card.cardId))
           dispatch(removeCard(card.cardId))
         },
-        error => dispatch(settingAddOrRemoveDeckCardListenerFailure(deckId, error.message)))
+        error => dispatch(settingAddOrRemoveDeckCardListenerFailure(deckId, error.message)),
+      ))
     }
   }
 }
@@ -130,9 +121,7 @@ export function setCardHistoryCollectionListeners(deckId) {
     const uid = auth.get('authedUid')
 
     if (listeners.getIn(['cardHistories', deckId, 'added']) !== true) {
-      dispatch(addCardHistoryAddedListenerFlag(deckId))
-      setCardHistoryAddedListener(
-        firebaseContext,
+      dispatch(setCardHistoryAddedListenerAndFlag(
         uid,
         deckId,
         (history, cardId) => {
@@ -140,7 +129,7 @@ export function setCardHistoryCollectionListeners(deckId) {
           dispatch(setCardHistoryValueListener(deckId, cardId))
         },
         error => dispatch(settingAddCardHistoryListenerFailure(deckId, error.message)),
-      )
+      ))
     }
   }
 }

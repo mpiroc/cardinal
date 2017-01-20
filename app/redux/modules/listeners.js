@@ -81,6 +81,69 @@ export function setUserValueListenerAndFlag(uid, onSuccess, onFailure) {
   }
 }
 
+export function setUserDeckAddedListenerAndFlag(uid, onSuccess, onFailure) {
+  return (dispatch, getState, firebaseContext) => {
+    dispatch(addUserDeckAddedListenerFlag(uid))
+    setUserDeckAddedListener(firebaseContext, uid, onSuccess, onFailure)
+  }
+}
+
+export function setUserDeckRemovedListenerAndFlag(uid, onSuccess, onFailure) {
+  return (dispatch, getState, firebaseContext) => {
+    dispatch(addUserDeckRemovedListenerFlag(uid))
+    setUserDeckRemovedListener(firebaseContext, uid, onSuccess, onFailure)
+  }
+}
+
+export function setUserDeckValueListenerAndFlag(uid, deckId, onSuccess, onFailure) {
+  return (dispatch, getState, firebaseContext) => {
+    dispatch(addUserDeckValueListenerFlag(uid, deckId))
+    setUserDeckValueListener(firebaseContext, uid, deckId, onSuccess, onFailure)
+  }
+}
+
+export function setDeckCardAddedListenerAndFlag(uid, deckId, onSuccess, onFailure) {
+  return (dispatch, getState, firebaseContext) => {
+    dispatch(addDeckCardAddedListenerFlag(deckId))
+    setDeckCardAddedListener(firebaseContext, uid, deckId, onSuccess, onFailure)
+  }
+}
+
+export function setDeckCardRemovedListenerAndFlag(uid, deckId, onSuccess, onFailure) {
+  return (dispatch, getState, firebaseContext) => {
+    dispatch(addDeckCardRemovedListenerFlag(deckId))
+    setDeckCardRemovedListener(firebaseContext, uid, deckId, onSuccess, onFailure)
+  }
+}
+
+export function setDeckCardValueListenerAndFlag(uid, deckId, cardId, onSuccess, onFailure) {
+  return (dispatch, getState, firebaseContext) => {
+    dispatch(addDeckCardValueListenerFlag(deckId, cardId))
+    setDeckCardValueListener(firebaseContext, uid, deckId, cardId, onSuccess, onFailure)
+  }
+}
+
+export function setCardHistoryAddedListenerAndFlag(uid, deckId, onSuccess, onFailure) {
+  return (dispatch, getState, firebaseContext) => {
+    dispatch(addCardHistoryAddedListenerFlag(deckId))
+    setCardHistoryAddedListener(firebaseContext, uid, deckId, onSuccess, onFailure)
+  }
+}
+
+export function setCardHistoryRemovedListenerAndFlag(uid, deckId, onSuccess, onFailure) {
+  return (dispatch, getState, firebaseContext) => {
+    dispatch(addCardHistoryRemovedListenerFlag(deckId))
+    setCardHistoryRemovedListener(firebaseContext, uid, deckId, onSuccess, onFailure)
+  }
+}
+
+export function setCardHistoryValueListenerAndFlag(uid, deckId, cardId, onSuccess, onFailure) {
+  return (dispatch, getState, firebaseContext) => {
+    dispatch(addCardHistoryValueListenerFlag(deckId, cardId))
+    setCardHistoryValueListener(firebaseContext, uid, deckId, cardId, onSuccess, onFailure)
+  }
+}
+
 // action creators
 export function addUserValueListenerFlag(uid) {
   return {
