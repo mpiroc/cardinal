@@ -112,36 +112,36 @@ export async function fetchDeckHistory({ ref }, uid, deckId) {
 }
 
 // Path helpers
-function getUserPath(uid) {
+export function getUserPath(uid) {
   return `users/${uid}`
 }
 
-function getUserDeckCollectionPath(uid) {
+export function getUserDeckCollectionPath(uid) {
   return `userDecks/${uid}`
 }
 
-function getUserDeckPath(uid, deckId) {
+export function getUserDeckPath(uid, deckId) {
   return `${getUserDeckCollectionPath(uid)}/${deckId}`
 }
 
-function getDeckCardCollectionPath(uid, deckId) {
+export function getDeckCardCollectionPath(uid, deckId) {
   return `deckCards/${uid}/${deckId}`
 }
 
-function getDeckCardPath(uid, deckId, cardId) {
+export function getDeckCardPath(uid, deckId, cardId) {
   return `${getDeckCardCollectionPath(uid, deckId)}/${cardId}`
 }
 
-function getCardHistoryCollectionPath(uid, deckId) {
+export function getCardHistoryCollectionPath(uid, deckId) {
   return `cardHistory/${uid}/${deckId}`
 }
 
-function getCardHistoryPath(uid, deckId, cardId) {
+export function getCardHistoryPath(uid, deckId, cardId) {
   return `${getCardHistoryCollectionPath(uid, deckId)}/${cardId}`
 }
 
 // Listener helpers
-function setDataListener(ref, event, path, onSuccess, onFailure) {
+export function setDataListener({ ref }, path, event, onSuccess, onFailure) {
   return ref.child(path).on(
     event,
     snapshot => onSuccess(
@@ -150,78 +150,6 @@ function setDataListener(ref, event, path, onSuccess, onFailure) {
     onFailure)
 }
 
-export function setUserValueListener({ ref }, uid, onSuccess, onFailure) {
-  return setDataListener(ref, 'value', getUserPath(uid), onSuccess, onFailure)
-}
-
-export function setUserDeckAddedListener({ ref }, uid, onSuccess, onFailure) {
-  return setDataListener(ref, 'child_added', getUserDeckCollectionPath(uid), onSuccess, onFailure)
-}
-
-export function setUserDeckRemovedListener({ ref }, uid, onSuccess, onFailure) {
-  return setDataListener(ref, 'child_removed', getUserDeckCollectionPath(uid), onSuccess, onFailure)
-}
-
-export function setUserDeckValueListener({ ref }, uid, deckId, onSuccess, onFailure) {
-  return setDataListener(ref, 'value', getUserDeckPath(uid, deckId), onSuccess, onFailure)
-}
-
-export function setDeckCardAddedListener({ ref }, uid, deckId, onSuccess, onFailure) {
-  return setDataListener(ref, 'child_added', getDeckCardCollectionPath(uid, deckId), onSuccess, onFailure)
-}
-
-export function setDeckCardRemovedListener({ ref }, uid, deckId, onSuccess, onFailure) {
-  return setDataListener(ref, 'child_removed', getDeckCardCollectionPath(uid, deckId), onSuccess, onFailure)
-}
-
-export function setDeckCardValueListener({ ref }, uid, deckId, cardId, onSuccess, onFailure) {
-  return setDataListener(ref, 'value', getDeckCardPath(uid, deckId, cardId), onSuccess, onFailure)
-}
-
-export function setCardHistoryAddedListener({ ref }, uid, deckId, onSuccess, onFailure) {
-  return setDataListener(ref, 'child_added', getCardHistoryCollectionPath(uid, deckId), onSuccess, onFailure)
-}
-
-export function setCardHistoryValueListener({ ref }, uid, deckId, cardId, onSuccess, onFailure) {
-  return setDataListener(ref, 'value', getCardHistoryPath(uid, deckId, cardId), onSuccess, onFailure)
-}
-
-function removeDataListener(ref, event, path) {
+export function removeDataListener({ ref }, path, event) {
   return ref.child(path).off(event)
-}
-
-export function removeUserValueListener({ ref }, uid, onSuccess, onFailure) {
-  return removeDataListener(ref, 'value', getUserPath(uid))
-}
-
-export function removeUserDeckAddedListener({ ref }, uid, onSuccess, onFailure) {
-  return removeDataListener(ref, 'child_added', getUserDeckCollectionPath(uid))
-}
-
-export function removeUserDeckRemovedListener({ ref }, uid, onSuccess, onFailure) {
-  return removeDataListener(ref, 'child_removed', getUserDeckCollectionPath(uid))
-}
-
-export function removeUserDeckValueListener({ ref }, uid, deckId, onSuccess, onFailure) {
-  return removeDataListener(ref, 'value', getUserDeckPath(uid, deckId))
-}
-
-export function removeDeckCardAddedListener({ ref }, uid, deckId, onSuccess, onFailure) {
-  return removeDataListener(ref, 'child_added', getDeckCardCollectionPath(uid, deckId))
-}
-
-export function removeDeckCardRemovedListener({ ref }, uid, deckId, onSuccess, onFailure) {
-  return removeDataListener(ref, 'child_removed', getDeckCardCollectionPath(uid, deckId))
-}
-
-export function removeDeckCardValueListener({ ref }, uid, deckId, cardId, onSuccess, onFailure) {
-  return removeDataListener(ref, 'value', getDeckCardPath(uid, deckId, cardId))
-}
-
-export function removeCardHistoryAddedListener({ ref }, uid, deckId, onSuccess, onFailure) {
-  return removeDataListener(ref, 'child_added', getCardHistoryCollectionPath(uid, deckId))
-}
-
-export function removeCardHistoryValueListener({ ref }, uid, deckId, cardId, onSuccess, onFailure) {
-  return removeDataListener(ref, 'value', getCardHistoryPath(uid, deckId, cardId))
 }

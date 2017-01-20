@@ -7,10 +7,10 @@ import {
   saveUser
 } from 'helpers/firebase'
 import {
-  addAuthStateChangedListenerFlag,
+  removeAllDataListenersAndFlags,
+  setAuthStateChangedListenerFlag,
 } from 'redux/modules/listeners'
 import {
-  disableAndRemoveAllListeners,
   setAndHandleUserValueListener,
 } from 'redux/modules/firebase'
 import { usersLogout, saveAndHandleUser } from 'redux/modules/users'
@@ -46,7 +46,7 @@ export function authAndSaveUser() {
 
 export function signOutAndUnauth() {
   return async (dispatch, getState, firebaseContext) => {
-    dispatch(disableAndRemoveAllListeners())
+    dispatch(removeAllDataListenersAndFlags())
     await signOut(firebaseContext)
 
     dispatch(unauthUser())
@@ -64,7 +64,7 @@ export function setAuthStateChangedListener() {
       return
     }
 
-    dispatch(addAuthStateChangedListenerFlag())
+    dispatch(setAuthStateChangedListenerFlag())
 
     firebaseSetAuthStateChangedListener(firebaseContext, async firebaseUser => {
       if (firebaseUser) {
