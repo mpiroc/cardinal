@@ -111,6 +111,20 @@ export async function fetchDeckHistory({ ref }, uid, deckId) {
   return snapshot.val()
 }
 
+// Listener helpers
+export function setDataListener({ ref }, path, event, onSuccess, onFailure) {
+  return ref.child(path).on(
+    event,
+    snapshot => onSuccess(
+      snapshot.val(),
+      snapshot.key),
+    onFailure)
+}
+
+export function removeDataListener({ ref }, path, event) {
+  return ref.child(path).off(event)
+}
+
 // Path helpers
 export function getUserPath(uid) {
   return `users/${uid}`
@@ -138,18 +152,4 @@ export function getCardHistoryCollectionPath(uid, deckId) {
 
 export function getCardHistoryPath(uid, deckId, cardId) {
   return `${getCardHistoryCollectionPath(uid, deckId)}/${cardId}`
-}
-
-// Listener helpers
-export function setDataListener({ ref }, path, event, onSuccess, onFailure) {
-  return ref.child(path).on(
-    event,
-    snapshot => onSuccess(
-      snapshot.val(),
-      snapshot.key),
-    onFailure)
-}
-
-export function removeDataListener({ ref }, path, event) {
-  return ref.child(path).off(event)
 }

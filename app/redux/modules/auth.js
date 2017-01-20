@@ -3,12 +3,11 @@ import { replace } from 'react-router-redux'
 import {
   signInWithPopup,
   signOut,
-  setAuthStateChangedListener as firebaseSetAuthStateChangedListener,
   saveUser
 } from 'helpers/firebase'
 import {
   removeAllDataListenersAndFlags,
-  setAuthStateChangedListenerFlag,
+  setAuthStateChangedListenerAndFlag,
 } from 'redux/modules/listeners'
 import {
   setAndHandleUserValueListener,
@@ -60,13 +59,7 @@ export function signOutAndUnauth() {
 
 export function setAuthStateChangedListener() {
   return (dispatch, getState, firebaseContext) => {
-    if (getState().listeners.get('authStateChanged') === true) {
-      return
-    }
-
-    dispatch(setAuthStateChangedListenerFlag())
-
-    firebaseSetAuthStateChangedListener(firebaseContext, async firebaseUser => {
+    dispatch(setAuthStateChangedListenerAndFlag(async firebaseUser => {
       if (firebaseUser) {
         const user = {
           uid: firebaseUser.uid,
@@ -83,7 +76,7 @@ export function setAuthStateChangedListener() {
         dispatch(unauthUser())
         dispatch(redirectFromAuthResult(false))
       }
-    })
+    }))
   }
 }
 

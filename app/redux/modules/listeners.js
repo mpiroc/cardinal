@@ -2,6 +2,7 @@ import { Map } from 'immutable'
 import {
   setDataListener,
   removeDataListener,
+  setAuthStateChangedListener,
 } from 'helpers/firebase'
 
 // actions
@@ -36,6 +37,20 @@ export function removeAllDataListenersAndFlags() {
   }
 }
 
+export function setAuthStateChangedListenerAndFlag(callback) {
+  return (dispatch, getState, firebaseContext) => {
+    const { listeners } = getState()
+
+    if (listeners.get('authStateChanged') === true) {
+      return
+    }
+
+    dispatch(setAuthStateChangedListenerFlag())
+
+    setAuthStateChangedListener(firebaseContext, callback)
+  }
+}
+
 // action creators
 function setDataListenerFlag(path, event) {
   return {
@@ -53,7 +68,7 @@ function removeDataListenerFlag(path, event) {
   }
 }
 
-export function setAuthStateChangedListenerFlag() {
+function setAuthStateChangedListenerFlag() {
   return {
     type: SET_AUTH_STATE_CHANGED_LISTENER
   }
