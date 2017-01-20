@@ -1,8 +1,8 @@
 import { Map } from 'immutable'
 import {
-  addUserValueListener,
-  addUserDeckAddedListener,
-  addUserDeckRemovedListener,
+  addUserValueListenerFlag,
+  addUserDeckAddedListenerFlag,
+  addUserDeckRemovedListenerFlag,
 } from './listeners'
 import {
   setUserValueListener,
@@ -32,7 +32,7 @@ export function setAndHandleUserValueListener(uid) {
     const state = getState().listeners
 
     if (state.getIn(['users', uid]) !== true) {
-      dispatch(addUserValueListener(uid))
+      dispatch(addUserValueListenerFlag(uid))
       dispatch(settingUserValueListener(uid))
       setUserValueListener(
         firebaseContext,
@@ -49,7 +49,7 @@ export function setUserDeckCollectionListeners(uid) {
     const state = getState().listeners
 
     if (state.getIn(['userDecks', uid, 'added']) !== true) {
-      dispatch(addUserDeckAddedListener(uid))
+      dispatch(addUserDeckAddedListenerFlag(uid))
       setUserDeckAddedListener(
         firebaseContext,
         uid,
@@ -64,7 +64,7 @@ export function setUserDeckCollectionListeners(uid) {
     }
 
     if (state.getIn(['userDecks', uid, 'removed']) !== true) {
-      dispatch(addUserDeckRemovedListener(uid))
+      dispatch(addUserDeckRemovedListenerFlag(uid))
       setUserDeckRemovedListener(
         firebaseContext,
         uid,

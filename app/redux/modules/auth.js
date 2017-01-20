@@ -6,7 +6,7 @@ import {
   setAuthStateChangedListener as firebaseSetAuthStateChangedListener,
   saveUser
 } from 'helpers/firebase'
-import { addAuthStateChangedListener, disableAndRemoveAllListeners } from 'redux/modules/listeners'
+import { addAuthStateChangedListenerFlag, disableAndRemoveAllListeners } from 'redux/modules/listeners'
 import { usersLogout, saveAndHandleUser, setAndHandleUserValueListener } from 'redux/modules/users'
 import { decksLogout } from 'redux/modules/decks'
 import { cardsLogout } from 'redux/modules/cards'
@@ -58,7 +58,7 @@ export function setAuthStateChangedListener() {
       return
     }
 
-    dispatch(addAuthStateChangedListener())
+    dispatch(addAuthStateChangedListenerFlag())
 
     firebaseSetAuthStateChangedListener(firebaseContext, async firebaseUser => {
       if (firebaseUser) {

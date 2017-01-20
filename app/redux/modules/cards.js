@@ -1,7 +1,7 @@
 import { Map } from 'immutable'
 import {
-  addDeckCardValueListener,
-  addCardHistoryValueListener,
+  addDeckCardValueListenerFlag,
+  addCardHistoryValueListenerFlag,
 } from './listeners'
 import {
   setDeckCardValueListener as fbSetDeckCardValueListener,
@@ -48,7 +48,7 @@ export function setCardValueListener(deckId, cardId) {
     const uid = auth.get('authedUid')
 
     if (listeners.getIn(['deckCards', deckId, 'cards', cardId]) !== true) {
-      dispatch(addDeckCardValueListener(deckId, cardId))
+      dispatch(addDeckCardValueListenerFlag(deckId, cardId))
       dispatch(settingCardValueListener(cardId))
       fbSetDeckCardValueListener(
         firebaseContext,
@@ -66,7 +66,7 @@ export function setCardHistoryValueListener(deckId, cardId) {
     const uid = auth.get('authedUid')
 
     if (listeners.getIn(['cardHistories', deckId, 'histories', cardId]) !== true) {
-      dispatch(addCardHistoryValueListener(deckId, cardId))
+      dispatch(addCardHistoryValueListenerFlag(deckId, cardId))
       dispatch(settingCardHistoryValueListener(cardId))
       fbSetCardHistoryValueListener(
         firebaseContext,

@@ -58,28 +58,28 @@ export function disableAndRemoveAllListeners() {
 }
 
 // action creators
-export function addUserValueListener(uid) {
+export function addUserValueListenerFlag(uid) {
   return {
     type: ADD_USER_VALUE_LISTENER,
     uid,
   }
 }
 
-export function addUserDeckAddedListener(uid) {
+export function addUserDeckAddedListenerFlag(uid) {
   return {
     type: ADD_USER_DECK_ADDED_LISTENER,
     uid,
   }
 }
 
-export function addUserDeckRemovedListener(uid) {
+export function addUserDeckRemovedListenerFlag(uid) {
   return {
     type: ADD_USER_DECK_REMOVED_LISTENER,
     uid,
   }
 }
 
-export function addUserDeckValueListener(uid, deckId) {
+export function addUserDeckValueListenerFlag(uid, deckId) {
   return {
     type: ADD_USER_DECK_VALUE_LISTENER,
     uid,
@@ -87,21 +87,21 @@ export function addUserDeckValueListener(uid, deckId) {
   }
 }
 
-export function addDeckCardAddedListener(deckId) {
+export function addDeckCardAddedListenerFlag(deckId) {
   return {
     type: ADD_DECK_CARD_ADDED_LISTENER,
     deckId,
   }
 }
 
-export function addDeckCardRemovedListener(deckId) {
+export function addDeckCardRemovedListenerFlag(deckId) {
   return {
     type: ADD_DECK_CARD_REMOVED_LISTENER,
     deckId,
   }
 }
 
-export function addDeckCardValueListener(deckId, cardId) {
+export function addDeckCardValueListenerFlag(deckId, cardId) {
   return {
     type: ADD_DECK_CARD_VALUE_LISTENER,
     deckId,
@@ -109,14 +109,14 @@ export function addDeckCardValueListener(deckId, cardId) {
   }
 }
 
-export function addCardHistoryAddedListener(deckId) {
+export function addCardHistoryAddedListenerFlag(deckId) {
   return {
     type: ADD_CARD_HISTORY_ADDED_LISTENER,
     deckId,
   }
 }
 
-export function addCardHistoryValueListener(deckId, cardId) {
+export function addCardHistoryValueListenerFlag(deckId, cardId) {
   return {
     type: ADD_CARD_HISTORY_VALUE_LISTENER,
     deckId,
@@ -124,7 +124,7 @@ export function addCardHistoryValueListener(deckId, cardId) {
   }
 }
 
-export function addAuthStateChangedListener() {
+export function addAuthStateChangedListenerFlag() {
   return {
     type: ADD_AUTH_STATE_CHANGED_LISTENER
   }
