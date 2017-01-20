@@ -49,9 +49,7 @@ export function fetchAndHandleDeckHistory(uid, deckId) {
       const cardHistories = await fetchDeckHistory(firebaseContext, uid, deckId)
       for (let cardId in cardHistories) {
         dispatch(updateCardHistory(cardId, cardHistories[cardId]))
-        // TODO: Set card history value listener
       }
-      // TODO: Set deck history collection listeners
       dispatch(fetchingDeckHistorySuccess(deckId))
     }
     catch (error) {
