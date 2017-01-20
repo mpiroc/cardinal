@@ -1,5 +1,13 @@
 import { Map } from 'immutable'
-import * as fbHelpers from 'helpers/firebase'
+import {
+  removeUserValueListener,
+  removeUserDeckAddedListener,
+  removeUserDeckRemovedListener,
+  removeUserDeckValueListener,
+  removeDeckCardAddedListener,
+  removeDeckCardRemovedListener,
+  removeDeckCardValueListener,
+} as fbHelpers from 'helpers/firebase'
 
 // actions
 const ADD_USER_VALUE_LISTENER = 'ADD_USER_VALUE_LISTENER'
@@ -29,28 +37,28 @@ export function disableAndRemoveAllListeners() {
     const { users, decks, cards } = getState()
 
     users.get('users').forEach((user, uid) => {
-      dispatch(removeUserValueListener(uid))
-      fbHelpers.removeUserValueListener(firebaseContext, uid)
+      dispatch(removeUserValueListenerFlag(uid))
+      removeUserValueListener(firebaseContext, uid)
 
-      dispatch(removeUserDeckAddedListener(uid))
-      fbHelpers.removeUserDeckAddedListener(firebaseContext, uid)
+      dispatch(removeUserDeckAddedListenerFlag(uid))
+      removeUserDeckAddedListener(firebaseContext, uid)
 
-      dispatch(removeUserDeckRemovedListener(uid))
-      fbHelpers.removeUserDeckRemovedListener(firebaseContext, uid)
+      dispatch(removeUserDeckRemovedListenerFlag(uid))
+      removeUserDeckRemovedListener(firebaseContext, uid)
 
       user.get('decks').forEach((deck, deckId) => {
-        dispatch(removeUserDeckValueListener(uid, deckId))
-        fbHelpers.removeUserDeckValueListener(firebaseContext, uid, deckId)
+        dispatch(removeUserDeckValueListenerFlag(uid, deckId))
+        removeUserDeckValueListener(firebaseContext, uid, deckId)
 
-        dispatch(removeDeckCardAddedListener(deckId))
-        fbHelpers.removeDeckCardAddedListener(firebaseContext, uid, deckId)
+        dispatch(removeDeckCardAddedListenerFlag(deckId))
+        removeDeckCardAddedListener(firebaseContext, uid, deckId)
 
-        dispatch(removeDeckCardRemovedListener(deckId))
-        fbHelpers.removeDeckCardRemovedListener(firebaseContext, uid, deckId)
+        dispatch(removeDeckCardRemovedListenerFlag(deckId))
+        removeDeckCardRemovedListener(firebaseContext, uid, deckId)
 
         decks.getIn(['decks', deckId, 'cards']).forEach((card, cardId) => {
-          dispatch(removeDeckCardValueListener(deckId, cardId))
-          fbHelpers.removeDeckCardValueListener(firebaseContext, uid, deckId, cardId)
+          dispatch(removeDeckCardValueListenerFlag(deckId, cardId))
+          removeDeckCardValueListener(firebaseContext, uid, deckId, cardId)
         })
       })
     })
@@ -130,28 +138,28 @@ export function addAuthStateChangedListenerFlag() {
   }
 }
 
-export function removeUserValueListener(uid) {
+export function removeUserValueListenerFlag(uid) {
   return {
     type: REMOVE_USER_VALUE_LISTENER,
     uid,
   }
 }
 
-export function removeUserDeckAddedListener(uid) {
+export function removeUserDeckAddedListenerFlag(uid) {
   return {
     type: REMOVE_USER_DECK_ADDED_LISTENER,
     uid,
   }
 }
 
-export function removeUserDeckRemovedListener(uid) {
+export function removeUserDeckRemovedListenerFlag(uid) {
   return {
     type: REMOVE_USER_DECK_REMOVED_LISTENER,
     uid,
   }
 }
 
-export function removeUserDeckValueListener(uid, deckId) {
+export function removeUserDeckValueListenerFlag(uid, deckId) {
   return {
     type: REMOVE_USER_DECK_VALUE_LISTENER,
     uid,
@@ -159,21 +167,21 @@ export function removeUserDeckValueListener(uid, deckId) {
   }
 }
 
-export function removeDeckCardAddedListener(deckId) {
+export function removeDeckCardAddedListenerFlag(deckId) {
   return {
     type: REMOVE_DECK_CARD_ADDED_LISTENER,
     deckId,
   }
 }
 
-export function removeDeckCardRemovedListener(deckId) {
+export function removeDeckCardRemovedListenerFlag(deckId) {
   return {
     type: REMOVE_DECK_CARD_REMOVED_LISTENER,
     deckId,
   }
 }
 
-export function removeDeckCardValueListener(deckId, cardId) {
+export function removeDeckCardValueListenerFlag(deckId, cardId) {
   return {
     type: REMOVE_DECK_CARD_VALUE_LISTENER,
     deckId,
@@ -181,14 +189,14 @@ export function removeDeckCardValueListener(deckId, cardId) {
   }
 }
 
-export function removeCardHistoryAddedListener(deckId) {
+export function removeCardHistoryAddedListenerFlag(deckId) {
   return {
     type: REMOVE_CARD_HISTORY_ADDED_LISTENER,
     deckId,
   }
 }
 
-export function removeCardHistoryValueListener(deckId, cardId) {
+export function removeCardHistoryValueListenerFlag(deckId, cardId) {
   return {
     type: REMOVE_CARD_HISTORY_VALUE_LISTENER,
     deckId,

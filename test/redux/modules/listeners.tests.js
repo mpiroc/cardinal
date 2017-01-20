@@ -16,15 +16,15 @@ import listenersReducer, {
   addCardHistoryAddedListenerFlag,
   addCardHistoryValueListenerFlag,
   addAuthStateChangedListenerFlag,
-  removeUserValueListener,
-  removeUserDeckAddedListener,
-  removeUserDeckRemovedListener,
-  removeUserDeckValueListener,
-  removeDeckCardAddedListener,
-  removeDeckCardRemovedListener,
-  removeDeckCardValueListener,
-  removeCardHistoryAddedListener,
-  removeCardHistoryValueListener,
+  removeUserValueListenerFlag,
+  removeUserDeckAddedListenerFlag,
+  removeUserDeckRemovedListenerFlag,
+  removeUserDeckValueListenerFlag,
+  removeDeckCardAddedListenerFlag,
+  removeDeckCardRemovedListenerFlag,
+  removeDeckCardValueListenerFlag,
+  removeCardHistoryAddedListenerFlag,
+  removeCardHistoryValueListenerFlag,
 } from 'redux/modules/listeners'
 import {
   updateUser,
@@ -205,118 +205,118 @@ describe('listeners', function() {
       })
     })
     
-    describe('removeUserValueListener', function() {
+    describe('removeUserValueListenerFlag', function() {
       it('should exist', function() {
-        expect(removeUserValueListener).to.exist
+        expect(removeUserValueListenerFlag).to.exist
       })
 
       it('should remove the correct listener flag', function() {
         store.dispatch(addUserValueListenerFlag('myUid'))
-        store.dispatch(removeUserValueListener('myUid'))
+        store.dispatch(removeUserValueListenerFlag('myUid'))
 
         expect(store.getState().listeners.getIn(['users', 'myUid'])).to.not.exist
       })
     })
     
-    describe('removeUserDeckAddedListener', function() {
+    describe('removeUserDeckAddedListenerFlag', function() {
       it('should exist', function() {
-        expect(removeUserDeckAddedListener).to.exist
+        expect(removeUserDeckAddedListenerFlag).to.exist
       })
 
       it('should remove the correct listener flag', function() {
         store.dispatch(addUserDeckAddedListenerFlag('myUid'))
-        store.dispatch(removeUserDeckAddedListener('myUid'))
+        store.dispatch(removeUserDeckAddedListenerFlag('myUid'))
 
         expect(store.getState().listeners.getIn(['userDecks', 'myUid', 'added'])).to.be.false
       })
     })
     
-    describe('removeUserDeckRemovedListener', function() {
+    describe('removeUserDeckRemovedListenerFlag', function() {
       it('should exist', function() {
-        expect(removeUserDeckRemovedListener).to.exist
+        expect(removeUserDeckRemovedListenerFlag).to.exist
       })
 
       it('should set the correct listener flag', function() {
         store.dispatch(addUserDeckRemovedListenerFlag('myUid'))
-        store.dispatch(removeUserDeckRemovedListener('myUid'))
+        store.dispatch(removeUserDeckRemovedListenerFlag('myUid'))
 
         expect(store.getState().listeners.getIn(['userDecks', 'myUid', 'removed'])).to.be.false
       })
     })
     
-    describe('removeUserDeckValueListener', function() {
+    describe('removeUserDeckValueListenerFlag', function() {
       it('should exist', function() {
-        expect(removeUserDeckValueListener).to.exist
+        expect(removeUserDeckValueListenerFlag).to.exist
       })
 
       it('should set the correct listener flag', function() {
         store.dispatch(addUserDeckValueListenerFlag('myUid', 'myDeckId'))
-        store.dispatch(removeUserDeckValueListener('myUid', 'myDeckId'))
+        store.dispatch(removeUserDeckValueListenerFlag('myUid', 'myDeckId'))
 
         expect(store.getState().listeners.getIn(['userDecks', 'myUid', 'decks', 'myDeckId'])).to.not.exist
       })
     })
     
-    describe('removeDeckCardAddedListener', function() {
+    describe('removeDeckCardAddedListenerFlag', function() {
       it('should exist', function() {
-        expect(removeDeckCardAddedListener).to.exist
+        expect(removeDeckCardAddedListenerFlag).to.exist
       })
 
       it('should set the correct listener flag', function() {
         store.dispatch(addDeckCardAddedListenerFlag('myDeckId'))
-        store.dispatch(removeDeckCardAddedListener('myDeckId'))
+        store.dispatch(removeDeckCardAddedListenerFlag('myDeckId'))
 
         expect(store.getState().listeners.getIn(['deckCards', 'myDeckId', 'added'])).to.be.false
       })
     })
     
-    describe('removeDeckCardRemovedListener', function() {
+    describe('removeDeckCardRemovedListenerFlag', function() {
       it('should exist', function() {
-        expect(removeDeckCardRemovedListener).to.exist
+        expect(removeDeckCardRemovedListenerFlag).to.exist
       })
 
       it('should set the correct listener flag', function() {
         store.dispatch(addDeckCardRemovedListenerFlag('myDeckId'))
-        store.dispatch(removeDeckCardRemovedListener('myDeckId'))
+        store.dispatch(removeDeckCardRemovedListenerFlag('myDeckId'))
 
         expect(store.getState().listeners.getIn(['deckCards', 'myDeckId', 'removed'])).to.be.false
       })
     })
     
-    describe('removeDeckCardValueListener', function() {
+    describe('removeDeckCardValueListenerFlag', function() {
       it('should exist', function() {
-        expect(removeDeckCardValueListener).to.exist
+        expect(removeDeckCardValueListenerFlag).to.exist
       })
 
       it('should set the correct listener flag', function() {
         store.dispatch(addDeckCardValueListenerFlag('myDeckId', 'myCardId'))
-        store.dispatch(removeDeckCardValueListener('myDeckId', 'myCardId'))
+        store.dispatch(removeDeckCardValueListenerFlag('myDeckId', 'myCardId'))
 
         expect(store.getState().listeners.getIn(['deckCards', 'myDeckId', 'cards', 'myCardId'])).to.not.exist
       })
     })
 
-    describe('removeCardHistoryAddedListener', function() {
+    describe('removeCardHistoryAddedListenerFlag', function() {
       it('should exist', function() {
-        expect(removeCardHistoryAddedListener).to.exist
+        expect(removeCardHistoryAddedListenerFlag).to.exist
       })
 
       it('should set the correct listener flag', function() {
         store.dispatch(addCardHistoryAddedListenerFlag('myDeckId'))
-        store.dispatch(removeCardHistoryAddedListener('myDeckId'))
+        store.dispatch(removeCardHistoryAddedListenerFlag('myDeckId'))
 
         expect(store.getState().listeners.getIn(['cardHistories', 'myDeckId', 'added'])).to.be.false
       })
     })
     
-    describe('removeCardHistoryValueListener', function() {
+    describe('removeCardHistoryValueListenerFlag', function() {
       it('should exist', function() {
-        expect(removeCardHistoryValueListener).to.exist
+        expect(removeCardHistoryValueListenerFlag).to.exist
       })
 
       it('should set the correct listener flag', function() {
         store.dispatch(addCardHistoryValueListenerFlag('myDeckId', 'myCardId'))
-        store.dispatch(removeCardHistoryValueListener('myDeckId', 'myCardId'))
+        store.dispatch(removeCardHistoryValueListenerFlag('myDeckId', 'myCardId'))
 
         expect(store.getState().listeners.getIn(['cardHistories', 'myDeckId', 'cards', 'myCardId'])).to.not.exist
       })
