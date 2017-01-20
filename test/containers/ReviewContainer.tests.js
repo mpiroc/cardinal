@@ -57,7 +57,7 @@ describe('ReviewContainer', function() {
       expect(review.get('currentCardId')).to.equal('myCardId')
 
       done()
-    }, 10)
+    }, 100)
 
   })
 

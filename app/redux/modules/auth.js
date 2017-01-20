@@ -6,8 +6,8 @@ import {
   setAuthStateChangedListener as firebaseSetAuthStateChangedListener,
   saveUser
 } from 'helpers/firebase'
-import { addAuthStateChangedListenerFlag, disableAndRemoveAllListeners } from 'redux/modules/listeners'
-import { usersLogout, saveAndHandleUser, setAndHandleUserValueListener } from 'redux/modules/users'
+import { addAuthStateChangedListenerFlag, disableAndRemoveAllListeners, setAndHandleUserValueListener } from 'redux/modules/listeners'
+import { usersLogout, saveAndHandleUser } from 'redux/modules/users'
 import { decksLogout } from 'redux/modules/decks'
 import { cardsLogout } from 'redux/modules/cards'
 import { setLoginRedirect, clearLoginRedirect } from 'redux/modules/loginRedirect'

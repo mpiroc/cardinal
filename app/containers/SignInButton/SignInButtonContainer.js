@@ -3,30 +3,27 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { Button } from 'react-toolbox'
 import { authAndSaveUser } from 'redux/modules/auth'
-import { setAndHandleUserValueListener } from 'redux/modules/users'
 
-function mapStateToProps ({ auth }, ownProps) {
+function mapStateToProps (state, ownProps) {
   return {
-    authedUid: auth.get('authedUid')
   }
 }
 
 function mapDispatchToProps (dispatch, ownProps) {
   return bindActionCreators({
     authAndSaveUser,
-    setAndHandleUserValueListener,
   }, dispatch)
 }
 
 function mergeProps (
-    { authedUid },
-    dispatchProps,
+    stateProps,
+    { authAndSaveUser },
     ownProps
   ) {
   return {
-    style: {color: 'white'},
+    style: { color: 'white' },
     label: 'Sign In',
-    onClick: dispatchProps.authAndSaveUser,
+    onClick: () => dispatchProps.authAndSaveUser(),
   }
 }
 

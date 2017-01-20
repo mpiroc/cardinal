@@ -1,22 +1,8 @@
 import { Map } from 'immutable'
-import {
-  setUserValueListener,
-  setUserDeckAddedListener,
-  setUserDeckRemovedListener,
-  setUserDeckValueListener,
-  setDeckCardAddedListener,
-  setDeckCardRemovedListener,
-  setDeckCardValueListener,
-  setCardHistoryAddedListener,
-  setCardHistoryValueListener,
-  removeUserValueListener,
-  removeUserDeckAddedListener,
-  removeUserDeckRemovedListener,
-  removeUserDeckValueListener,
-  removeDeckCardAddedListener,
-  removeDeckCardRemovedListener,
-  removeDeckCardValueListener,
-} from 'helpers/firebase'
+import * as fb from 'helpers/firebase'
+import * as usersModule from './users'
+import * as decksModule from './decks'
+import * as cardsModule from './cards'
 
 // actions
 const ADD_USER_VALUE_LISTENER = 'ADD_USER_VALUE_LISTENER'
@@ -47,100 +33,188 @@ export function disableAndRemoveAllListeners() {
 
     users.get('users').forEach((user, uid) => {
       dispatch(removeUserValueListenerFlag(uid))
-      removeUserValueListener(firebaseContext, uid)
+      fb.removeUserValueListener(firebaseContext, uid)
 
       dispatch(removeUserDeckAddedListenerFlag(uid))
-      removeUserDeckAddedListener(firebaseContext, uid)
+      fb.removeUserDeckAddedListener(firebaseContext, uid)
 
       dispatch(removeUserDeckRemovedListenerFlag(uid))
-      removeUserDeckRemovedListener(firebaseContext, uid)
+      fb.removeUserDeckRemovedListener(firebaseContext, uid)
 
       user.get('decks').forEach((deck, deckId) => {
         dispatch(removeUserDeckValueListenerFlag(uid, deckId))
-        removeUserDeckValueListener(firebaseContext, uid, deckId)
+        fb.removeUserDeckValueListener(firebaseContext, uid, deckId)
 
         dispatch(removeDeckCardAddedListenerFlag(deckId))
-        removeDeckCardAddedListener(firebaseContext, uid, deckId)
+        fb.removeDeckCardAddedListener(firebaseContext, uid, deckId)
 
         dispatch(removeDeckCardRemovedListenerFlag(deckId))
-        removeDeckCardRemovedListener(firebaseContext, uid, deckId)
+        fb.removeDeckCardRemovedListener(firebaseContext, uid, deckId)
 
         decks.getIn(['decks', deckId, 'cards']).forEach((card, cardId) => {
           dispatch(removeDeckCardValueListenerFlag(deckId, cardId))
-          removeDeckCardValueListener(firebaseContext, uid, deckId, cardId)
+          fb.removeDeckCardValueListener(firebaseContext, uid, deckId, cardId)
         })
       })
     })
   }
 }
 
-export function setUserValueListenerAndFlag(uid, onSuccess, onFailure) {
+export function setAndHandleUserValueListener(uid) {
   return (dispatch, getState, firebaseContext) => {
-    dispatch(addUserValueListenerFlag(uid))
-    setUserValueListener(firebaseContext, uid, onSuccess, onFailure)
+    const state = getState().listeners
+
+    if (state.getIn(['users', uid]) !== true) {
+      dispatch(addUserValueListenerFlag(uid))
+      dispatch(usersModule.settingUserValueListener(uid))
+      fb.setUserValueListener(
+        firebaseContext,
+        uid,
+        user => dispatch(usersModule.settingUserValueListenerSuccess(uid, user)),
+        error => dispatch(usersModule.settingUserValueListenerFailure(uid, error)),
+      )
+    }
   }
 }
 
-export function setUserDeckAddedListenerAndFlag(uid, onSuccess, onFailure) {
+export function setAndHandleUserDeckCollectionListeners(uid) {
   return (dispatch, getState, firebaseContext) => {
-    dispatch(addUserDeckAddedListenerFlag(uid))
-    setUserDeckAddedListener(firebaseContext, uid, onSuccess, onFailure)
+    const { listeners } = getState()
+
+    if (listeners.getIn(['userDecks', uid, 'added']) !== true) {
+      dispatch(addUserDeckAddedListenerFlag(uid))
+      fb.setUserDeckAddedListener(
+        firebaseContext,
+        uid,
+        deck => {
+          dispatch(usersModule.userDeckAddedReceived(uid, deck.deckId))
+          dispatch(decksModule.updateDeck(deck.deckId, deck))
+          dispatch(setAndHandleUserDeckValueListener(uid, deck.deckId))
+          dispatch(setAndHandleDeckCardCollectionListeners(deck.deckId))
+        },
+        error => dispatch(usersModule.settingAddOrRemoveUserDeckListenerFailure(uid, error)),
+      )
+    }
+
+    if (listeners.getIn(['userDecks', uid, 'removed']) !== true) {
+      dispatch(addUserDeckRemovedListenerFlag(uid))
+      fb.setUserDeckRemovedListener(
+        firebaseContext,
+        uid,
+        deck => {
+          dispatch(usersModule.userDeckRemovedReceived(uid, deck.deckId))
+          dispatch(decksModule.removeDeck(deck.deckId))
+        },
+        error => dispatch(usersModule.settingAddOrRemoveUserDeckListenerFailure(uid, error)),
+      )
+    }
   }
 }
 
-export function setUserDeckRemovedListenerAndFlag(uid, onSuccess, onFailure) {
+export function setAndHandleUserDeckValueListener(uid, deckId) {
   return (dispatch, getState, firebaseContext) => {
-    dispatch(addUserDeckRemovedListenerFlag(uid))
-    setUserDeckRemovedListener(firebaseContext, uid, onSuccess, onFailure)
+    const { listeners } = getState()
+
+    if (listeners.getIn(['userDecks', uid, 'decks', deckId]) !== true) {
+      dispatch(addUserDeckValueListenerFlag(uid, deckId))
+      dispatch(decksModule.settingDeckValueListener(deckId))
+      fb.setUserDeckValueListener(
+        firebaseContext,
+        uid, deckId,
+        deck => dispatch(decksModule.settingDeckValueListenerSuccess(deckId, deck)),
+        error => dispatch(decksModule.settingDeckValueListenerFailure(deckId, error.message)),
+      )
+    }
   }
 }
 
-export function setUserDeckValueListenerAndFlag(uid, deckId, onSuccess, onFailure) {
+export function setAndHandleDeckCardCollectionListeners(deckId) {
   return (dispatch, getState, firebaseContext) => {
-    dispatch(addUserDeckValueListenerFlag(uid, deckId))
-    setUserDeckValueListener(firebaseContext, uid, deckId, onSuccess, onFailure)
+    const { auth, listeners } = getState()
+    const uid = auth.get('authedUid')
+
+    if (listeners.getIn(['deckCards', deckId, 'added']) !== true) {
+      dispatch(addDeckCardAddedListenerFlag(deckId))
+      fb.setDeckCardAddedListener(
+        firebaseContext,
+        uid, deckId,
+        card => {
+          dispatch(decksModule.deckCardAddedReceived(deckId, card.cardId))
+          dispatch(cardsModule.updateCard(card.cardId, card))
+          dispatch(setAndHandleDeckCardValueListener(deckId, card.cardId))
+        },
+        error => dispatch(decksModule.settingAddOrRemoveDeckCardListenerFailure(deckId, error.message)),
+      )
+    }
+
+    if (listeners.getIn(['deckCards', deckId, 'removed']) !== true) {
+      dispatch(addDeckCardRemovedListenerFlag(deckId))
+      fb.setDeckCardRemovedListener(
+        firebaseContext,
+        uid, deckId,
+        card => {
+          dispatch(decksModule.deckCardRemovedReceived(deckId, card.cardId))
+          dispatch(cardsModule.removeCard(card.cardId))
+        },
+        error => dispatch(settingAddOrRemoveDeckCardListenerFailure(deckId, error.message)),
+      )
+    }
   }
 }
 
-export function setDeckCardAddedListenerAndFlag(uid, deckId, onSuccess, onFailure) {
+export function setAndHandleCardHistoryCollectionListeners(deckId) {
   return (dispatch, getState, firebaseContext) => {
-    dispatch(addDeckCardAddedListenerFlag(deckId))
-    setDeckCardAddedListener(firebaseContext, uid, deckId, onSuccess, onFailure)
+    const { auth, listeners } = getState()
+    const uid = auth.get('authedUid')
+
+    if (listeners.getIn(['cardHistories', deckId, 'added']) !== true) {
+      dispatch(addCardHistoryAddedListenerFlag(deckId))
+      fb.setCardHistoryAddedListener(
+        firebaseContext,
+        uid, deckId,
+        (history, cardId) => {
+          dispatch(cardsModule.updateCardHistory(cardId, history))
+          dispatch(setAndHandleCardHistoryValueListener(deckId, cardId))
+        },
+        error => dispatch(decksModule.settingAddCardHistoryListenerFailure(deckId, error.message)),
+      )
+    }
   }
 }
 
-export function setDeckCardRemovedListenerAndFlag(uid, deckId, onSuccess, onFailure) {
+export function setAndHandleDeckCardValueListener(deckId, cardId) {
   return (dispatch, getState, firebaseContext) => {
-    dispatch(addDeckCardRemovedListenerFlag(deckId))
-    setDeckCardRemovedListener(firebaseContext, uid, deckId, onSuccess, onFailure)
+    const { auth, listeners } = getState()
+    const uid = auth.get('authedUid')
+
+    if (listeners.getIn(['deckCards', deckId, 'cards', cardId]) !== true) {
+      dispatch(addDeckCardValueListenerFlag(deckId, cardId))
+      dispatch(cardsModule.settingCardValueListener(cardId))
+      fb.setDeckCardValueListener(
+        firebaseContext,
+        uid, deckId, cardId,
+        card => dispatch(cardsModule.settingCardValueListenerSuccess(cardId, card)),
+        error => dispatch(cardsModule.settingCardValueListenerFailure(cardId, error)),
+      )
+    }
   }
 }
 
-export function setDeckCardValueListenerAndFlag(uid, deckId, cardId, onSuccess, onFailure) {
+export function setAndHandleCardHistoryValueListener(deckId, cardId) {
   return (dispatch, getState, firebaseContext) => {
-    dispatch(addDeckCardValueListenerFlag(deckId, cardId))
-    setDeckCardValueListener(firebaseContext, uid, deckId, cardId, onSuccess, onFailure)
-  }
-}
+    const { auth, listeners } = getState()
+    const uid = auth.get('authedUid')
 
-export function setCardHistoryAddedListenerAndFlag(uid, deckId, onSuccess, onFailure) {
-  return (dispatch, getState, firebaseContext) => {
-    dispatch(addCardHistoryAddedListenerFlag(deckId))
-    setCardHistoryAddedListener(firebaseContext, uid, deckId, onSuccess, onFailure)
-  }
-}
-
-export function setCardHistoryRemovedListenerAndFlag(uid, deckId, onSuccess, onFailure) {
-  return (dispatch, getState, firebaseContext) => {
-    dispatch(addCardHistoryRemovedListenerFlag(deckId))
-    setCardHistoryRemovedListener(firebaseContext, uid, deckId, onSuccess, onFailure)
-  }
-}
-
-export function setCardHistoryValueListenerAndFlag(uid, deckId, cardId, onSuccess, onFailure) {
-  return (dispatch, getState, firebaseContext) => {
-    dispatch(addCardHistoryValueListenerFlag(deckId, cardId))
-    setCardHistoryValueListener(firebaseContext, uid, deckId, cardId, onSuccess, onFailure)
+    if (listeners.getIn(['cardHistories', deckId, 'histories', cardId]) !== true) {
+      dispatch(addDeckCardValueListenerFlag(deckId, cardId))
+      dispatch(cardsModule.settingCardHistoryValueListener(cardId))
+      fb.setCardHistoryValueListener(
+        firebaseContext,
+        uid, deckId, cardId,
+        card => dispatch(cardsModule.settingCardHistoryValueListenerSuccess(cardId, card)),
+        error => dispatch(cardsModule.settingCardHistoryValueListenerFailure(cardId, error)),
+      )
+    }
   }
 }
 

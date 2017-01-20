@@ -3,10 +3,12 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import {
   fetchAndHandleDeckHistory,
-  setDeckValueListener,
-  setDeckCardCollectionListeners,
-  setCardHistoryCollectionListeners,
 } from 'redux/modules/decks'
+import {
+  setAndHandleUserDeckValueListener,
+  setAndHandleDeckCardCollectionListeners,
+  setAndHandleCardHistoryCollectionListeners,
+} from 'redux/modules/listeners'
 import {
   gradeAndShowNextCard,
   showNextCard,
@@ -24,22 +26,22 @@ class ReviewContainer extends React.Component {
       fetchAndHandleDeckHistory,
       showNextCard,
       setCurrentCard,
-      setDeckValueListener,
-      setDeckCardCollectionListeners,
-      setCardHistoryCollectionListeners
+      setAndHandleUserDeckValueListener,
+      setAndHandleDeckCardCollectionListeners,
+      setAndHandleCardHistoryCollectionListeners
     } = this.props
 
     setCurrentCard('')
-    setDeckValueListener(authedUid, deckId)
-    setDeckCardCollectionListeners(deckId)
+    setAndHandleUserDeckValueListener(authedUid, deckId)
+    setAndHandleDeckCardCollectionListeners(deckId)
 
-    // Even though we are about to get the history through setCardHistoryCollectionListeners,
+    // Even though we are about to get the history through setAndHandleCardHistoryCollectionListeners,
     // we need to be sure that we have loaded all history before selecting the first card to
     // review. So we do a one-time fetch of *all* history for the deck when the component
     // first loads.
     await fetchAndHandleDeckHistory(authedUid, deckId)
     
-    setCardHistoryCollectionListeners(deckId)
+    setAndHandleCardHistoryCollectionListeners(deckId)
 
     await showNextCard(moment().valueOf(), deckId)
   }
@@ -78,9 +80,9 @@ ReviewContainer.propTypes = {
   showNextCard: PropTypes.func.isRequired,
   setCurrentCard: PropTypes.func.isRequired,
   toggleAnswerVisible: PropTypes.func.isRequired,
-  setDeckValueListener: PropTypes.func.isRequired,
-  setDeckCardCollectionListeners: PropTypes.func.isRequired,
-  setCardHistoryCollectionListeners: PropTypes.func.isRequired,
+  setAndHandleUserDeckValueListener: PropTypes.func.isRequired,
+  setAndHandleDeckCardCollectionListeners: PropTypes.func.isRequired,
+  setAndHandleCardHistoryCollectionListeners: PropTypes.func.isRequired,
 }
 
 function mapStateToProps (state, ownProps) {
@@ -105,9 +107,9 @@ function mapDispatchToProps (dispatch, ownProps) {
     showNextCard,
     setCurrentCard,
     toggleAnswerVisible,
-    setDeckValueListener,
-    setDeckCardCollectionListeners,
-    setCardHistoryCollectionListeners,
+    setAndHandleUserDeckValueListener,
+    setAndHandleDeckCardCollectionListeners,
+    setAndHandleCardHistoryCollectionListeners,
   }, dispatch)
 }
 

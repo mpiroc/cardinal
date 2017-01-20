@@ -1,15 +1,4 @@
 import { Map } from 'immutable'
-import {
-  setUserValueListenerAndFlag,
-  setUserDeckAddedListenerAndFlag,
-  setUserDeckRemovedListenerAndFlag,
-} from './listeners'
-import {
-  setDeckValueListener,
-  setDeckCardCollectionListeners,
-  updateDeck,
-  removeDeck,
-} from './decks'
 
 // actions
 const USER_DECK_ADDED_RECEIVED = 'USER_DECK_ADDED_RECEIVED'
@@ -21,52 +10,6 @@ const SETTING_USER_VALUE_LISTENER_FAILURE = 'SETTING_USER_VALUE_LISTENER_FAILURE
 const UPDATE_USER = 'UPDATE_USER'
 const USERS_LOGOUT = 'USERS_LOGOUT'
 
-// thunks
-export function setAndHandleUserValueListener(uid) {
-  return (dispatch, getState, firebaseContext) => {
-    const state = getState().listeners
-
-    if (state.getIn(['users', uid]) !== true) {
-      dispatch(settingUserValueListener(uid))
-      dispatch(setUserValueListenerAndFlag(
-        uid,
-        user => dispatch(settingUserValueListenerSuccess(uid, user)),
-        error => dispatch(settingUserValueListenerFailure(uid, error)),
-      ))
-    }
-  }
-}
-
-export function setUserDeckCollectionListeners(uid) {
-  return (dispatch, getState, firebaseContext) => {
-    const state = getState().listeners
-
-    if (state.getIn(['userDecks', uid, 'added']) !== true) {
-      dispatch(setUserDeckAddedListenerAndFlag(
-        uid,
-        deck => {
-          dispatch(userDeckAddedReceived(uid, deck.deckId))
-          dispatch(updateDeck(deck.deckId, deck))
-          dispatch(setDeckValueListener(uid, deck.deckId))
-          dispatch(setDeckCardCollectionListeners(deck.deckId))
-        },
-        error => dispatch(settingAddOrRemoveUserDeckListenerFailure(uid, error)),
-      ))
-    }
-
-    if (state.getIn(['userDecks', uid, 'removed']) !== true) {
-      dispatch(setUserDeckRemovedListenerAndFlag(
-        uid,
-        deck => {
-          dispatch(userDeckRemovedReceived(uid, deck.deckId))
-          dispatch(removeDeck(deck.deckId))
-        },
-        error => dispatch(settingAddOrRemoveUserDeckListenerFailure(uid, error)),
-      ))
-    }
-  }
-}
-
 // action creators
 export function userDeckAddedReceived(uid, deckId) {
   return {
@@ -76,7 +19,7 @@ export function userDeckAddedReceived(uid, deckId) {
   }
 }
 
-function userDeckRemovedReceived(uid, deckId) {
+export function userDeckRemovedReceived(uid, deckId) {
   return {
     type: USER_DECK_REMOVED_RECEIVED,
     uid,
@@ -84,7 +27,7 @@ function userDeckRemovedReceived(uid, deckId) {
   }
 }
 
-function settingAddOrRemoveUserDeckListenerFailure(uid, error) {
+export function settingAddOrRemoveUserDeckListenerFailure(uid, error) {
   return {
     type: SETTING_ADD_OR_REMOVE_USER_DECK_LISTENER_FAILURE,
     uid,
@@ -92,14 +35,14 @@ function settingAddOrRemoveUserDeckListenerFailure(uid, error) {
   }
 }
 
-function settingUserValueListener(uid) {
+export function settingUserValueListener(uid) {
   return {
     type: SETTING_USER_VALUE_LISTENER,
     uid,
   }
 }
 
-function settingUserValueListenerSuccess(uid, user) {
+export function settingUserValueListenerSuccess(uid, user) {
   return {
     type: SETTING_USER_VALUE_LISTENER_SUCCESS,
     uid,
@@ -107,7 +50,7 @@ function settingUserValueListenerSuccess(uid, user) {
   }
 }
 
-function settingUserValueListenerFailure(uid, error) {
+export function settingUserValueListenerFailure(uid, error) {
   return {
     type: SETTING_USER_VALUE_LISTENER_FAILURE,
     uid,

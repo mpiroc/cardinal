@@ -1,9 +1,5 @@
 import { Map } from 'immutable'
 import {
-  setDeckCardValueListenerAndFlag,
-  setCardHistoryValueListenerAndFlag,
-} from './listeners'
-import {
   deleteCard as fbDeleteCard,
 } from 'helpers/firebase'
 
@@ -36,38 +32,6 @@ export function deleteAndHandleCard(deckId, cardId) {
     }
     catch (error) {
       dispatch(deletingCardFailure(cardId, `Error deleting card: ${error.message}`))
-    }
-  }
-}
-
-export function setCardValueListener(deckId, cardId) {
-  return (dispatch, getState, firebaseContext) => {
-    const { auth, listeners } = getState()
-    const uid = auth.get('authedUid')
-
-    if (listeners.getIn(['deckCards', deckId, 'cards', cardId]) !== true) {
-      dispatch(settingCardValueListener(cardId))
-      dispatch(setDeckCardValueListenerAndFlag(
-        uid, deckId, cardId,
-        card => dispatch(settingCardValueListenerSuccess(cardId, card)),
-        error => dispatch(settingCardValueListenerFailure(cardId, error)),
-      ))
-    }
-  }
-}
-
-export function setCardHistoryValueListener(deckId, cardId) {
-  return (dispatch, getState, firebaseContext) => {
-    const { auth, listeners } = getState()
-    const uid = auth.get('authedUid')
-
-    if (listeners.getIn(['cardHistories', deckId, 'histories', cardId]) !== true) {
-      dispatch(settingCardHistoryValueListener(cardId))
-      dispatch(setCardHistoryValueListenerAndFlag(
-        uid, deckId, cardId,
-        card => dispatch(settingCardHistoryValueListenerSuccess(cardId, card)),
-        error => dispatch(settingCardHistoryValueListenerFailure(cardId, error)),
-      ))
     }
   }
 }

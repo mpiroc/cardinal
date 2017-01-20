@@ -2,12 +2,12 @@ import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import Decks from 'components/Decks/Decks'
-import * as userActionCreators from 'redux/modules/users'
+import { setAndHandleUserDeckCollectionListeners } from 'redux/modules/listeners'
 
 class DecksContainer extends React.Component {
   componentDidMount() {
-    const { setUserDeckCollectionListeners, authedUid } = this.props
-    setUserDeckCollectionListeners(authedUid)
+    const { setAndHandleUserDeckCollectionListeners, authedUid } = this.props
+    setAndHandleUserDeckCollectionListeners(authedUid)
   }
   render () {
     const { decks } = this.props
@@ -20,7 +20,7 @@ class DecksContainer extends React.Component {
 DecksContainer.propTypes = {
   decks: PropTypes.object.isRequired,
   authedUid: PropTypes.string.isRequired,
-  setUserDeckCollectionListeners: PropTypes.func.isRequired,
+  setAndHandleUserDeckCollectionListeners: PropTypes.func.isRequired,
 }
 
 function mapStateToProps ({decks, auth}, ownProps) {
@@ -31,7 +31,9 @@ function mapStateToProps ({decks, auth}, ownProps) {
 }
 
 function mapDispatchToProps (dispatch, ownProps) {
-  return bindActionCreators(userActionCreators, dispatch)
+  return bindActionCreators({
+    setAndHandleUserDeckCollectionListeners,
+  }, dispatch)
 }
 
 export default connect(

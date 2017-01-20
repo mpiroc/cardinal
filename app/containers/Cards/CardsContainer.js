@@ -4,23 +4,23 @@ import { connect } from 'react-redux'
 import { Map } from 'immutable'
 import Cards from 'components/Cards/Cards'
 import {
-  setDeckValueListener,
-  setDeckCardCollectionListeners,
-  setCardHistoryCollectionListeners,
-} from 'redux/modules/decks'
+  setAndHandleUserDeckValueListener,
+  setAndHandleDeckCardCollectionListeners,
+  setAndHandleCardHistoryCollectionListeners,
+} from 'redux/modules/listeners'
 
 class CardsContainer extends React.Component {
   componentDidMount() {
     const {
       deckId,
       authedUid,
-      setDeckValueListener,
-      setDeckCardCollectionListeners,
-      setCardHistoryCollectionListeners,
+      setAndHandleUserDeckValueListener,
+      setAndHandleDeckCardCollectionListeners,
+      setAndHandleCardHistoryCollectionListeners,
     } = this.props
-    setDeckValueListener(authedUid, deckId)
-    setDeckCardCollectionListeners(deckId)
-    setCardHistoryCollectionListeners(deckId)
+    setAndHandleUserDeckValueListener(authedUid, deckId)
+    setAndHandleDeckCardCollectionListeners(deckId)
+    setAndHandleCardHistoryCollectionListeners(deckId)
   }
   render () {
     const { deckId, cards } = this.props
@@ -30,9 +30,9 @@ class CardsContainer extends React.Component {
 
 CardsContainer.propTypes = {
   authedUid: PropTypes.string.isRequired,
-  setDeckValueListener: PropTypes.func.isRequired,
-  setDeckCardCollectionListeners: PropTypes.func.isRequired,
-  setCardHistoryCollectionListeners: PropTypes.func.isRequired,
+  setAndHandleUserDeckValueListener: PropTypes.func.isRequired,
+  setAndHandleDeckCardCollectionListeners: PropTypes.func.isRequired,
+  setAndHandleCardHistoryCollectionListeners: PropTypes.func.isRequired,
   params: PropTypes.shape({
     deckId: PropTypes.string.isRequired
   })
@@ -52,9 +52,9 @@ function mapStateToProps ({ auth, decks, cards }, { params }) {
 
 function mapDispatchToProps (dispatch, ownProps) {
   return bindActionCreators({
-    setDeckValueListener,
-    setDeckCardCollectionListeners,
-    setCardHistoryCollectionListeners,
+    setAndHandleUserDeckValueListener,
+    setAndHandleDeckCardCollectionListeners,
+    setAndHandleCardHistoryCollectionListeners,
   }, dispatch)
 }
 

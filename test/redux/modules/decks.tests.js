@@ -470,39 +470,5 @@ describe('decks', function() {
 
       it('should not reset deletingError')
     })
-
-    describe('setDeckValueListener', function() {
-      it('should exist', function() {
-        expect(setDeckValueListener).to.exist
-      })
-
-      it('should set the listener flag in the listeners module')
-
-      it('should update the deck when a value event is received')
-
-      it('should log and display an error message when an error is received')
-    })
-
-    describe('setDeckCardCollectionListeners', function() {
-      it('should exist', function() {
-        expect(setDeckCardCollectionListeners).to.exist
-      })
-
-      it('should set the listener flags in the listeners module')
-
-      it('should add the cardId to the deck when a child_added event is received')
-
-      it('should add the card to the cards module when a child_added event is received')
-
-      it('should listen for card value changes when a child_added event is received')
-
-      it('should log and display an error message when the child_added listener receives an error from firebase')
-
-      it('should remove the cardId from the deck when a child_removed event is received')
-
-      it('should remove the card from the cards module when a child_removed event is received')
-
-      it('should log and display an error message when the child_removed listener receives an error from firebase')
-    })
   })
 })

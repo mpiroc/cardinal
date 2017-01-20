@@ -1,19 +1,9 @@
 import { Map } from 'immutable'
 import {
-  setUserDeckValueListenerAndFlag,
-  setDeckCardAddedListenerAndFlag,
-  setDeckCardRemovedListenerAndFlag,
-  setCardHistoryAddedListenerAndFlag,
-} from './listeners'
-import {
   deleteDeck,
   fetchDeckHistory,
 } from 'helpers/firebase'
 import {
-  setCardValueListener,
-  setCardHistoryValueListener,
-  updateCard,
-  removeCard,
   updateCardHistory,
 } from './cards'
 
@@ -64,53 +54,6 @@ export function deleteAndHandleDeck(uid, deckId) {
     }
     catch (error) {
       dispatch(deletingDeckFailure(deckId, `Error deleting deck: ${error.message}`))
-    }
-  }
-}
-
-export function setDeckValueListener(uid, deckId) {
-  return (dispatch, getState, firebaseContext) => {
-    const listeners = getState().listeners
-
-    if (listeners.getIn(['userDecks', uid, 'decks', deckId]) !== true) {
-      dispatch(settingDeckValueListener(deckId))
-      dispatch(setUserDeckValueListenerAndFlag(
-        uid, deckId,
-        deck => dispatch(settingDeckValueListenerSuccess(deckId, deck)),
-        error => dispatch(settingDeckValueListenerFailure(deckId, error.message)),
-      ))
-    }
-  }
-}
-
-export function setDeckCardCollectionListeners(deckId) {
-  return (dispatch, getState, firebaseContext) => {
-    const { auth, listeners } = getState()
-    const uid = auth.get('authedUid')
-
-    if (listeners.getIn(['deckCards', deckId, 'added']) !== true) {
-      dispatch(setDeckCardAddedListenerAndFlag(
-        uid,
-        deckId,
-        card => {
-          dispatch(deckCardAddedReceived(deckId, card.cardId))
-          dispatch(updateCard(card.cardId, card))
-          dispatch(setCardValueListener(deckId, card.cardId))
-        },
-        error => dispatch(settingAddOrRemoveDeckCardListenerFailure(deckId, error.message)),
-      ))
-    }
-
-    if (listeners.getIn(['deckCards', deckId, 'removed']) !== true) {
-      dispatch(setDeckCardRemovedListenerAndFlag(
-        uid,
-        deckId,
-        card => {
-          dispatch(deckCardRemovedReceived(deckId, card.cardId))
-          dispatch(removeCard(card.cardId))
-        },
-        error => dispatch(settingAddOrRemoveDeckCardListenerFailure(deckId, error.message)),
-      ))
     }
   }
 }
