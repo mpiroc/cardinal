@@ -36,7 +36,6 @@ export function setAndHandleUserDeckCollectionListeners(uid) {
           dispatch(usersModule.userDeckAddedReceived(uid, deck.deckId))
           dispatch(decksModule.updateDeck(deck.deckId, deck))
           dispatch(setAndHandleUserDeckValueListener(uid, deck.deckId))
-          dispatch(setAndHandleDeckCardCollectionListeners(deck.deckId))
         },
         error => dispatch(usersModule.settingAddOrRemoveUserDeckListenerFailure(uid, error)),
       ))

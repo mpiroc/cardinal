@@ -6,7 +6,6 @@ import Cards from 'components/Cards/Cards'
 import {
   setAndHandleUserDeckValueListener,
   setAndHandleDeckCardCollectionListeners,
-  setAndHandleCardHistoryCollectionListeners,
 } from 'redux/modules/firebase'
 
 class CardsContainer extends React.Component {
@@ -16,11 +15,9 @@ class CardsContainer extends React.Component {
       authedUid,
       setAndHandleUserDeckValueListener,
       setAndHandleDeckCardCollectionListeners,
-      setAndHandleCardHistoryCollectionListeners,
     } = this.props
     setAndHandleUserDeckValueListener(authedUid, deckId)
     setAndHandleDeckCardCollectionListeners(deckId)
-    setAndHandleCardHistoryCollectionListeners(deckId)
   }
   render () {
     const { deckId, cards } = this.props
@@ -32,7 +29,6 @@ CardsContainer.propTypes = {
   authedUid: PropTypes.string.isRequired,
   setAndHandleUserDeckValueListener: PropTypes.func.isRequired,
   setAndHandleDeckCardCollectionListeners: PropTypes.func.isRequired,
-  setAndHandleCardHistoryCollectionListeners: PropTypes.func.isRequired,
   params: PropTypes.shape({
     deckId: PropTypes.string.isRequired
   })
@@ -54,7 +50,6 @@ function mapDispatchToProps (dispatch, ownProps) {
   return bindActionCreators({
     setAndHandleUserDeckValueListener,
     setAndHandleDeckCardCollectionListeners,
-    setAndHandleCardHistoryCollectionListeners,
   }, dispatch)
 }
 

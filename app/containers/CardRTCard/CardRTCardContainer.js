@@ -2,9 +2,45 @@ import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import moment from 'moment'
+import { setAndHandleCardHistoryValueListener } from 'redux/modules/firebase'
 import CardRTCard from 'components/CardRTCard/CardRTCard'
 import { openDeleteCardConfirmationDialog } from 'redux/modules/deleteCardConfirmationDialog'
 import { openEditCardDialog } from 'redux/modules/editCardDialog'
+
+
+class CardRTCardContainer extends React.Component {
+  componentDidMount() {
+    const {
+      deckId,
+      cardId,
+      setAndHandleCardHistoryValueListener,
+    } = this.props
+
+    // Neccessary to determine and display the next due date.
+    setAndHandleCardHistoryValueListener(deckId, cardId)
+  }
+  render() {
+    const {
+      isDeleting,
+      side1,
+      side2,
+      nextReview,
+      onEdit,
+      onDelete,
+    } = this.props
+
+    return (
+      <CardRTCard
+        isDeleting={isDeleting}
+        side1={side1}
+        side2={side2}
+        nextReview={nextReview}
+        onEdit={onEdit}
+        onDelete={onDelete}
+      />
+    )
+  }
+}
 
 function formatNextReview(nextReviewMs) {
   if (nextReviewMs === undefined) {
@@ -43,6 +79,7 @@ function mapStateToProps ({ cards }, { cardId }) {
 
 function mapDispatchToProps (dispatch, ownProps) {
   return bindActionCreators({
+    setAndHandleCardHistoryValueListener,
     openDeleteCardConfirmationDialog,
     openEditCardDialog,
   }, dispatch)
@@ -50,7 +87,7 @@ function mapDispatchToProps (dispatch, ownProps) {
 
 function mergeProps (
     { isLoading, isDeleting, side1, side2, nextReview, },
-    { openEditCardDialog, openDeleteCardConfirmationDialog },
+    { setAndHandleCardHistoryValueListener, openEditCardDialog, openDeleteCardConfirmationDialog },
     { deckId, cardId }) {
   return {
     isLoading,
@@ -58,7 +95,9 @@ function mergeProps (
     side1,
     side2,
     nextReview,
+    deckId,
     cardId,
+    setAndHandleCardHistoryValueListener,
     onEdit: () => openEditCardDialog(
       deckId,
       cardId,
