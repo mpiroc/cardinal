@@ -1,6 +1,8 @@
 language: node_js
 node_js: node
-script: npm run production
+script: 
+- npm test
+- npm run production
 cache:
   directories:
   - node_modules
