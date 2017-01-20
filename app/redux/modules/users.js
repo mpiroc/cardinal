@@ -1,11 +1,10 @@
 import { Map } from 'immutable'
 import {
-  addUserValueListenerFlag,
+  setUserValueListenerAndFlag,
   addUserDeckAddedListenerFlag,
   addUserDeckRemovedListenerFlag,
 } from './listeners'
 import {
-  setUserValueListener,
   setUserDeckAddedListener,
   setUserDeckRemovedListener,
 } from 'helpers/firebase'
@@ -32,14 +31,12 @@ export function setAndHandleUserValueListener(uid) {
     const state = getState().listeners
 
     if (state.getIn(['users', uid]) !== true) {
-      dispatch(addUserValueListenerFlag(uid))
       dispatch(settingUserValueListener(uid))
-      setUserValueListener(
-        firebaseContext,
+      dispatch(setUserValueListenerAndFlag(
         uid,
         user => dispatch(settingUserValueListenerSuccess(uid, user)),
         error => dispatch(settingUserValueListenerFailure(uid, error)),
-      )
+      ))
     }
   }
 }

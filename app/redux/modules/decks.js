@@ -135,7 +135,7 @@ export function setCardHistoryCollectionListeners(deckId) {
         firebaseContext,
         uid,
         deckId,
-        (cardId, history) => {
+        (history, cardId) => {
           dispatch(updateCardHistory(cardId, history))
           dispatch(setCardHistoryValueListener(deckId, cardId))
         },

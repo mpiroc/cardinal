@@ -142,11 +142,16 @@ function getCardHistoryPath(uid, deckId, cardId) {
 
 // Listener helpers
 function setDataListener(ref, event, path, onSuccess, onFailure) {
-  return ref.child(path).on(event, snapshot => onSuccess(snapshot.val()), onFailure)
+  return ref.child(path).on(
+    event,
+    snapshot => onSuccess(
+      snapshot.val(),
+      snapshot.key),
+    onFailure)
 }
 
 export function setUserValueListener({ ref }, uid, onSuccess, onFailure) {
-  return setDataListener(ref, 'value', getUserPath(uid, onSuccess, onFailure))
+  return setDataListener(ref, 'value', getUserPath(uid), onSuccess, onFailure)
 }
 
 export function setUserDeckAddedListener({ ref }, uid, onSuccess, onFailure) {

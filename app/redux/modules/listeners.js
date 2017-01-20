@@ -1,5 +1,14 @@
 import { Map } from 'immutable'
 import {
+  setUserValueListener,
+  setUserDeckAddedListener,
+  setUserDeckRemovedListener,
+  setUserDeckValueListener,
+  setDeckCardAddedListener,
+  setDeckCardRemovedListener,
+  setDeckCardValueListener,
+  setCardHistoryAddedListener,
+  setCardHistoryValueListener,
   removeUserValueListener,
   removeUserDeckAddedListener,
   removeUserDeckRemovedListener,
@@ -7,7 +16,7 @@ import {
   removeDeckCardAddedListener,
   removeDeckCardRemovedListener,
   removeDeckCardValueListener,
-} as fbHelpers from 'helpers/firebase'
+} from 'helpers/firebase'
 
 // actions
 const ADD_USER_VALUE_LISTENER = 'ADD_USER_VALUE_LISTENER'
@@ -62,6 +71,13 @@ export function disableAndRemoveAllListeners() {
         })
       })
     })
+  }
+}
+
+export function setUserValueListenerAndFlag(uid, onSuccess, onFailure) {
+  return (dispatch, getState, firebaseContext) => {
+    dispatch(addUserValueListenerFlag(uid))
+    setUserValueListener(firebaseContext, uid, onSuccess, onFailure)
   }
 }
 
