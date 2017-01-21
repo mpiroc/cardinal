@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import MainAppBarContainer from 'containers/MainAppBar/MainAppBarContainer'
+import MainNavDrawerContainer from 'containers/MainNavDrawer/MainNavDrawerContainer'
 import { Layout, Panel } from 'react-toolbox/lib/layout'
 import { ProgressBar } from 'react-toolbox/lib/progress_bar'
 import { setAuthStateChangedListener } from 'redux/modules/auth'
@@ -24,10 +25,23 @@ class MainContainer extends React.Component {
                     <ProgressBar type='circular' mode='indeterminate' /> 
                   </div>
                 </div>
+              ) : isAuthed === true ? (
+                <Layout>
+                  <MainNavDrawerContainer />
+                  <Panel>
+                    <div style={{ height: '100%', overflow: 'auto' }}>
+                      {children}
+                    </div>
+                  </Panel>
+                </Layout>
               ) : (
-                <div style={{ height: '100%', overflow: 'auto' }}>
-                  {children}
-                </div>
+                <Layout>
+                  <Panel>
+                    <div style={{ height: '100%', overflow: 'auto' }}>
+                      {children}
+                    </div>
+                  </Panel>
+                </Layout>
               )
             }
           </Panel>

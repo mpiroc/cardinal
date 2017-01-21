@@ -20,7 +20,7 @@ export function setDataListenerAndFlag(path, event, onSuccess, onFailure) {
     }
 
     setDataListener(firebaseContext, path, event, onSuccess, onFailure)
-    setDataListenerFlag(path, event)
+    dispatch(setDataListenerFlag(path, event))
   }
 }
 
@@ -31,7 +31,7 @@ export function removeAllDataListenersAndFlags() {
     listeners.get('data').forEach((data, path) => {
       data.keySeq().forEach((event) => {
         removeDataListener(firebaseContext, path, event)
-        removeDataListenerFlag(path, event)
+        dispatch(removeDataListenerFlag(path, event))
       })
     })
   }
@@ -76,9 +76,9 @@ function setAuthStateChangedListenerFlag() {
 
 function dataListener(state = Map(), action) {
   switch(action.type) {
-    case SET_DATA_LISTENER:
+    case SET_DATA_LISTENER_FLAG:
       return state.set(action.event, true)
-    case REMOVE_DATA_LISTENER:
+    case REMOVE_DATA_LISTENER_FLAG:
       return state.remove(action.event)
     default:
       return state

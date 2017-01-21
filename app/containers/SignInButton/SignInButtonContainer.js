@@ -23,7 +23,7 @@ function mergeProps (
   return {
     style: { color: 'white' },
     label: 'Sign In',
-    onClick: () => dispatchProps.authAndSaveUser(),
+    onClick: () => authAndSaveUser(),
   }
 }
 

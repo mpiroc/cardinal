@@ -46,12 +46,14 @@ export function authAndSaveUser() {
 export function signOutAndUnauth() {
   return async (dispatch, getState, firebaseContext) => {
     dispatch(removeAllDataListenersAndFlags())
-    await signOut(firebaseContext)
 
-    dispatch(unauthUser())
     dispatch(usersLogout())
     dispatch(decksLogout())
     dispatch(cardsLogout())
+
+    await signOut(firebaseContext)
+
+    dispatch(unauthUser())
 
     dispatch(replace('/'))
   }

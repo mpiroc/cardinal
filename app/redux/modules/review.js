@@ -54,10 +54,11 @@ export function gradeAndShowNextCard(nowMs, deckId, newGrade) {
         throw new Error('Cannot grade card when there is no current card.')
       }
 
-      const oldHistory = cards.getIn(['cards', cardId, 'history'])
+      const card = cards.getIn(['cards', cardId])
+      const oldHistory = card.get('history')
       const newHistory = getNewCardHistory(oldHistory, nowMs, newGrade)
 
-      await saveCardHistory(firebaseContext, authedUid, deckId, cardId, newHistory)
+      await saveCardHistory(firebaseContext, authedUid, card.get('deckId'), cardId, newHistory)
 
       dispatch(showNextCard(nowMs, deckId))
       dispatch(gradingCardSuccess())

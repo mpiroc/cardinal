@@ -72,6 +72,7 @@ export function saveNewCard({ ref }, uid, deckId, { side1, side2 }) {
   return Promise.all([
     deckCardRef.set({
       cardId: deckCardRef.key,
+      deckId,
       side1,
       side2,
     }),
@@ -86,6 +87,7 @@ export function saveNewCard({ ref }, uid, deckId, { side1, side2 }) {
 export function saveExistingCard({ ref }, uid, deckId, { cardId, side1, side2 }) {
   return ref.child(getDeckCardPath(uid, deckId, cardId)).set({
     cardId,
+    deckId,
     side1,
     side2,
   })
@@ -122,7 +124,7 @@ export function setDataListener({ ref }, path, event, onSuccess, onFailure) {
 }
 
 export function removeDataListener({ ref }, path, event) {
-  return ref.child(path).off(event)
+  ref.child(path).off(event)
 }
 
 // Path helpers
