@@ -14,6 +14,7 @@ import {
 // Actions
 const SET_CURRENT_CARD = 'SET_CURRENT_CARD'
 const TOGGLE_ANSWER_VISIBLE = 'TOGGLE_ANSWER_VISIBLE'
+const SELECT_GRADE = 'SELECT_GRADE'
 const GRADING_CARD = 'GRADING_CARD'
 const GRADING_CARD_SUCCESS = 'GRADING_CARD_SUCCESS'
 const GRADING_CARD_FAILURE = 'GRADING_CARD_FAILURE'
@@ -110,6 +111,13 @@ export function toggleAnswerVisible() {
   }
 }
 
+export function selectGrade(grade) {
+  return {
+    type: SELECT_GRADE,
+    grade,
+  }
+}
+
 function gradingCard() {
   return {
     type: GRADING_CARD,
@@ -159,6 +167,7 @@ function snackbar(state = initialSnackbarState, action) {
 const initialState = Map({
   currentCardId: '',
   isAnswerVisible: false,
+  selectedGrade: 0,
   isGradingCard: false,
   gradingError: '',
   snackbar: snackbar(undefined, { type: undefined }),
@@ -170,8 +179,11 @@ export default function review(state = initialState, action) {
       return state
         .set('currentCardId', action.cardId)
         .set('isAnswerVisible', false)
+        .set('selectedGrade', 0)
     case TOGGLE_ANSWER_VISIBLE:
       return state.set('isAnswerVisible', !state.get('isAnswerVisible'))
+    case SELECT_GRADE:
+      return state.set('selectedGrade', action.grade)
     case GRADING_CARD:
       return state.set('isGradingCard', true)
     case GRADING_CARD_SUCCESS:

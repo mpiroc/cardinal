@@ -14,6 +14,7 @@ import {
   showNextCard,
   setCurrentCard,
   toggleAnswerVisible,
+  selectGrade,
 } from 'redux/modules/review'
 import Review from 'components/Review/Review'
 import moment from 'moment'
@@ -51,9 +52,11 @@ class ReviewContainer extends React.Component {
       side1,
       side2,
       isAnswerVisible,
+      selectedGrade,
       isCurrentCardSet,
       gradeAndShowNextCard,
       toggleAnswerVisible,
+      selectGrade,
     } = this.props
     
     return (
@@ -61,8 +64,10 @@ class ReviewContainer extends React.Component {
         side1={side1}
         side2={side2}
         isAnswerVisible={isAnswerVisible}
+        selectedGrade={selectedGrade}
         isCurrentCardSet={isCurrentCardSet}
-        onToggleAnswerVisible={() => toggleAnswerVisible()}
+        onToggleAnswerVisible={toggleAnswerVisible}
+        onSelectGrade={selectGrade}
         onGrade={grade => gradeAndShowNextCard(moment().valueOf(), deckId, grade)}
       />
     )
@@ -73,6 +78,7 @@ ReviewContainer.propTypes = {
   side1: PropTypes.string.isRequired,
   side2: PropTypes.string.isRequired,
   isAnswerVisible: PropTypes.bool.isRequired,
+  selectedGrade: PropTypes.number.isRequired,
   authedUid: PropTypes.string.isRequired,
   deckId: PropTypes.string.isRequired,
   fetchAndHandleDeckHistory: PropTypes.func.isRequired,
@@ -80,6 +86,7 @@ ReviewContainer.propTypes = {
   showNextCard: PropTypes.func.isRequired,
   setCurrentCard: PropTypes.func.isRequired,
   toggleAnswerVisible: PropTypes.func.isRequired,
+  selectGrade: PropTypes.func.isRequired,
   setAndHandleUserDeckValueListener: PropTypes.func.isRequired,
   setAndHandleDeckCardCollectionListeners: PropTypes.func.isRequired,
   setAndHandleCardHistoryCollectionListeners: PropTypes.func.isRequired,
@@ -96,6 +103,7 @@ function mapStateToProps (state, ownProps) {
     side1: card ? card.get('side1') : '',
     side2: card ? card.get('side2') : '',
     isAnswerVisible: review.get('isAnswerVisible'),
+    selectedGrade: review.get('selectedGrade'),
     isCurrentCardSet: card !== undefined,
   }
 }
@@ -107,6 +115,7 @@ function mapDispatchToProps (dispatch, ownProps) {
     showNextCard,
     setCurrentCard,
     toggleAnswerVisible,
+    selectGrade,
     setAndHandleUserDeckValueListener,
     setAndHandleDeckCardCollectionListeners,
     setAndHandleCardHistoryCollectionListeners,
