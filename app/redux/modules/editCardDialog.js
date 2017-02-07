@@ -1,5 +1,5 @@
 import { Map } from 'immutable'
-import { saveExistingCard } from 'helpers/firebase'
+import { saveCardContent } from 'helpers/firebase'
 
 // actions
 const UPDATE_EDIT_CARD_SIDE1 = 'UPDATE_EDIT_CARD_SIDE1'
@@ -24,8 +24,7 @@ export function saveAndHandleEditCard() {
       const side1 = editCardDialog.get('side1')
       const side2 = editCardDialog.get('side2')
 
-      await saveExistingCard(firebaseContext, uid, deckId, {
-        cardId,
+      await saveCardContent(firebaseContext, uid, deckId, cardId, {
         side1,
         side2,
       })

@@ -30,11 +30,13 @@ export function saveUser({ ref }, { uid, name }) {
 export function deleteDeck({ ref }, uid, deckId) {
   const deckCardRef = ref.child(getDeckCardCollectionPath(uid, deckId))
   const cardHistoryRef = ref.child(getCardHistoryCollectionPath(uid, deckId))
+  const cardContentRef = ref.child(getCardContentCollectionPath(uid, deckId))
   const userDeckRef = ref.child(getUserDeckPath(uid, deckId))
 
   return Promise.all([
     deckCardRef.remove(),
     cardHistoryRef.remove(),
+    cardContentRef.remove(),
     userDeckRef.remove(),
   ])
 }
@@ -62,7 +64,8 @@ export function deleteCard({ ref }, uid, deckId, cardId) {
 
   return Promise.all([
     deckCardRef.remove(),
-    deleteCardHistory({ ref }, uid, deckId, cardId)
+    deleteCardHistory({ ref }, uid, deckId, cardId),
+    deleteCardContent({ ref }, uid, deckId, cardId),
   ])
 }
 
@@ -73,37 +76,51 @@ export function saveNewCard({ ref }, uid, deckId, { side1, side2 }) {
     deckCardRef.set({
       cardId: deckCardRef.key,
       deckId,
-      side1,
-      side2,
     }),
     saveCardHistory({ ref }, uid, deckId, deckCardRef.key, {
       grade: 0,
       difficulty: 2.5,
       repetitionCount: 0,
-    })
+    }),
+    saveCardContent({ ref }, uid, deckId, deckCardRef.key, {
+      side1,
+      side2,
+    }),
   ])
-}
-
-export function saveExistingCard({ ref }, uid, deckId, { cardId, side1, side2 }) {
-  return ref.child(getDeckCardPath(uid, deckId, cardId)).set({
-    cardId,
-    deckId,
-    side1,
-    side2,
-  })
 }
 
 // cardHistory create/update/delete helpers
 export function deleteCardHistory({ ref }, uid, deckId, cardId) {
   const cardHistoryRef = ref.child(getCardHistoryPath(uid, deckId, cardId))
 
-  return cardHistoryRef.remove()
+  if (cardHistoryRef) {
+    return cardHistoryRef.remove()
+  }
+
+  return Promise.resolve()
 }
 
 export function saveCardHistory({ ref }, uid, deckId, cardId, history) {
   const cardHistoryRef = ref.child(getCardHistoryPath(uid, deckId, cardId))
 
   return cardHistoryRef.set(history)
+}
+
+// cardContent create/update/delete helpers
+export function deleteCardContent({ ref }, uid, deckId, cardId) {
+  const cardContentRef = ref.child(getCardContentPath(uid, deckId, cardId))
+
+  if (cardContentRef) {
+    return cardContentRef.remove()
+  }
+
+  return Promise.resolve()
+}
+
+export function saveCardContent({ ref }, uid, deckId, cardId, content) {
+  const cardContentRef = ref.child(getCardContentPath(uid, deckId, cardId))
+
+  return cardContentRef.set(content)
 }
 
 // One-time fetch of history for all cards in a deck
@@ -154,4 +171,12 @@ export function getCardHistoryCollectionPath(uid, deckId) {
 
 export function getCardHistoryPath(uid, deckId, cardId) {
   return `${getCardHistoryCollectionPath(uid, deckId)}/${cardId}`
+}
+
+export function getCardContentCollectionPath(uid, deckId) {
+  return `cardContent/${uid}/${deckId}`
+}
+
+export function getCardContentPath(uid, deckId, cardId) {
+  return `${getCardContentCollectionPath(uid, deckId)}/${cardId}`
 }

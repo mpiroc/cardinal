@@ -15,6 +15,7 @@ import cardsReducer, {
   updateCard,
   removeCard,
   updateCardHistory,
+  updateCardContent,
   cardsLogout,
   deleteAndHandleCard,
   setCardValueListener,
@@ -59,8 +60,6 @@ describe('cards', function() {
         expect(card.get('isDeleting')).to.be.false
         expect(card.get('loadingError')).to.equal('')
         expect(card.get('cardId')).to.equal('myCardId')
-        expect(card.get('side1')).to.equal('')
-        expect(card.get('side2')).to.equal('')
       })
     })
 
@@ -70,8 +69,6 @@ describe('cards', function() {
         store.dispatch(settingCardValueListener('myCardId'))
         store.dispatch(settingCardValueListenerSuccess('myCardId', {
           cardId: 'myCardId',
-          side1: 'mySideOne',
-          side2: 'mySideTwo',
         }))
 
         card = store.getState().cards.getIn(['cards', 'myCardId'])
@@ -80,8 +77,6 @@ describe('cards', function() {
       it('should initialize card with fetched values', function() {
         expect(card).to.exist
         expect(card.get('cardId')).to.equal('myCardId')
-        expect(card.get('side1')).to.equal('mySideOne')
-        expect(card.get('side2')).to.equal('mySideTwo')
       })
     })
 
@@ -106,8 +101,6 @@ describe('cards', function() {
         store.dispatch(settingCardValueListener('myCardId'))
         store.dispatch(settingCardValueListenerSuccess('myCardId', {
           cardId: 'myCardId',
-          side1: 'mySideOne',
-          side2: 'mySideTwo',
         }))
         store.dispatch(deletingCard('myCardId'))
 
@@ -173,15 +166,13 @@ describe('cards', function() {
       })
     })
 
-    describe('updateCard', function() {
+    describe('updateCardContent', function() {
       let card
       beforeEach(function() {
         store.dispatch(settingCardValueListenerSuccess('myCardId', {
           cardId: 'myCardId',
-          side1: 'mySideOne',
-          side2: 'mySideTwo',
         }))
-        store.dispatch(updateCard('myCardId', {
+        store.dispatch(updateCardContent('myCardId', {
           side1: 'mySideOne2',
           side2: 'mySideTwo2',
         }))
@@ -190,8 +181,8 @@ describe('cards', function() {
       })
 
       it('should update any specified values', function() {
-        expect(card.get('side1')).to.equal('mySideOne2')
-        expect(card.get('side2')).to.equal('mySideTwo2')
+        expect(card.getIn(['content', 'side1'])).to.equal('mySideOne2')
+        expect(card.getIn(['content', 'side2'])).to.equal('mySideTwo2')
       })
 
       it('should retain the old values for any unspecified fields', function() {
@@ -204,8 +195,6 @@ describe('cards', function() {
       beforeEach(function() {
         store.dispatch(settingCardValueListenerSuccess('myCardId', {
           cardId: 'myCardId',
-          side1: 'mySideOne',
-          side2: 'mySideTwo',
         }))
         store.dispatch(removeCard('myCardId'))
 
@@ -255,8 +244,6 @@ describe('cards', function() {
       beforeEach(function() {
         store.dispatch(settingCardValueListenerSuccess('myCardId', {
           cardId: 'myCardId',
-          side1: 'mySideOne',
-          side2: 'mySideTwo',
         }))
         store.dispatch(cardsLogout())
 
@@ -282,8 +269,6 @@ describe('cards', function() {
         store.dispatch(authUser('myUid'))
         store.dispatch(settingCardValueListenerSuccess('myCardId', {
           cardId: 'myCardId',
-          side1: 'mySideOne',
-          side2: 'mySideTwo',
         }))
         store.dispatch(deleteAndHandleCard('myDeckId', 'myCardId'))
 

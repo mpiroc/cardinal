@@ -15,6 +15,7 @@ import {
   saveNewCard,
   saveExistingCard,
   saveCardHistory,
+  saveCardContent,
   fetchDeckHistory,
 } from 'helpers/firebase'
 
@@ -155,11 +156,12 @@ describe('firebase helper', function() {
     it('should delete the correct records', function() {
       deleteDeck({ ref: refMock }, 'myUid', 'myDeckId')
 
-      expect(childStub).to.have.been.calledThrice
+      expect(childStub.callCount).to.equal(4)
       expect(childStub).to.have.been.calledWith('deckCards/myUid/myDeckId')
       expect(childStub).to.have.been.calledWith('cardHistory/myUid/myDeckId')
+      expect(childStub).to.have.been.calledWith('cardContent/myUid/myDeckId')
       expect(childStub).to.have.been.calledWith('userDecks/myUid/myDeckId')
-      expect(removeStub).to.have.been.calledThrice
+      expect(removeStub.callCount).to.equal(4)
     })
   })
 
@@ -302,10 +304,12 @@ describe('firebase helper', function() {
     let pushStub
     let deckCardSetStub
     let cardHistorySetStub
+    let cardContentSetStub
 
     beforeEach(function() {
       deckCardSetStub = sinon.stub()
       cardHistorySetStub = sinon.stub()
+      cardContentSetStub = sinon.stub()
       pushStub = sinon.stub().returns({
         key: 'myNewCardId',
         set: deckCardSetStub,
@@ -317,6 +321,9 @@ describe('firebase helper', function() {
         })
       childStub.withArgs('cardHistory/myUid/myDeckId/myNewCardId').returns({
         set: cardHistorySetStub,
+      })
+      childStub.withArgs('cardContent/myUid/myDeckId/myNewCardId').returns({
+        set: cardContentSetStub,
       })
       refMock = {
         child: childStub
@@ -355,8 +362,6 @@ describe('firebase helper', function() {
       expect(deckCardSetStub).to.have.been.calledOnce
       expect(deckCardSetStub).to.have.been.calledWith(sinon.match({
         cardId: 'myNewCardId',
-        side1: 'mySide1',
-        side2: 'mySide2'
       }))
 
       expect(cardHistorySetStub).to.have.been.calledOnce
@@ -365,10 +370,16 @@ describe('firebase helper', function() {
         difficulty: 2.5,
         repetitionCount: 0,
       }))
+
+      expect(cardContentSetStub).to.have.been.calledOnce
+      expect(cardContentSetStub).to.have.been.calledWith(sinon.match({
+        side1: 'mySide1',
+        side2: 'mySide2',
+      }))
     })
   })
 
-  describe('saveExistingCard', function() {
+  describe('saveCardContent', function() {
     let refMock
     let childStub
     let setStub
@@ -384,30 +395,27 @@ describe('firebase helper', function() {
     })
 
     it('should exist', function() {
-      expect(saveExistingCard).to.exist
+      expect(saveCardContent).to.exist
     })
 
     it('should save to correct path', function() {
-      saveExistingCard({ ref: refMock }, 'myUid', 'myDeckId', {
-        cardId: 'myCardId',
+      saveCardContent({ ref: refMock }, 'myUid', 'myDeckId', 'myCardId', {
         side1: 'mySide1',
         side2: 'mySide2',
       })
 
       expect(childStub).to.have.been.calledOnce
-      expect(childStub).to.have.been.calledWith('deckCards/myUid/myDeckId/myCardId')
+      expect(childStub).to.have.been.calledWith('cardContent/myUid/myDeckId/myCardId')
     })
 
     it('should save correct data', function() {
-      saveExistingCard({ ref: refMock }, 'myUid', 'myDeckId', {
-        cardId: 'myCardId',
+      saveCardContent({ ref: refMock }, 'myUid', 'myDeckId', 'myCardId', {
         side1: 'mySide1',
         side2: 'mySide2',
       })
 
       expect(setStub).to.have.been.calledOnce
       expect(setStub).to.have.been.calledWith(sinon.match({
-        cardId: 'myCardId',
         side1: 'mySide1',
         side2: 'mySide2',
       }))

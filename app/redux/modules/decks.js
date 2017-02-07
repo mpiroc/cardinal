@@ -11,7 +11,8 @@ import {
 const DECK_CARD_ADDED_RECEIVED = 'DECK_CARD_ADDED_RECEIVED'
 const DECK_CARD_REMOVED_RECEIVED = 'DECK_CARD_REMOVED_RECEIVED'
 const SETTING_ADD_OR_REMOVE_DECK_CARD_LISTENER_FAILURE = 'SETTING_ADD_OR_REMOVE_DECK_CARD_LISTENER_FAILURE'
-const SETTING_ADD_CARD_HISTORY_LISTENER_FAILURE = 'SETTING_REMOVE_CARD_HISTORY_LISTENER_FAILURE'
+const SETTING_ADD_CARD_HISTORY_LISTENER_FAILURE = 'SETTING_ADD_CARD_HISTORY_LISTENER_FAILURE'
+const SETTING_ADD_CARD_CONTENT_LISTENER_FAILURE = 'SETTING_ADD_CARD_CONTENT_LISTENER_FAILURE'
 const SETTING_DECK_VALUE_LISTENER = 'SETTING_DECK_VALUE_LISTENER'
 const SETTING_DECK_VALUE_LISTENER_SUCCESS = 'SETTING_DECK_VALUE_LISTENER_SUCCESS'
 const SETTING_DECK_VALUE_LISTENER_FAILURE = 'SETTING_DECK_VALUE_LISTENER_FAILURE'
@@ -58,25 +59,6 @@ export function deleteAndHandleDeck(uid, deckId) {
   }
 }
 
-export function setCardHistoryCollectionListeners(deckId) {
-  return (dispatch, getState, firebaseContext) => {
-    const { auth, listeners } = getState()
-    const uid = auth.get('authedUid')
-
-    if (listeners.getIn(['cardHistories', deckId, 'added']) !== true) {
-      dispatch(setCardHistoryAddedListenerAndFlag(
-        uid,
-        deckId,
-        (history, cardId) => {
-          dispatch(updateCardHistory(cardId, history))
-          dispatch(setCardHistoryValueListener(deckId, cardId))
-        },
-        error => dispatch(settingAddCardHistoryListenerFailure(deckId, error.message)),
-      ))
-    }
-  }
-}
-
 // action creators
 export function deckCardAddedReceived(deckId, cardId) {
   return {
@@ -97,6 +79,22 @@ export function deckCardRemovedReceived(deckId, cardId) {
 export function settingAddOrRemoveDeckCardListenerFailure(deckId, error) {
   return {
     type: SETTING_ADD_OR_REMOVE_DECK_CARD_LISTENER_FAILURE,
+    deckId,
+    error,
+  }
+}
+
+export function settingAddCardHistoryListenerFailure(deckId, error) {
+  return {
+    type: SETTING_ADD_CARD_HISTORY_LISTENER_FAILURE,
+    deckId,
+    error,
+  }
+}
+
+export function settingAddCardContentListenerFailure(deckId, error) {
+  return {
+    type: SETTING_ADD_CARD_CONTENT_LISTENER_FAILURE,
     deckId,
     error,
   }
@@ -203,6 +201,8 @@ const initialDeckState = Map({
 
   loadingError: '',
   addOrRemoveError: '',
+  addHistoryError: '',
+  addContentError: '',
   deletingError: '',
   fetchingHistoryError: '',
 
@@ -220,6 +220,10 @@ function deck(state = initialDeckState, action) {
       return state.deleteIn(['cards', action.cardId])
     case SETTING_ADD_OR_REMOVE_DECK_CARD_LISTENER_FAILURE:
       return state.set('addOrRemoveError', action.error)
+    case SETTING_ADD_CARD_HISTORY_LISTENER_FAILURE:
+      return state.set('addHistoryError', action.error)
+    case SETTING_ADD_CARD_CONTENT_LISTENER_FAILURE:
+      return state.set('addContentError', action.error)
     case SETTING_DECK_VALUE_LISTENER:
       return state.set('loadingError', '')
     case SETTING_DECK_VALUE_LISTENER_SUCCESS:
@@ -260,6 +264,8 @@ const initialSnackbarState = Map({
 function snackbar(state = initialSnackbarState, action) {
   switch(action.type) {
     case SETTING_ADD_OR_REMOVE_DECK_CARD_LISTENER_FAILURE:
+    case SETTING_ADD_CARD_HISTORY_LISTENER_FAILURE:
+    case SETTING_ADD_CARD_HISTORY_LISTENER_FAILURE:
     case SETTING_DECK_VALUE_LISTENER_FAILURE:
     case DELETING_DECK_FAILURE:
     case FETCHING_DECK_HISTORY_FAILURE:
@@ -287,6 +293,8 @@ export default function decks(state = initialState, action) {
     case DECK_CARD_ADDED_RECEIVED:
     case DECK_CARD_REMOVED_RECEIVED:
     case SETTING_ADD_OR_REMOVE_DECK_CARD_LISTENER_FAILURE:
+    case SETTING_ADD_CARD_HISTORY_LISTENER_FAILURE:
+    case SETTING_ADD_CARD_HISTORY_LISTENER_FAILURE:
     case SETTING_DECK_VALUE_LISTENER:
     case SETTING_DECK_VALUE_LISTENER_SUCCESS:
     case SETTING_DECK_VALUE_LISTENER_FAILURE:

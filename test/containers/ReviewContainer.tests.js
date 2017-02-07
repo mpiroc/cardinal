@@ -10,7 +10,7 @@ import moment from 'moment'
 import createStoreMock from '../testUtils/createStoreMock'
 import ReviewContainer from '../../app/containers/Review/ReviewContainer'
 import { authUser } from 'redux/modules/auth'
-import { updateCard, updateCardHistory } from 'redux/modules/cards'
+import { updateCard, updateCardHistory, updateCardContent } from 'redux/modules/cards'
 import { updateDeck, deckCardAddedReceived } from 'redux/modules/decks'
 
 jsdomGlobal()
@@ -29,6 +29,8 @@ describe('ReviewContainer', function() {
     store.dispatch(deckCardAddedReceived('myDeckId', 'myCardId'))
     store.dispatch(updateCard('myCardId', {
       cardId: 'myCardId',
+    }))
+    store.dispatch(updateCardContent('myCardId', {
       side1: 'mySideOne',
       side2: 'mySideTwo',
     }))

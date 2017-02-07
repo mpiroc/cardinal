@@ -53,11 +53,12 @@ describe('deleteDeckConfirmationDialog', function() {
         store.dispatch(openDeleteDeckConfirmationDialog('myDeckId', 'myDeckName', 2))
         store.dispatch(closeDialogAndDeleteDeck())
 
-        expect(store.firebaseContext.stubs.child).to.have.been.calledThrice
+        expect(store.firebaseContext.stubs.child.callCount).to.equal(4)
         expect(store.firebaseContext.stubs.child).to.have.been.calledWith('userDecks/myUid/myDeckId')
         expect(store.firebaseContext.stubs.child).to.have.been.calledWith('deckCards/myUid/myDeckId')
         expect(store.firebaseContext.stubs.child).to.have.been.calledWith('cardHistory/myUid/myDeckId')
-        expect(store.firebaseContext.stubs.remove).to.have.been.calledThrice
+        expect(store.firebaseContext.stubs.child).to.have.been.calledWith('cardContent/myUid/myDeckId')
+        expect(store.firebaseContext.stubs.remove.callCount).to.equal(4)
       })
     })
   })

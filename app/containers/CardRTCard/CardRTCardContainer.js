@@ -2,7 +2,10 @@ import React, { PropTypes } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import moment from 'moment'
-import { setAndHandleCardHistoryValueListener } from 'redux/modules/firebase'
+import {
+  setAndHandleCardHistoryValueListener,
+  setAndHandleCardContentValueListener,
+} from 'redux/modules/firebase'
 import CardRTCard from 'components/CardRTCard/CardRTCard'
 import { openDeleteCardConfirmationDialog } from 'redux/modules/deleteCardConfirmationDialog'
 import { openEditCardDialog } from 'redux/modules/editCardDialog'
@@ -14,10 +17,11 @@ class CardRTCardContainer extends React.Component {
       deckId,
       cardId,
       setAndHandleCardHistoryValueListener,
+      setAndHandleCardContentValueListener,
     } = this.props
 
-    // Neccessary to determine and display the next due date.
     setAndHandleCardHistoryValueListener(deckId, cardId)
+    setAndHandleCardContentValueListener(deckId, cardId)
   }
   render() {
     const {
@@ -68,11 +72,14 @@ function mapStateToProps ({ cards }, { cardId }) {
     }
   }
 
+  const side1 = card.getIn(['content', 'side1'])
+  const side2 = card.getIn(['content', 'side2'])
+
   return {
     isLoading: false,
     isDeleting: card.get('isDeleting'),
-    side1: card.get('side1'),
-    side2: card.get('side2'),
+    side1: side1 === undefined ? '' : side1,
+    side2: side2 === undefined ? '' : side2,
     nextReview: formatNextReview(card.getIn(['history', 'nextReviewMs'])),
   }
 }
@@ -80,15 +87,30 @@ function mapStateToProps ({ cards }, { cardId }) {
 function mapDispatchToProps (dispatch, ownProps) {
   return bindActionCreators({
     setAndHandleCardHistoryValueListener,
+    setAndHandleCardContentValueListener,
     openDeleteCardConfirmationDialog,
     openEditCardDialog,
   }, dispatch)
 }
 
 function mergeProps (
-    { isLoading, isDeleting, side1, side2, nextReview, },
-    { setAndHandleCardHistoryValueListener, openEditCardDialog, openDeleteCardConfirmationDialog },
-    { deckId, cardId }) {
+    {
+      isLoading,
+      isDeleting,
+      side1,
+      side2,
+      nextReview,
+    },
+    {
+      setAndHandleCardHistoryValueListener,
+      setAndHandleCardContentValueListener,
+      openEditCardDialog,
+      openDeleteCardConfirmationDialog,
+    },
+    {
+      deckId,
+      cardId,
+    }) {
   return {
     isLoading,
     isDeleting,
@@ -98,6 +120,7 @@ function mergeProps (
     deckId,
     cardId,
     setAndHandleCardHistoryValueListener,
+    setAndHandleCardContentValueListener,
     onEdit: () => openEditCardDialog(
       deckId,
       cardId,
@@ -115,4 +138,4 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps,
   mergeProps,
-)(CardRTCard)
+)(CardRTCardContainer)

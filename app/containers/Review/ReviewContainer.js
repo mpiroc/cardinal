@@ -8,6 +8,7 @@ import {
   setAndHandleUserDeckValueListener,
   setAndHandleDeckCardCollectionListeners,
   setAndHandleCardHistoryCollectionListeners,
+  setAndHandleCardContentValueListener,
 } from 'redux/modules/firebase'
 import {
   gradeAndShowNextCard,
@@ -29,7 +30,8 @@ class ReviewContainer extends React.Component {
       setCurrentCard,
       setAndHandleUserDeckValueListener,
       setAndHandleDeckCardCollectionListeners,
-      setAndHandleCardHistoryCollectionListeners
+      setAndHandleCardHistoryCollectionListeners,
+      setAndHandleCardContentValueListener,
     } = this.props
 
     setCurrentCard('')
@@ -90,6 +92,7 @@ ReviewContainer.propTypes = {
   setAndHandleUserDeckValueListener: PropTypes.func.isRequired,
   setAndHandleDeckCardCollectionListeners: PropTypes.func.isRequired,
   setAndHandleCardHistoryCollectionListeners: PropTypes.func.isRequired,
+  setAndHandleCardContentValueListener: PropTypes.func.isRequired,
 }
 
 function mapStateToProps (state, ownProps) {
@@ -98,10 +101,11 @@ function mapStateToProps (state, ownProps) {
   const card = cards.getIn(['cards', cardId])
 
   return {
+    cardId,
     authedUid: state.auth.get('authedUid'),
     deckId: ownProps.params.deckId,
-    side1: card ? card.get('side1') : '',
-    side2: card ? card.get('side2') : '',
+    side1: card ? (card.getIn(['content', 'side1']) || '') : '',
+    side2: card ? (card.getIn(['content', 'side2']) || '') : '',
     isAnswerVisible: review.get('isAnswerVisible'),
     selectedGrade: review.get('selectedGrade'),
     isCurrentCardSet: card !== undefined,
@@ -119,11 +123,26 @@ function mapDispatchToProps (dispatch, ownProps) {
     setAndHandleUserDeckValueListener,
     setAndHandleDeckCardCollectionListeners,
     setAndHandleCardHistoryCollectionListeners,
+    setAndHandleCardContentValueListener,
   }, dispatch)
+}
+
+function mergeProps (stateProps, dispatchProps, ownProps) {
+  const { deckId, cardId } = stateProps
+  if (cardId) {
+    dispatchProps.setAndHandleCardContentValueListener(deckId, cardId)
+  }
+
+  return {
+    ...stateProps,
+    ...dispatchProps,
+    ...ownProps,
+  }
 }
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
+  mergeProps,
 )(ReviewContainer)
 

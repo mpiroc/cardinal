@@ -52,10 +52,11 @@ describe('deleteCardConfirmationDialog', function() {
         store.dispatch(openDeleteCardConfirmationDialog('myDeckId', 'myCardId'))
         store.dispatch(closeDialogAndDeleteCard())
 
-        expect(store.firebaseContext.stubs.child).to.have.been.calledTwice
+        expect(store.firebaseContext.stubs.child).to.have.been.calledThrice
         expect(store.firebaseContext.stubs.child).to.have.been.calledWith('deckCards/myUid/myDeckId/myCardId')
         expect(store.firebaseContext.stubs.child).to.have.been.calledWith('cardHistory/myUid/myDeckId/myCardId')
-        expect(store.firebaseContext.stubs.remove).to.have.been.calledTwice
+        expect(store.firebaseContext.stubs.child).to.have.been.calledWith('cardContent/myUid/myDeckId/myCardId')
+        expect(store.firebaseContext.stubs.remove).to.have.been.calledThrice
       })
     })
   })

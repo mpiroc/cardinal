@@ -149,3 +149,38 @@ export function setAndHandleCardHistoryValueListener(deckId, cardId) {
     }
   }
 }
+
+export function setAndHandleCardContentCollectionListeners(deckId) {
+  return (dispatch, getState, firebaseContext) => {
+    const { auth, listeners } = getState()
+    const uid = auth.get('authedUid')
+    const path = fb.getCardContentCollectionPath(uid, deckId)
+
+    if (listeners.getIn(['data'], path, 'child_added') !== true) {
+      dispatch(setDataListenerAndFlag(path, 'child_added',
+        (content, cardId) => {
+          dispatch(cardsModule.updateCardContent(cardId, content))
+          dispatch(setAndHandleCardContentValueListener(deckId, cardId))
+        },
+        error => dispatch(decksModule.settingAddCardContentListenerFailure(deckId, error.message)),
+      ))
+    }
+  }
+}
+
+export function setAndHandleCardContentValueListener(deckId, cardId) {
+  return (dispatch, getState, firebaseContext) => {
+    const { auth, listeners } = getState()
+    const uid = auth.get('authedUid')
+    const path = fb.getCardContentPath(uid, deckId, cardId)
+    const event = 'value'
+
+    if (listeners.getIn(['data', path, event]) !== true) {
+      dispatch(cardsModule.settingCardContentValueListener(cardId))
+      dispatch(setDataListenerAndFlag(path, event,
+        card => dispatch(cardsModule.settingCardContentValueListenerSuccess(cardId, card)),
+        error => dispatch(cardsModule.settingCardContentValueListenerFailure(cardId, error)),
+      ))
+    }
+  }
+}
