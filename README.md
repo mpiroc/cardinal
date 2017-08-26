@@ -2,7 +2,8 @@ Cardinal is a simple [spaced repetition](https://en.wikipedia.org/wiki/Spaced_re
 
 ## Demo
 
-You can see a live demo of Cardinal at [cardinal.mpiroc.com](http://cardinal.mpiroc.com/). When I say **demo**, I mean it. Your data may be lost at any time.
+The demo is currently offline while I make some changes to the database schema.
+~~You can see a live demo of Cardinal at [cardinal.mpiroc.com](http://cardinal.mpiroc.com/). When I say **demo**, I mean it. Your data may be lost at any time.~~
 
 ## Developers
 
